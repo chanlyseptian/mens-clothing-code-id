@@ -4,12 +4,14 @@ import { GiClothes } from "react-icons/gi";
 import { FaUserEdit } from "react-icons/fa";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaUserLock } from "react-icons/fa";
+import url from "../helpers/base_url";
 
 import CMSRoute from "../routers/CMSRoute";
 import Swal from "sweetalert2";
 
 function SideBarCMS() {
   const [showDashboard, setShowDashboard] = useState(true);
+  const [showLoggedProfile, setShowLoggedProfile] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,9 +31,8 @@ function SideBarCMS() {
   return (
     <div className="flex">
       <aside
-        className={`flex transform top-0 left-0 w-96 fixed h-screen overflow-auto ease-in-out transition-all duration-300 z-[3] ${
-          showDashboard ? "translate-x-0" : "-translate-x-3/4"
-        } `}
+        className={`flex transform top-0 left-0 w-96 fixed h-screen overflow-auto ease-in-out transition-all duration-300 z-[3] ${showDashboard ? "translate-x-0" : "-translate-x-3/4"
+          } `}
       >
         <div className="justify-between border-r-4 border-darkColor pt-6 w-3/4 bg-darkColor">
           <div className="flex flex-col items-center text-6xl">
@@ -63,7 +64,7 @@ function SideBarCMS() {
                 </button>
               </li>
               <hr />
-              <li className="my-2 absolute bottom-5">
+              {/* <li className="my-2 absolute bottom-5">
                 <hr className="w-[280px] mb-3" />
                 <button
                   className="flex items-center px-4 py-2 text-accentColor rounded-md hover:text-red-700"
@@ -76,7 +77,7 @@ function SideBarCMS() {
                   <RiLogoutCircleLine size={25} />
                   <span className="mx-4 font-medium">Logout</span>
                 </button>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
@@ -92,6 +93,30 @@ function SideBarCMS() {
         </div> */}
       </aside>
       <main className="mx-auto w-full">
+        <div className="justify-end flex pr-10 pt-7">
+          <button onClick={() => setShowLoggedProfile(!showLoggedProfile)}>
+            <img className="w-16 h-16 object-cover rounded-full" src={url + "/images/" + localStorage.getItem('avatar')} />
+          </button>
+          <aside
+            className={`bg-white shadow-sm shadow-stone-300 flex transform top-[100px] mr-6 border right-0 w-[100px] fixed p-5 overflow-auto ease-in-out transition-all duration-300 z-[3] ${showLoggedProfile ? "  block" : " hidden"
+              } `}
+          >
+            <div>
+              <ul>
+                <li
+                  className="cursor-pointer"
+                  onClick={() => {
+                    localStorage.clear();
+                    Swal.fire("Logout Success!", "See you later!", "success");
+                    navigate("/login");
+                  }}
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          </aside>
+        </div>
         <div className="container mx-auto">
           <CMSRoute />
         </div>
