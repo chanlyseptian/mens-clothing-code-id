@@ -18,8 +18,6 @@ const SearchedHomePage = () => {
     dispatch(getAllProducts());
   }, []);
 
-
-
   return (
     <div className="mx-auto md:container">
       <div
@@ -38,10 +36,7 @@ const SearchedHomePage = () => {
           <h1 className="text-xl text-cyan-900 font-semibold capitalize">
             Men's {query}
           </h1>
-          <p className="text-sm text-bgcolor ml-3 ">
-            
-            products
-          </p>
+          <p className="text-sm text-bgcolor ml-3 ">products</p>
         </div>
         <div className="flex items-center space-x-10">
           <div className="flex items-center">

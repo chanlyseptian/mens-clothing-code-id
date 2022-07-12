@@ -4,15 +4,15 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        '3xl': '1624px',
+        "3xl": "1624px",
       },
       colors: {
         bgcolor: "#F5F7F8",
-        accentColor: "#FFCC1D",
-        lightColor: "#E8E8CC",
-        midColor: "#116530",
-        darkColor: "#0B4619",
-        headerColor: '#F5F5F5',
+        accentColor: "#ECB365",
+        lightColor: "#064663",
+        midColor: "#04293A",
+        darkColor: "#041C32",
+        headerColor: "#041C32",
       },
     },
   },

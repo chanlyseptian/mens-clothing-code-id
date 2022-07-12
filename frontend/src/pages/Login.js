@@ -31,7 +31,7 @@ function Login() {
 
   return (
     <div className="flex justify-center items-center h-screen ">
-      <div className="lg:w-[500px] md:w-3/5 sm:w-96 bg-cyan-700 rounded-md">
+      <div className="lg:w-[500px] md:w-3/5 sm:w-96 bg-midColor rounded-md">
         <div className="p-10">
           <div className="py-4 text-2xl font-bold text-white text-center">
             Login
@@ -63,7 +63,7 @@ function Login() {
 
           <div className="px-5 py-6">
             <button
-              className="text-2xl py-2 border text-white uppercase bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-full"
+              className="text-2xl py-2 border text-white uppercase bg-midColor hover:bg-darkColor p-2 rounded-md w-full"
               name="condition"
               id="condition"
               onClick={() => loginHandler()}
@@ -75,13 +75,13 @@ function Login() {
               Doesn't have an account ?{" "}
               <div className="flex justify-between mt-3">
                 <button
-                  className="font-bold text-white"
+                  className="font-bold text-white hover:text-lightColor"
                   onClick={() => navigate("/registerUser")}
                 >
                   Register User
                 </button>
                 <button
-                  className="font-bold text-white"
+                  className="font-bold text-white hover:text-lightColor"
                   onClick={() => navigate("/registerCMS")}
                 >
                   Register Admin

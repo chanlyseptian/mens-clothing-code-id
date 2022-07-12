@@ -86,88 +86,88 @@ function EditProduct() {
     <div className="mx-auto container md:w-1/2 sm:w-96  overflow-scroll max-h-screen py-5 no-scrollbar">
       <div className="">
         <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
-          <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-cyan-900 flex items-center">
+          <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-darkColor flex items-center">
             <MdOutlineArrowBackIos className="mr-1" /> Back
           </h1>
         </div>
-        <div className="py-4 text-3xl font-bold text-cyan-900 text-center 3xl:mt-3 3xl:mb-8">
+        <div className="py-4 text-3xl font-bold text-darkColor text-center 3xl:mt-3 3xl:mb-8">
           Edit Product
-          <hr className="border-cyan-800 mx-5 mt-2" />
+          <hr className="border-midColor mx-5 mt-2" />
         </div>
         <div className="grid grid-cols-2">
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Name
             </label>
             <input
               type="text"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               value={form.name || ""}
             ></input>
           </div>
 
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Price
             </label>
             <input
               type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               value={form.price || ""}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Stock
             </label>
             <input
               type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, stock: e.target.value })}
               value={form.stock || ""}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Expired Date
             </label>
             <input
               type="date"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-2/5"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-2/5"
               onChange={(e) => setForm({ ...form, expire: e.target.value })}
               value={form.expire || ""}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Weight
             </label>
             <input
               type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, weight: e.target.value })}
               value={form.weight || ""}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Unit
             </label>
             <input
               type="text"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, unit: e.target.value })}
               value={form.unit || ""}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Category
             </label>
             <select
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-2/5"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-2/5"
               name="category"
               id="category"
               onChange={(e) => setForm({ ...form, category: e.target.value })}
@@ -180,11 +180,11 @@ function EditProduct() {
             </select>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Condition
             </label>
             <select
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-2/5"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-2/5"
               name="condition"
               id="condition"
               onChange={(e) => setForm({ ...form, condition: e.target.value })}
@@ -195,19 +195,19 @@ function EditProduct() {
             </select>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Description
             </label>
             <textarea
               rows="4"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md bg-white w-full"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
               value={form.desc || ""}
             ></textarea>
           </div>
-          
+
           <div className="flex flex-col space-x-8">
-            <h1 className="text-cyan-900 text-lg font-bold ml-5">Images</h1>
+            <h1 className="text-darkColor text-lg font-bold ml-5">Images</h1>
             {data.ProductImages !== undefined ? (
               data.ProductImages.map((img, index) => {
                 return (
@@ -250,7 +250,7 @@ function EditProduct() {
 
         <div className="px-5 py-5 mt-2">
           <button
-            className="text-2xl uppercase py-2 border text-white bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-full"
+            className="text-2xl uppercase py-2 border text-white bg-midColor hover:bg-darkColor p-2 rounded-md w-full"
             name="condition"
             id="condition"
             onClick={() => {

@@ -22,14 +22,12 @@ class ProductController {
         desc,
         price,
         stock,
-        expire,
         weight,
         category,
         condition,
         totalSold,
         rating,
         views,
-        unit,
       } = req.body;
 
       const result = await Product.create({
@@ -37,15 +35,12 @@ class ProductController {
         desc,
         price,
         stock,
-        stock,
-        expire,
         weight,
         category,
         condition,
         totalSold,
         rating,
         views,
-        unit,
         UserId: id,
       });
 

@@ -24,16 +24,16 @@ const HomePage = () => {
 
       <div className="px-24 3xl:px-[73px] flex items-center lg:mt-2 lg:mb-8 justify-between">
         <div className="flex items-center">
-          <h1 className="text-xl text-cyan-900 font-semibold">
+          <h1 className="text-xl text-darkColor font-semibold">
             Men's Clothing
           </h1>
-          <p className="text-sm text-cyan-900 ml-3">{data.length} products</p>
+          <p className="text-sm text-darkColor ml-3">{data.length} products</p>
         </div>
         <div className="flex items-center space-x-10">
           <div className="flex items-center">
-            <label className=" text-cyan-800 text-sm mr-4">Sort: </label>
+            <label className=" text-darkColor text-sm mr-4">Sort: </label>
             <select
-              className="border hover:border-cyan-800 focus:border-cyan-900 w-full rounded-md bg-white py-1 px-4 text-cyan-900 text-sm"
+              className="border hover:border-cyan-800 focus:border-cyan-900 w-full rounded-md bg-white py-1 px-4 text-darkColor text-sm"
               name="condition"
               id="condition"
               value="featured"
@@ -49,7 +49,7 @@ const HomePage = () => {
           <div className="text-4xl flex items-center ">
             <MdKeyboardArrowLeft className="text-gray-400" />
             <p className="text-sm">1</p>
-            <MdKeyboardArrowRight className="text-cyan-900 cursor-pointer" />
+            <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
           </div>
         </div>
       </div>

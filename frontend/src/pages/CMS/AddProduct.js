@@ -19,9 +19,7 @@ function AddProduct() {
     desc: "",
     price: 0,
     stock: 0,
-    expire: null,
     weight: 0,
-    unit: "",
     category: "tops",
     condition: "available",
   });
@@ -34,9 +32,7 @@ function AddProduct() {
     formData.append("desc", form.desc);
     formData.append("price", form.price);
     formData.append("stock", form.stock);
-    formData.append("expire", form.expire);
     formData.append("weight", form.weight);
-    formData.append("unit", form.unit);
     formData.append("category", form.category);
     formData.append("condition", form.condition);
 
@@ -104,16 +100,7 @@ function AddProduct() {
               onChange={(e) => setForm({ ...form, stock: e.target.value })}
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Expired Date
-            </label>
-            <input
-              type="date"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-2/5"
-              onChange={(e) => setForm({ ...form, expire: e.target.value })}
-            ></input>
-          </div>
+
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
               Weight
@@ -124,16 +111,7 @@ function AddProduct() {
               onChange={(e) => setForm({ ...form, weight: e.target.value })}
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Unit
-            </label>
-            <input
-              type="text"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, unit: e.target.value })}
-            ></input>
-          </div>
+
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
               Category

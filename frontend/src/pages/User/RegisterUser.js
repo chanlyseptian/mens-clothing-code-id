@@ -46,12 +46,12 @@ function RegisterUser() {
   return (
     <div className="mx-auto lg:w-2/5 md:w-3/5 sm:w-96 rounded-md">
       <div className="p-14 ">
-        <div className="py-4 text-3xl font-bold text-cyan-900 text-center 3xl:mt-12 3xl:mb-8">
+        <div className="py-4 text-3xl font-bold text-darkColor text-center 3xl:mt-12 3xl:mb-8">
           Register User
-          <hr className="border-cyan-800 mx-5 mt-2" />
+          <hr className="border-midColor mx-5 mt-2" />
         </div>
         <div className="px-5 py-5">
-          <div className="mx-auto my-5 w-40 h-40  border-4 border-cyan-800 relative rounded-full flex justify-center items-center">
+          <div className="mx-auto my-5 w-40 h-40  border-4 border-midColor relative rounded-full flex justify-center items-center">
             <label
               className="cursor-pointer custom-file-upload"
               htmlFor="file-upload"
@@ -76,7 +76,7 @@ function RegisterUser() {
                 setForm({ ...form, avatar: e.target.files[0] });
               }}
             />
-            <div className=" bg-cyan-800 rounded-full absolute top-0 right-0 px-2 py-2">
+            <div className=" bg-midColor rounded-full absolute top-0 right-0 px-2 py-2">
               <div className="text-2xl text-white">
                 <MdAddAPhoto />
               </div>
@@ -86,42 +86,42 @@ function RegisterUser() {
 
         <div className="grid grid-cols-2 relative">
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Email
             </label>
             <input
               type="text"
-              className="border hover:border-green-800 focus:border-cyan-800 p-2 rounded-md bg-white w-full"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Password
             </label>
             <input
               type="password"
-              className="border hover:border-green-800 focus:border-cyan-800 p-2 rounded-md bg-white w-full"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             ></input>
           </div>
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
               Username
             </label>
             <input
               type="text"
-              className="border hover:border-green-800 focus:border-cyan-800 p-2 rounded-md bg-white w-full"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, username: e.target.value })}
             ></input>
           </div>
 
           <div className="px-5 py-2">
-            <label className="block text-cyan-800 text-lg font-bold pb-2 ">
+            <label className="block text-midColor text-lg font-bold pb-2 ">
               Gender
             </label>
             <select
-              className="border hover:border-green-800 focus:border-cyan-800 p-2 rounded-md bg-white w-full"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               name="gender"
               id="gender"
               onChange={(e) => setForm({ ...form, gender: e.target.value })}
@@ -132,29 +132,29 @@ function RegisterUser() {
           </div>
 
           <div className="  px-5 py-2 mb-6">
-            <label className="   block text-cyan-800 text-lg font-bold pb-2 absolute ml-[205px] 3xl:ml-[270px]  mt-2">
+            <label className="   block text-midColor text-lg font-bold pb-2 absolute ml-[205px] 3xl:ml-[270px]  mt-2">
               Birth Day
             </label>
             <input
               type="date"
-              className="  border hover:border-green-800 focus:border-cyan-800 p-2 rounded-md bg-white  absolute w-72 text-center ml-24 3xl:ml-[160px] mt-10"
+              className="  border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white  absolute w-72 text-center ml-24 3xl:ml-[160px] mt-10"
               onChange={(e) => setForm({ ...form, birthday: e.target.value })}
             ></input>
           </div>
         </div>
         <div className="px-5 py-8 mt-12">
           <button
-            className="text-2xl py-2 border text-white bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-full"
+            className="text-2xl py-2 border text-white bg-midColor hover:bg-darkColor p-2 rounded-md w-full"
             name="condition"
             id="condition"
             onClick={() => registerHandler()}
           >
             Register
           </button>
-          <h1 className="text-md mt-3 text-cyan-800 text-center">
-            Have an account ? {" "}
+          <h1 className="text-md mt-3 text-midColor text-center">
+            Have an account ?{" "}
             <button
-              className="font-bold text-cyan-800"
+              className="font-bold text-lightColor hover:text-darkColor"
               onClick={() => navigate("/login")}
             >
               Login
