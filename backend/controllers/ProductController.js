@@ -12,6 +12,32 @@ class ProductController {
       next(err);
     }
   }
+  static async getPageProduct(req, res) {
+    try {
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageProduct = await Product.findAll().skip(skip).limit(perPage);
+      res.status(200).json(pageProduct);
+    } catch (error) {
+      // console.log(error);
+      res.status(500).json(error);
+    }
+  }
+  // static async getPageProduct(req, res) {
+  //   try {
+  //     const page = +req.query.page || 1;
+  //     const limit = req.query.limit || 1;
+  //     const startIndex = (page - 1) * 10;
+  //     const endIndex = page * perPage;
+
+  //     let pageProduct = await Product.slice(startIndex, endIndex);
+  //     res.status(200).json(pageProduct);
+  //   } catch (error) {
+  //     console.log(error);
+  //     // res.status(500).json(error);
+  //   }
+  // }
   //just for admin
   static async create(req, res, next) {
     try {
