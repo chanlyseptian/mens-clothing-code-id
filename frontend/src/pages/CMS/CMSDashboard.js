@@ -117,14 +117,17 @@ const CMSDashboard = () => {
           "loading"
         )}
       </div>
-      <div className="fixed right-20 bottom-8">
-        <button onClick={() => navigate("/cms/add")}>
-          <IoMdAddCircle size={50} className="text-darkColor " />
-        </button>
-      </div>
-      <div className="fixed right-16 z-10 bottom-14">
-        <button onClick={() => navigate("/cms/add")}>
-          <RiTShirtAirFill size={40} className="text-darkColor mr-1 mb-1.5" />
+      <div className="fixed right-28 bottom-9">
+        <button
+          className="text-darkColor hover:text-cyan-600"
+          onClick={() => navigate("/cms/add")}
+        >
+          <div className="flex">
+            <IoMdAddCircle size={50} />
+            <h1 className="text-base rounded-md font-bold pt-3 pl-1">
+              PRODUCTS
+            </h1>
+          </div>
         </button>
       </div>
     </div>

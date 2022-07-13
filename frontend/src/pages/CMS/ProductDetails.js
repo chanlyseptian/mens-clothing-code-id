@@ -7,6 +7,7 @@ import "swiper/css";
 import intToRupiah from "../../helpers/rupiah";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "../../actions/cmsActions";
+import { MdOutlineArrowBackIos } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import base_url from "../../helpers/base_url";
 
@@ -23,98 +24,168 @@ const ProductDetails = () => {
   }, []);
 
   return (
-    <div>
-      <div className="grid md:grid-cols-12 sm:grid-cols-1 px-10 lg:px-32 lg:ml-52 3xl:ml-12">
-        <div className="md:col-span-4 sm:col-span-12 sm:min-h-screen mx-auto ">
-          <div className="flex px-5">
-            <h1 className="text-lg flex items-center pt-10 pb-5 text-darkColor font-bold"></h1>
-          </div>
-          <div className="max-w-md 3xl:max-w-xl px-5 rounded overflow-hidden">
-            <Swiper spaceBetween={50} slidesPerView={1}>
-              {action === "GET_PRODUCT_BY_ID" && data !== "loading"
-                ? data.ProductImages.map((img, index) => {
-                    return (
-                      <SwiperSlide key={index}>
-                        <img
-                          className=""
-                          src={`${url}/images/${img.filename}`}
-                        ></img>
-                      </SwiperSlide>
-                    );
-                  })
-                : "Loading"}
-            </Swiper>
-            <div className="flex justify-center items-center">
-              <div className="font-bold text-xl text-center mt-2 text-midColor">
-                {data.name}
-              </div>
-            </div>
-          </div>
+    <div className="px-10 lg:px-32 lg:ml-52 3xl:ml-12 overflow-scroll max-h-screen py-5 no-scrollbar">
+      <div className="p-5">
+        <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
+          <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-cyan-900 flex items-center">
+            <MdOutlineArrowBackIos className="mr-1" /> Back
+          </h1>
         </div>
-        <div className="border-r w-5 border-bgcolor mr-32 px-12" />
-        <div className="md:col-span-7 sm:col-span-12 overflow-scroll no-scrollbar ml-20">
-          <div className="p-5">
-            <div
-              className="absolute text-2xl 3xl:text-3xl  font-bold text-darkColor ml-[480px] 3xl:ml-[625px] mt-5 hover:text-cyan-600 hover:scale-125 cursor-pointer"
+        <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
+          <div className="flex">
+            <h1 className="pl-5">Product Detail</h1>
+            <button
+              className=" text-darkColor hover:text-cyan-600 cursor-pointer"
               onClick={() => navigate(`/cms/edit/${id}`)}
             >
-              <TbEdit className="" />
-            </div>
-            <h1 className="text-xl font-bold pt-10 pb-1 text-darkColor">
-              Description
-            </h1>
-            <p className="text-justify mb-3 text-darkColor">{data.desc}</p>
-            <hr />
-            <h1 className="pt-3 text-lg font-bold text-darkColor">Category</h1>
-            <p className="mb-3 text-darkColor capitalize">{data.category}</p>
-            <hr />
-            <h1 className="pt-3 text-lg font-bold text-darkColor">Condition</h1>
-            <p className="mb-3 text-darkColor capitalize">{data.condition}</p>
-            <hr />
-            <h1 className="pt-3 text-lg font-bold text-darkColor capitalize">
-              Unit
-            </h1>
-            <p className="mb-3 text-darkColor">{data.unit}</p>
-            <hr />
-            <h1 className="pt-3 text-lg font-bold text-darkColor">Stock</h1>
-            <p>{data.stock}</p>
-            <hr />
-            <h1 className="pt-3 text-lg font-bold text-darkColor ">Views</h1>
-            <p className="mb-3 text-darkColor">{data.views}</p>
-            <hr />
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-darkColor">Price</h1>
-                <p className="mb-3 text-darkColor font-semibold">
-                  Rp. {intToRupiah(data.price)}
-                </p>
+              <div className="flex">
+                <div className="ml-[500px] 3xl:ml-[625px]">
+                  <TbEdit className="text-2xl 3xl:text-3xl font-bold mr-1" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold">EDIT</h1>
+                </div>
               </div>
-
-              <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-darkColor">
-                  Total Sold
-                </h1>
-                <p>{data.totalSold}</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-darkColor">
-                  Rating
-                </h1>
-                <p>
-                  <div className="flex justify-center mt-2">
-                    {data.rating !== 0 && data.rating !== null
-                      ? [...Array(data.rating)].map((x, i) => (
-                          <BsFillStarFill
-                            key={i}
-                            className="text-amber-500"
-                            size={20}
-                          />
-                        ))
-                      : "No ratings given"}
+            </button>
+          </div>
+          <hr className="border-cyan-800 mx-5 mt-2" />
+        </div>
+        {action === "GET_PRODUCT_BY_ID" &&
+        status === "data" &&
+        data !== "loading" ? (
+          <></>
+        ) : (
+          <></>
+        )}
+        <div className="px-5 pb-10">
+          <div className=" flex space-x-8">
+            {data.ProductImages !== undefined ? (
+              data.ProductImages.map((img, index) => {
+                return (
+                  <div
+                    className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
+                    key={index}
+                  >
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-7xl">
+                        <img
+                          className="object-cover w-full h-40"
+                          src={
+                            img
+                              ? url + "/images/" + img.filename
+                              : "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                        />
+                      </div>
+                    </label>
                   </div>
-                </p>
-              </div>
-            </div>
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-3 ">
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Name
+            </label>
+          </div>
+
+          <div className="px-5 py-2 col-span-2">
+            <input
+              type="text"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+              disabled
+              value={data.name}
+            ></input>
+          </div>
+
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Description
+            </label>
+          </div>
+
+          <div className="px-5 py-2 col-span-2">
+            <textarea
+              rows="4"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+              value={data.desc}
+              disabled
+            ></textarea>
+          </div>
+
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Category
+            </label>
+            <select
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+              name="category"
+              id="category"
+              value={data.category}
+              disabled
+            >
+              <option value="tops">Tops</option>
+              <option value="bottoms">Bottoms</option>
+              <option value="accessories">Accessories</option>
+              <option value="grooming">Grooming</option>
+            </select>
+          </div>
+
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Condition
+            </label>
+            <select
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+              name="condition"
+              id="condition"
+              value={data.condition}
+              disabled
+            >
+              <option value="available">Available</option>
+              <option value="soldout">Sold-Out</option>
+            </select>
+          </div>
+
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Weight
+            </label>
+            <input
+              type="number"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+              value={data.weight}
+              disabled
+            ></input>
+          </div>
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Price
+            </label>
+            <input
+              type="number"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+              value={intToRupiah(data.price)}
+              disabled
+            ></input>
+          </div>
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Stock
+            </label>
+            <input
+              type="number"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+              value={data.stock}
+              disabled
+            ></input>
           </div>
         </div>
       </div>

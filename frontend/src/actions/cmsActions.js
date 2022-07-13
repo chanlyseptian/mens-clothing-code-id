@@ -149,6 +149,9 @@ export const update = (data, id) => {
       method: "PUT",
       url: `${url}/${id}`,
       data: data,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
     })
       .then(async (response) => {
         console.log(response.data);

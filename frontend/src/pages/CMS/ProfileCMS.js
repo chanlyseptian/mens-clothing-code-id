@@ -29,7 +29,9 @@ const ProfileCMS = () => {
               className=" relative"
               onClick={() => navigate(`/cms/editProfile`)}
             >
-              <RiEdit2Line className="top-0 right-0 absolute text-4xl   font-bold text-darkColor  mb-4 hover:text-cyan-600 hover:scale-125 cursor-pointer" />
+              <h1 className="text-base rounded-md  text-darkColor font-bold top-2 right-0 absolute hover:text-cyan-600 hover:scale-125 cursor-pointer">
+                EDIT
+              </h1>
             </div>
             <img
               className="w-full rounded-full shadow-lg"

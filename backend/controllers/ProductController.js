@@ -62,19 +62,20 @@ class ProductController {
   static async update(req, res, next) {
     try {
       const id = req.params.id;
+      const userId = req.userData.id;
+      const imagenames = req.files;
+
       const {
         name,
         desc,
         price,
         stock,
-        expire,
         weight,
         category,
         condition,
         totalSold,
         rating,
         views,
-        unit,
       } = req.body;
       let result = await Product.update(
         {
@@ -82,23 +83,35 @@ class ProductController {
           desc,
           price,
           stock,
-          stock,
-          expire,
           weight,
           category,
           condition,
           totalSold,
           rating,
           views,
-          unit,
         },
         {
-          where: { id },
+          where: { id: id, UserId: userId },
         }
       );
+      imagenames.forEach(async (imagename, index) => {
+        const isPrimary = index === 0 ? true : false;
+        await ProductImage.update(
+          {
+            filename: imagename.filename,
+            fileType: imagename.mimetype,
+            primary: isPrimary,
+          },
+          {
+            where: {
+              ProductId: id,
+            },
+          }
+        );
+      });
       res.status(201).json(result);
     } catch (err) {
-      next(err);
+      console.log(err);
     }
   }
   static async getProductById(req, res, next) {
