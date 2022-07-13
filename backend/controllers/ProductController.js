@@ -1,4 +1,7 @@
 const { Product, User, ProductImage } = require("../models");
+const axios = require("axios").default;
+
+const { URL } = require("url");
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -17,7 +20,12 @@ class ProductController {
       const page = +req.query.page || 1;
       const perPage = req.query.limit || 1;
       const skip = (page - 1) * 10;
-      let pageProduct = await Product.findAll().skip(skip).limit(perPage);
+      let pageProduct = await Product.findAll({
+        include: [User, ProductImage],
+        limit: 1,
+        offset: (page - 1) * 5,
+        where,
+      });
       res.status(200).json(pageProduct);
     } catch (error) {
       // console.log(error);
@@ -27,17 +35,20 @@ class ProductController {
   // static async getPageProduct(req, res) {
   //   try {
   //     const page = +req.query.page || 1;
-  //     const limit = req.query.limit || 1;
-  //     const startIndex = (page - 1) * 10;
-  //     const endIndex = page * perPage;
+  //     const perPage = +req.query.perPage || 1;
+  //     let getPageJobs = await axios({
+  //       method: "GET",
+  //       url: "http://localhost:3000/products" + page,
+  //     });
+  //     const url = URL + "?" + page;
 
-  //     let pageProduct = await Product.slice(startIndex, endIndex);
-  //     res.status(200).json(pageProduct);
+  //     console.log(url);
+  //     res.status(200).json(getPageJobs.data);
   //   } catch (error) {
-  //     console.log(error);
-  //     // res.status(500).json(error);
+  //     res.status(500).json(error);
   //   }
   // }
+
   //just for admin
   static async create(req, res, next) {
     try {
