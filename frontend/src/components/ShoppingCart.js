@@ -94,18 +94,18 @@ const ShoppingCart = () => {
   return (
     <div className="flex w-full relative">
       <div
-        className="text-xl right-[70px] lg:right-72 3xl:right-96 z-20 text-accentColor hover:text-white top-10 fixed cursor-pointer"
+        className="text-xl right-[70px] lg:right-52 3xl:right-96 z-20 text-accentColor hover:text-white top-10 fixed cursor-pointer"
         onClick={() => setShowCart(!showCart)}
       >
         <FaShoppingCart />
       </div>
       <div
-        className={`w-2 h-10 bg-white fixed top-16 right-[291px] 3xl:right-[388px] z-30 rounded-xl ${
+        className={`w-2 h-10 bg-white fixed top-16 right-[212px] 3xl:right-[388px] z-30 rounded-xl ${
           showCart ? "  block" : " hidden"
         }`}
       ></div>
       <aside
-        className={`flex transform top-[85px] right-0 w-1/3 fixed h-96 overflow-auto ease-in-out transition-all duration-300 z-[3] ${
+        className={`flex transform top-[85px] -right-12 3xl:right-0 w-1/3 fixed h-96 overflow-auto ease-in-out transition-all duration-300 z-[3] ${
           showCart ? "  block" : " hidden"
         } `}
       >

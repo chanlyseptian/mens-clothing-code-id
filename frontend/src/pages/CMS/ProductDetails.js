@@ -32,21 +32,25 @@ const ProductDetails = () => {
           </h1>
         </div>
         <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
-          <div className="flex">
-            <h1 className="pl-5">Product Detail</h1>
-            <button
-              className=" text-darkColor hover:text-cyan-600 cursor-pointer"
-              onClick={() => navigate(`/cms/edit/${id}`)}
-            >
-              <div className="flex">
-                <div className="ml-[500px] 3xl:ml-[625px]">
-                  <TbEdit className="text-2xl 3xl:text-3xl font-bold mr-1" />
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="pl-5">Product Detail</h1>
+            </div>
+            <div className="mr-5">
+              <button
+                className=" text-darkColor hover:text-cyan-600 cursor-pointer"
+                onClick={() => navigate(`/cms/edit/${id}`)}
+              >
+                <div className="flex items-center">
+                  <div className="">
+                    <TbEdit className="text-2xl 3xl:text-3xl font-bold mr-1" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold">EDIT</h1>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold">EDIT</h1>
-                </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
           <hr className="border-cyan-800 mx-5 mt-2" />
         </div>
