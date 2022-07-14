@@ -57,7 +57,7 @@ function RegisterUser() {
               htmlFor="file-upload"
             >
               <img
-                className="mx-auto object-cover w-36 h-36 "
+                className="mx-auto rounded-full object-cover w-36 h-36 "
                 src={
                   form.avatar
                     ? URL.createObjectURL(form.avatar)

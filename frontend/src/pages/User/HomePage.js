@@ -138,7 +138,7 @@ const HomePage = () => {
 
         <div className="mb-16">
           {action === "GET_ALL_PRODUCTS" && status === "data" ? (
-            <ProductCardContainerUser data={data} />
+            <ProductCardContainerUser data={data.data} />
           ) : (
             "loading"
           )}

@@ -112,7 +112,7 @@ const CMSDashboard = () => {
       {/* card */}
       <div className="">
         {action === "GET_ALL_PRODUCTS" && status === "data" ? (
-          <ProductCardContainerCMS data={data} />
+          <ProductCardContainerCMS data={data.data} />
         ) : (
           "loading"
         )}

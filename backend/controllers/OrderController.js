@@ -11,10 +11,23 @@ class OrderController {
   //hanya untuk admin
   static async getAllOrders(req, res, next) {
     try {
-      let orders = await Order.findAll({
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * perPage;
+      let pageOrder = await Order.findAll({
         include: Product,
+        limit: perPage,
+        offset: (page - 1) * perPage
       });
-      res.status(200).json(orders);
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: pageOrder.length
+      }
+
+      res.status(200).json(result);
     } catch (err) {
       next(err);
     }
@@ -181,7 +194,10 @@ class OrderController {
   static async getOrdersByUserId(req, res, next) {
     try {
       const id = +req.userData.id;
-      let result = await Order.findAll({
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageOrder = await Order.findAll({
         include: [
           {
             model: Product,
@@ -189,9 +205,11 @@ class OrderController {
           },
           User,
         ],
+        limit: 5,
+        offset: (page - 1) * 5,
         where: { UserId: id },
       });
-      res.status(201).json(result);
+      res.status(200).json(pageOrder);
     } catch (err) {
       next(err);
     }
