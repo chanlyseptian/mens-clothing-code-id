@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.belongsTo(models.User); //type admin
       Product.hasMany(models.ProductImage);
+      Product.hasMany(models.ProductStock);
       Product.belongsToMany(models.Order, { through: models.LineItem });
       Product.belongsToMany(models.ShoppingCart, { through: models.LineItem });
     }

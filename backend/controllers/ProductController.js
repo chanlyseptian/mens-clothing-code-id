@@ -1,10 +1,10 @@
-const { Product, User, ProductImage } = require("../models");
+const { Product, User, ProductImage, ProductStock } = require("../models");
 
 class ProductController {
   static async getAllProducts(req, res, next) {
     try {
       let products = await Product.findAll({
-        include: [User, ProductImage],
+        include: [User, ProductImage, ProductStock],
         order: [["id", "asc"]],
       });
       res.status(200).json(products);
@@ -22,6 +22,8 @@ class ProductController {
         desc,
         price,
         stock,
+        sizes,
+        stocks,
         weight,
         category,
         condition,
@@ -34,7 +36,7 @@ class ProductController {
         name,
         desc,
         price,
-        stock,
+        stock: stock || 0,
         weight,
         category,
         condition,
@@ -43,6 +45,17 @@ class ProductController {
         views,
         UserId: id,
       });
+
+      console.log(result.id)
+      if(result.id){
+        sizes.forEach(async (size, index) => {
+          await ProductStock.create({
+            ProductId: result.id,
+            size: sizes[index],
+            stock: stocks[index]
+          })
+        })
+      }
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
@@ -69,6 +82,8 @@ class ProductController {
         name,
         desc,
         price,
+        sizes,
+        stocks,
         stock,
         weight,
         category,
@@ -94,6 +109,21 @@ class ProductController {
           where: { id: id, UserId: userId },
         }
       );
+
+      if(result){
+        console.log("result true")
+        sizes.forEach(async (size, index) => {
+          await ProductStock.update({
+            stock: stocks[index]
+          },{
+            where: {
+              ProductId: id,
+			  size: sizes[index],
+            }
+          })
+        })
+      }
+
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
         await ProductImage.update(
@@ -118,7 +148,7 @@ class ProductController {
     const id = req.params.id;
     try {
       let result = await Product.findByPk(id, {
-        include: [ProductImage],
+        include: [ProductImage, ProductStock],
       });
       res.status(201).json(result);
     } catch (err) {
