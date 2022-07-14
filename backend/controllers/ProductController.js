@@ -3,11 +3,54 @@ const { Product, User, ProductImage, ProductStock } = require("../models");
 class ProductController {
   static async getAllProducts(req, res, next) {
     try {
+      const page = +req.query.page || 1;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      let limit = 4
+
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
-        order: [["id", "asc"]],
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
       });
-      res.status(200).json(products);
+
+      let result = {
+        data: products,
+        page: page,
+        limit: limit,
+        totalData: products.length
+      }
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  static async getByCategories(req, res, next) {
+    try {
+      const category = req.params.category || "tops";
+      const page = +req.query.page || 1;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      let limit = 4
+
+      let products = await Product.findAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          category: category
+        }
+      });
+
+      let result = {
+        data: products,
+        page: page,
+        limit: limit,
+        totalData: products.length
+      }
+      res.status(200).json(result);
     } catch (err) {
       next(err);
     }
