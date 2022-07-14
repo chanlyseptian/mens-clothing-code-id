@@ -10,4 +10,8 @@ orderRoute.put("/payment/:id", authentication, OrderController.updatePayment);
 orderRoute.put("/cancel/:id", authentication, OrderController.cancel);
 orderRoute.get("/unpaid", authentication, OrderController.orderUnpaid);
 
+//paging
+orderRoute.get("/all/:pages", OrderController.getPageAllOrders); //just for admin
+orderRoute.get("/:pages", authentication, OrderController.getPageOrdersByUserId);
+
 module.exports = orderRoute;

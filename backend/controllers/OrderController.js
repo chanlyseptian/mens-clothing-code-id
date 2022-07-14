@@ -19,6 +19,26 @@ class OrderController {
       next(err);
     }
   }
+
+  // mengambil all order di admin
+  static async getPageAllOrders(req, res) {
+    try {
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageOrder = await Order.findAll({
+        include: Product,
+        limit: 1,
+        offset: (page - 1) * 5,
+        where,
+      });
+      res.status(200).json(pageOrder);
+    } catch (error) {
+      // console.log(error);
+      res.status(500).json(error);
+    }
+  }
+
   static async create(req, res, next) {
     try {
       const id = +req.userData.id;
@@ -194,6 +214,32 @@ class OrderController {
       res.status(201).json(result);
     } catch (err) {
       next(err);
+    }
+  }
+
+  //mengambil page order dari user
+  static async getPageOrdersByUserId(req, res) {
+    try {
+      const id = +req.userData.id;
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageOrder = await Order.findAll({
+        include: [
+          {
+            model: Product,
+            include: [ProductImage],
+          },
+          User,
+        ],
+        limit: 1,
+        offset: (page - 1) * 5,
+        where: { UserId: id },
+      });
+      res.status(200).json(pageOrder);
+    } catch (error) {
+      // console.log(error);
+      res.status(500).json(error);
     }
   }
 
