@@ -16,7 +16,8 @@ productRoute.put(
   upload.array("filename"),
   ProductController.update
 ); //just for admin
-productRoute.get("/category/:category", ProductController.getProductByCategory);
+
+// productRoute.get("/category/:category", ProductController.getProductByCategory);
 productRoute.get("/nameAsc", ProductController.sortProductsNameAtoZ);
 productRoute.get("/nameDesc", ProductController.sortProductsNameZtoA);
 productRoute.get("/priceAsc", ProductController.sortProductsPriceAsc);
