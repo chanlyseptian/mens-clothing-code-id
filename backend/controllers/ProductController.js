@@ -48,13 +48,17 @@ class ProductController {
 
       console.log(result.id)
       if(result.id){
-        sizes.forEach(async (size, index) => {
-          await ProductStock.create({
-            ProductId: result.id,
-            size: sizes[index],
-            stock: stocks[index]
-          })
-        })
+		console.log(sizes)
+		console.log(stocks)
+		if(sizes){
+			sizes.forEach(async (size, index) => {
+				await ProductStock.create({
+					ProductId: result.id,
+					size: size || 0,
+					stock: stocks[index] || 0
+				})
+			})
+		}
       }
 
       imagenames.forEach(async (imagename, index) => {
