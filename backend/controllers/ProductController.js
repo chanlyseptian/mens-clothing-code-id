@@ -143,6 +143,109 @@ class ProductController {
       next(err);
     }
   }
+
+  // static async getProductByCategory(req, res, next){
+  //   const category = req.params.category;
+  //   // const page = req.params.page
+  //   // const limit = req.params.limit
+
+  //   // const startIndex = (page - 1) * limit
+  //   // const endIndex = page * limit
+
+  //   try{
+  //     let product = await getProductByCategory.findAll({
+  //       where: { category },
+  //     });
+  //     // let result = await product.slice(startIndex, endIndex)
+  //     res.status(201).json(product)
+  //   } catch (err){
+  //     next(err)
+  //   }
+  // }
+
+  static async sortProductsNameAtoZ(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["name", "asc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async sortProductsNameZtoA(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["name", "desc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async sortProductsPriceAsc(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["price", "asc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async sortProductsPriceDesc(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["price", "desc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async sortProductsLatest(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["id", "desc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async sortProductsRatingDesc(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["rating", "desc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
+  
+  static async sortProductsRatingAsc(req, res, next) {
+    try {
+      let products = await Product.findAll({
+        include: [User, ProductImage],
+        order: [["rating", "asc"]],
+      });
+      res.status(200).json(products);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = ProductController;

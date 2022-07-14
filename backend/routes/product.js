@@ -16,7 +16,15 @@ productRoute.put(
   upload.array("filename"),
   ProductController.update
 ); //just for admin
-productRoute.get("/:id", ProductController.getProductById);
+productRoute.get("/info/:id", ProductController.getProductById);
 productRoute.put("/views/:id", ProductController.addViews);
+// productRoute.get("/cat/:category", ProductController.getProductByCategory);
+productRoute.get("/nameAsc", ProductController.sortProductsNameAtoZ);
+productRoute.get("/nameDesc", ProductController.sortProductsNameZtoA);
+productRoute.get("/priceAsc", ProductController.sortProductsPriceAsc);
+productRoute.get("/priceDesc", ProductController.sortProductsPriceDesc);
+productRoute.get("/latest", ProductController.sortProductsLatest);
+productRoute.get("/ratingAsc", ProductController.sortProductsRatingAsc);
+productRoute.get("/RatingDesc", ProductController.sortProductsRatingDesc);
 
 module.exports = productRoute;
