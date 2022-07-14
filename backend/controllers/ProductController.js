@@ -144,24 +144,24 @@ class ProductController {
     }
   }
 
-  // static async getProductByCategory(req, res, next){
-  //   const category = req.params.category;
-  //   // const page = req.params.page
-  //   // const limit = req.params.limit
+  static async getProductByCategory(req, res, next){
+    const category = req.params.category;
+    // const page = req.params.page
+    // const limit = req.params.limit
 
-  //   // const startIndex = (page - 1) * limit
-  //   // const endIndex = page * limit
+    // const startIndex = (page - 1) * limit
+    // const endIndex = page * limit
 
-  //   try{
-  //     let product = await getProductByCategory.findAll({
-  //       where: { category },
-  //     });
-  //     // let result = await product.slice(startIndex, endIndex)
-  //     res.status(201).json(product)
-  //   } catch (err){
-  //     next(err)
-  //   }
-  // }
+    try{
+      let product = await getProductByCategory.findAll({
+        where: { category },
+      });
+      // let result = await product.slice(startIndex, endIndex)
+      res.status(201).json(product)
+    } catch (err){
+      next(err)
+    }
+  }
 
   static async sortProductsNameAtoZ(req, res, next) {
     try {
@@ -234,7 +234,7 @@ class ProductController {
       next(err);
     }
   }
-  
+
   static async sortProductsRatingAsc(req, res, next) {
     try {
       let products = await Product.findAll({
