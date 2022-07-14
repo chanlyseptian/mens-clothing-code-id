@@ -25,6 +25,29 @@ function AddProduct() {
   const [images, setImages] = useState([]);
   const [sizeRows, setSizeRows] = useState([1]);
 
+  const [type, setType] = useState("");
+  const [stock, setStock] = useState(0);
+
+  const [sizeArr, setSizeArr] = useState([]);
+  const [doneAddArr, setDoneAddArr] = useState(false);
+
+  const addSizeToArr = (e) => {
+    setSizeArr([
+      ...sizeArr,
+      {
+        type: type,
+        stock: stock,
+      },
+    ]);
+    console.log(sizeArr);
+    setDoneAddArr(true);
+  };
+
+  useEffect(() => {
+    setType("");
+    setStock(0);
+  }, [doneAddArr]);
+
   const addProductHandler = () => {
     let formData = new FormData();
     formData.append("name", form.name);
@@ -231,8 +254,8 @@ function AddProduct() {
             )}
           </div>
         </div>
-        {/* <hr className="border-cyan-800 mx-5 mt-2" /> */}
-        {/* <div className="grid grid-cols-2">
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="grid grid-cols-2">
           <div className="px-5 py-2">
             <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
               <h1 className="pl-5">Size Chart</h1>
@@ -256,18 +279,29 @@ function AddProduct() {
                 sizeRows.map((row, index) => {
                   return (
                     <tr key={index}>
-                      <td className="pl-5 w-[80vw]">
+                      <td className="pl-5 ml-5 w-[200vw]">
                         <input
                           placeholder="Size Type (S/M/L/US/UK)"
+                          type="text"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => setType(e.target.value)}
                         />
                       </td>
-                      <td className="pl-5 w-[20vw]">
+                      <td className="ml-5 w-[80vw]">
                         <input
                           placeholder="Stock"
                           type="number"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => setStock(e.target.value)}
                         />
+                      </td>
+                      <td className="pl-5 w-[20vw]">
+                        <button
+                          className="px-3 py-2 rounded bg-darkColor text-white font-semibold"
+                          onClick={addSizeToArr}
+                        >
+                          +
+                        </button>
                       </td>
                     </tr>
                   );
@@ -277,7 +311,7 @@ function AddProduct() {
               )}
             </tbody>
           </table>
-        </div> */}
+        </div>
         <div className="px-5 py-5 text-center">
           <button
             className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-1/3 text-white uppercase"

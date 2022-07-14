@@ -104,7 +104,7 @@ const ShoppingCart = () => {
           showCart ? "  block" : " hidden"
         }`}
       ></div>
-      <aside
+      <div
         className={`flex transform top-[85px] -right-12 3xl:right-0 w-1/3 fixed h-96 overflow-auto ease-in-out transition-all duration-300 z-[3] ${
           showCart ? "  block" : " hidden"
         } `}
@@ -176,12 +176,39 @@ const ShoppingCart = () => {
             </ul>
           </div>
         </div>
-      </aside>
+      </div>
+      {/* <aside className="flex border-r border-lightColor transform top-0 left-0 w-48 fixed h-screen ease-in-out transition-all duration-300 z-[3] -translate-x-[185px] hover:translate-x-0">
+        <div className="bg-darkColor w-full">
+          <div className="mx-auto h-full w-full">
+            <ul className="my-2 h-full text-accentColor">
+              <li className="py-10 text-2xl flex justify-center items-center">Filter</li>
+              <hr/>
+              <li className="pl-2 py-3">Categories</li>
+              <li className="flex items-center mb-2">
+                <Checkbox className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" color="blue" />
+                <label>Tops</label>
+              </li>
+              <li className="flex items-center mb-2">
+                <Checkbox className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" color="blue" />
+                <label>Bottoms</label>
+              </li>
+              <li className="flex items-center mb-2">
+                <Checkbox className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" color="blue" />
+                <label>Accessories</label>
+              </li>
+              <li className="flex items-center mb-2">
+                <Checkbox className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" color="blue" />
+                <label>Grooming</label>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside> */}
       <main className="w-full max-h-full">
         <div className="sticky top-0 z-[2]">
           <Header />
         </div>
-        <div className="sticky z-[1] ">
+        <div className="sticky">
           <AfterLoginRoutes />
         </div>
         <div className="pt-2">
