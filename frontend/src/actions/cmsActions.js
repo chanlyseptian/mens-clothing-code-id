@@ -5,7 +5,7 @@ import base_url from "../helpers/base_url";
 
 const url = base_url + "/products";
 
-export const getAllProducts = () => {
+export const getAllProducts = (attribute) => {
   return (dispatch) => {
     // loading
     dispatch({
@@ -19,7 +19,7 @@ export const getAllProducts = () => {
     //success
     axios({
       method: "GET",
-      url: url,
+      url: url + attribute,
     })
       .then((response) => {
         dispatch({

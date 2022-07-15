@@ -7,15 +7,19 @@ import { GiLoincloth } from "react-icons/gi";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../../actions/cmsActions";
 import { RiTShirtAirFill } from "react-icons/ri";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const CMSDashboard = () => {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
-    dispatch(getAllProducts());
-  }, []);
+    let pageAttribute = `?page=${page}`
+    dispatch(getAllProducts(pageAttribute));
+  }, [page]);
 
   const [query, setQuery] = useState("");
   const [queryDone, setQueryDone] = useState(false);
@@ -116,6 +120,19 @@ const CMSDashboard = () => {
         ) : (
           "loading"
         )}
+      </div>
+      <div className="text-4xl flex justify-center items-center ">
+      {(data.page> 1)?
+          <button onClick={()=>setPage(page-1)}>
+            <MdKeyboardArrowLeft className="text-gray-400" />
+          </button>
+        :""}       
+          <p className="text-sm">{data.page}</p>
+        {(data.page< data.totalPage)?
+          <button onClick={()=>setPage(page+1)}>
+            <MdKeyboardArrowRight className="text-darkColor cursor-pointer"/>
+          </button>
+        :""}
       </div>
       <div className="fixed right-28 bottom-9">
         <button

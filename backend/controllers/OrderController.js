@@ -12,19 +12,62 @@ class OrderController {
   static async getAllOrders(req, res, next) {
     try {
       const page = +req.query.page || 1;
-      const perPage = req.query.limit || 1;
-      const skip = (page - 1) * perPage;
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
       let pageOrder = await Order.findAll({
         include: Product,
-        limit: perPage,
-        offset: (page - 1) * perPage
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
       });
+
+      let totalData = await Order.count();
 
       let result = {
         data: pageOrder,
         page: page,
         limit: limit,
-        totalData: pageOrder.length
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  static async getAllOrderByStatus(req, res, next) {
+    try {
+      const status = req.params.status || "completed";
+      const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
+      let pageOrder = await Order.findAll({
+        include: Product,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          status: status
+        }
+      });
+
+      let totalData = Order.count({
+        where: {
+          status: status
+        }
+      })
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
       }
 
       res.status(200).json(result);
