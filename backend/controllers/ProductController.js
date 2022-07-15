@@ -6,7 +6,7 @@ class ProductController {
       const page = +req.query.page || 1;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4
+      const limit = req.query.limit || 5;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
@@ -15,11 +15,13 @@ class ProductController {
         order: [[sorter, order]],
       });
 
+      let totalData = products.count
       let result = {
-        data: products,
+        data: products.rows,
         page: page,
         limit: limit,
-        totalData: products.length
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
       }
       res.status(200).json(result);
     } catch (err) {
@@ -30,11 +32,11 @@ class ProductController {
     try {
       const category = req.params.category || "tops";
       const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4
 
-      let products = await Product.findAll({
+      let products = await Product.findAndCountAll({
         include: [User, ProductImage, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
@@ -44,11 +46,13 @@ class ProductController {
         }
       });
 
+      let totalData = products.count
       let result = {
-        data: products,
+        data: products.rows,
         page: page,
         limit: limit,
-        totalData: products.length
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
       }
       res.status(200).json(result);
     } catch (err) {
