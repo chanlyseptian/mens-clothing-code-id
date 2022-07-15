@@ -100,7 +100,6 @@ const ShoppingCart = () => {
         <FaShoppingCart />
       </div>
       <div
-<<<<<<< HEAD
         className={`w-2 h-10 bg-white fixed top-16 right-[212px] 3xl:right-[388px] z-30 rounded-xl ${
           showCart ? "  block" : " hidden"
         }`}
@@ -109,14 +108,6 @@ const ShoppingCart = () => {
         className={`flex transform top-[85px] -right-12 3xl:right-0 w-1/3 fixed h-96 overflow-auto ease-in-out transition-all duration-300 z-[3] ${
           showCart ? "  block" : " hidden"
         } `}
-=======
-        className={`w-2 h-10 bg-white fixed top-16 right-[212px] 3xl:right-[388px] z-30 rounded-xl ${showCart ? "  block" : " hidden"
-          }`}
-      ></div>
-      <div
-        className={`flex transform top-[85px] -right-12 3xl:right-0 w-1/3 fixed h-96 overflow-auto ease-in-out transition-all duration-300 z-[3] ${showCart ? "  block" : " hidden"
-          } `}
->>>>>>> 88ffd2f3da575f03787eaede6e2b2c6e95fd2801
       >
         <div className="justify-between pt-6 w-3/4 bg-white shadow-xl rounded-xl">
           <div className=" text-xl text-center mt-2 text-darkColor font-semibold ">
@@ -126,8 +117,8 @@ const ShoppingCart = () => {
           <div className="mx-auto flex justify-center">
             <ul className="my-2 ">
               {action === "GET_CART_BY_USER_ID" &&
-                status === "data" &&
-                data !== "loading" ? (
+              status === "data" &&
+              data !== "loading" ? (
                 data.lineItems.map((lineItem, index) => {
                   return (
                     <div key={index}>
@@ -161,9 +152,9 @@ const ShoppingCart = () => {
                 <></>
               )}
               {action === "GET_CART_BY_USER_ID" &&
-                status === "data" &&
-                data !== "loading" &&
-                data.lineItems.length !== 0 ? (
+              status === "data" &&
+              data !== "loading" &&
+              data.lineItems.length !== 0 ? (
                 <li className="my-2 w-3/4 absolute right-0 bottom-5">
                   <button
                     className="flex bg-darkColor items-center py-3 px-8 text-white hover:bg-midColor rounded-md"

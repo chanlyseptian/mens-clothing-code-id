@@ -6,7 +6,7 @@ class ProductController {
       const page = +req.query.page || 1;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4
+      let limit = 4;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
@@ -21,8 +21,8 @@ class ProductController {
         data: products,
         page: page,
         limit: limit,
-        totalPage: Math.ceil(totalProduct/limit)
-      }
+        totalPage: Math.ceil(totalProduct / limit),
+      };
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -34,7 +34,7 @@ class ProductController {
       const page = +req.query.page || 1;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4
+      let limit = 4;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
@@ -42,16 +42,16 @@ class ProductController {
         offset: (page - 1) * limit,
         order: [[sorter, order]],
         where: {
-          category: category
-        }
+          category: category,
+        },
       });
 
       let result = {
         data: products,
         page: page,
         limit: limit,
-        totalData: products.length
-      }
+        totalData: products.length,
+      };
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -66,7 +66,6 @@ class ProductController {
         name,
         desc,
         price,
-        stock,
         sizes,
         stocks,
         weight,
@@ -81,7 +80,6 @@ class ProductController {
         name,
         desc,
         price,
-        stock: stock || 0,
         weight,
         category,
         condition,
@@ -91,19 +89,19 @@ class ProductController {
         UserId: id,
       });
 
-      console.log(result.id)
-      if(result.id){
-		    console.log(sizes)
-        console.log(stocks)
-        if(sizes){
+      console.log(result.id);
+      if (result.id) {
+        console.log(sizes);
+        console.log(stocks);
+        if (sizes) {
           sizes.forEach(async (size, index) => {
-				    await ProductStock.create({
+            await ProductStock.create({
               ProductId: result.id,
               size: size || 0,
-              stock: stocks[index] || 0
-				    })
-			    })
-		    }
+              stock: stocks[index] || 0,
+            });
+          });
+        }
       }
 
       imagenames.forEach(async (imagename, index) => {
@@ -133,7 +131,6 @@ class ProductController {
         price,
         sizes,
         stocks,
-        stock,
         weight,
         category,
         condition,
@@ -141,12 +138,13 @@ class ProductController {
         rating,
         views,
       } = req.body;
+
+      console.log(req.body);
       let result = await Product.update(
         {
           name,
           desc,
           price,
-          stock,
           weight,
           category,
           condition,
@@ -159,18 +157,21 @@ class ProductController {
         }
       );
 
-      if(result){
-        console.log("result true")
+      if (result) {
+        console.log("result true");
         sizes.forEach(async (size, index) => {
-          await ProductStock.update({
-            stock: stocks[index]
-          },{
-            where: {
-              ProductId: id,
-			  size: sizes[index],
+          await ProductStock.update(
+            {
+              stock: stocks[index],
+            },
+            {
+              where: {
+                ProductId: id,
+                size: sizes[index],
+              },
             }
-          })
-        })
+          );
+        });
       }
 
       imagenames.forEach(async (imagename, index) => {

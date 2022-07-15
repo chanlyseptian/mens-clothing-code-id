@@ -16,7 +16,6 @@ function AddProduct() {
     name: "",
     desc: "",
     price: 0,
-    stock: 0,
     weight: 0,
     category: "tops",
     condition: "available",
@@ -27,9 +26,8 @@ function AddProduct() {
 
   const [sizeArr, setSizeArr] = useState([]);
 
-
   useEffect(() => {
-    console.log(sizeArr)
+    console.log(sizeArr);
   }, [sizeArr]);
 
   const addSize = () => {
@@ -41,26 +39,25 @@ function AddProduct() {
         stock: 0,
       },
     ]);
-  }
+  };
 
   const updateTypeChanged = (index, e) => {
     let newArr = [...sizeArr];
     newArr[index] = { ...newArr[index], type: e.target.value };
     setSizeArr(newArr);
-  }
+  };
 
   const updateStockChanged = (index, e) => {
     let newArr = [...sizeArr];
     newArr[index] = { ...newArr[index], stock: e.target.value };
     setSizeArr(newArr);
-  }
+  };
 
   const addProductHandler = () => {
     let formData = new FormData();
     formData.append("name", form.name);
     formData.append("desc", form.desc);
     formData.append("price", form.price);
-    formData.append("stock", form.stock);
     formData.append("weight", form.weight);
     formData.append("category", form.category);
     formData.append("condition", form.condition);
@@ -68,7 +65,7 @@ function AddProduct() {
     if (sizeArr.length !== 0) {
       for (const sizeStock of sizeArr) {
         formData.append("sizes", sizeStock.type);
-        formData.append("stocks", sizeStock.stock)
+        formData.append("stocks", sizeStock.stock);
       }
     }
 
@@ -77,7 +74,7 @@ function AddProduct() {
         formData.append("filename", image);
       }
     }
-    console.log(formData)
+    console.log(formData);
     dispatch(create(formData));
   };
 
@@ -185,16 +182,6 @@ function AddProduct() {
               onChange={(e) => setForm({ ...form, price: e.target.value })}
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Stock
-            </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, stock: e.target.value })}
-            ></input>
-          </div>
         </div>
         <hr className="border-cyan-800 mx-5 mt-2" />
         <div className="px-5 py-5">
@@ -277,12 +264,7 @@ function AddProduct() {
             </div>
           </div>
           <div className="px-5 py-2 text-right">
-            <button
-              className="p-2"
-              onClick={() =>
-                addSize()
-              }
-            >
+            <button className="p-2" onClick={() => addSize()}>
               <h1 className="pl-5 text-base font-bold text-cyan-700 hover:text-cyan-900 ">
                 Add Rows
               </h1>
@@ -310,14 +292,6 @@ function AddProduct() {
                           onChange={(e) => updateStockChanged(index, e)}
                         />
                       </td>
-                      {/* <td className="pl-5 w-[20vw]">
-                        <button
-                          className="px-3 py-2 rounded bg-darkColor text-white font-semibold"
-                          onClick={addSizeToArr}
-                        >
-                          +
-                        </button>
-                      </td> */}
                     </tr>
                   );
                 })
