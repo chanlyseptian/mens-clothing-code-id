@@ -1,4 +1,6 @@
 const { Product, User, ProductImage, ProductStock } = require("../models");
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -8,7 +10,7 @@ class ProductController {
       const order = req.query.order || "asc";
       const limit = req.query.limit || 5;
 
-      let products = await Product.findAll({
+      let products = await Product.findAndCountAll({
         include: [User, ProductImage, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
@@ -23,6 +25,61 @@ class ProductController {
         totalData: totalData,
         totalPage: Math.ceil(totalData / limit)
       }
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  static async getProductsBySearch(req, res, next) {
+    try {   
+      const page = +req.query.page || 1;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const limit = req.query.limit || 5;
+      const search = req.query.search
+      const filter = req.body.filter || []
+      let products
+     
+      products = await Product.findAndCountAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          [Op.or]: [
+            {
+              name : {
+                [Op.like]: `%${search}%`
+              }
+          },{
+            desc : {
+              [Op.like]: `%${search}%`
+            }
+          },{
+            category : {
+              [Op.like]: `%${search}%`
+            }
+          }]
+        },
+      })
+
+      // ----- Filter products by categories -----
+      if(filter.length !== 0){
+        console.log(search)
+        console.log("ada filter")
+        products.rows  = products.rows.filter( prd => filter.includes(prd.category))
+      }
+
+      // ----- Output Data for FE -----
+      let totalData = products.count
+      let result = {
+        data: products.rows,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+      
       res.status(200).json(result);
     } catch (err) {
       next(err);
