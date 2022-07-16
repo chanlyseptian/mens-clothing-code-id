@@ -13,10 +13,12 @@ const HomePage = () => {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(getAllProducts());
-  }, []);
+    let pageAttribute = `?page=${page}`;
+    dispatch(getAllProducts(pageAttribute));
+  }, [page]);
 
   const [formFilter, setFormFilter] = useState({
     tops: false,
