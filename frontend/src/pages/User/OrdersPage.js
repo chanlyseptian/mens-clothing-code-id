@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getOrdersByUserId } from "../../actions/shoppingActions";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-function OrdersPage() {
+const OrdersPage = () => {
   const { action, status, data } = useSelector(
     (state) => state.shoppingReducer
   );
@@ -15,10 +15,11 @@ function OrdersPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getOrdersByUserId());
+    dispatch(getOrdersByUserId(page, 5));
   }, []);
 
   const [orders, setOrders] = useState([]);
+  const [page, setPage] = useState(1);
 
 
   useEffect(() => {
@@ -26,6 +27,11 @@ function OrdersPage() {
       setOrders(data);
     }
   }, [status]);
+
+  const changeDataPage = (page) => {
+    setPage(page);
+    dispatch(getOrdersByUserId(page, 5));
+  }
 
   return (
     <div className="py-3 p-24 3xl:px-48 3xl:ml-6 h-[820px]">
@@ -70,9 +76,26 @@ function OrdersPage() {
           >
             Cancelled
           </button>
+          <div className="text-4xl flex items-center ">
+            {/* {(data.page > 1) ?
+              <button onClick={() => setPage(page - 1)}>
+                <MdKeyboardArrowLeft className="text-gray-400" />
+              </button>
+              : ""}
+            <p className="text-sm">{data.page}</p>
+            {(data.page < data.totalPage) ?
+              <button onClick={() => setPage(page + 1)}>
+                <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
+              </button>
+              : ""} */}
+            <MdKeyboardArrowLeft className="text-gray-400 cursor-pointer" onClick={() => changeDataPage(page - 1)} />
+            <p className="text-sm">{page}</p>
+            <MdKeyboardArrowRight className="text-darkColor cursor-pointer" onClick={() => changeDataPage(page + 1)} />
+          </div>
 
         </div>
 
+        <hr className="mt-1" />
 
         <div className="p-5 border border-1 bg-gray-100 mt-5">
           {orders ? <OrderTable data={orders} /> : <></>}

@@ -3,6 +3,7 @@ const OrderController = require("../controllers/OrderController");
 const authentication = require("../middlewares/auth");
 
 orderRoute.get("/all", OrderController.getAllOrders); //just for admin
+orderRoute.get("/status/:status", OrderController.getAllOrderByStatus);
 orderRoute.get("/:id", authentication, OrderController.getOrder);
 orderRoute.get("/", authentication, OrderController.getOrdersByUserId);
 orderRoute.post("/checkout", authentication, OrderController.create);

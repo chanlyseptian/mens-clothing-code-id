@@ -39,7 +39,8 @@ const OrderTable = (props) => {
                     <td className="pb-4 md:table-cell p-2 text-right">
                       <Link to="#">
                         <p className="md:table-cell text-midColor">
-                          {index + 1}.
+                          {order.id}.
+                          {/* {index + 1}. */}
                         </p>
                       </Link>
                     </td>

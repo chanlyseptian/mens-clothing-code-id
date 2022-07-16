@@ -145,7 +145,7 @@ export const getOrder = (id) => {
   };
 };
 
-export const getOrdersByUserId = () => {
+export const getOrdersByUserId = (page, perPage) => {
   return (dispatch) => {
     // Loading
     dispatch({
@@ -159,8 +159,12 @@ export const getOrdersByUserId = () => {
     // Success
     axios({
       method: "GET",
-      url: url + "/orders/",
+      url: url + "/orders",
       timeout: 5000,
+      params: {
+        page: page,
+        perPage: perPage
+      },
       headers: {
         access_token: localStorage.getItem("access_token"),
       },
