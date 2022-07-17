@@ -17,7 +17,7 @@ const dummyImg = [
   },
   {
     image: image_banner_3,
-    label: "Sunscreen for Your Daily Activities",
+    label: "T-Shirt for Your Daily Activities",
   },
 ];
 
