@@ -33,6 +33,7 @@ const HomePage = () => {
 
   return (
     <>
+      <CarouselComponent />
       <aside className=" flex border-r border-lightColor transform top-0 left-0 w-48 fixed h-screen ease-in-out transition-all duration-300 -translate-x-[185px] hover:translate-x-0">
         <div className="bg-darkColor w-full">
           <div className="mx-auto h-full w-full">
