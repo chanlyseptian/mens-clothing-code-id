@@ -8,13 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ProductId: {
-        type: Sequelize.INTEGER
-      },
       size: {
         type: Sequelize.STRING
       },
+      color: {
+        type: Sequelize.STRING
+      },
       stock: {
+        type: Sequelize.INTEGER
+      },
+      ProductId: {
         type: Sequelize.INTEGER
       },
       createdAt: {
@@ -28,6 +31,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('productstocks');
+    await queryInterface.dropTable('ProductStocks');
   }
 };

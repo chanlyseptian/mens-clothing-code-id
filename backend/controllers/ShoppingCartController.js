@@ -32,7 +32,7 @@ class ShoppingCartController {
     static async addToCart(req, res, next) {
         try {
             const id = +req.userData.id
-            const { qty, ProductStockId } = req.body;
+            const { qty, ProductStockId, ProductId, color } = req.body;
 
             // cari keranjang yang open
             const shoppingCart = await ShoppingCart.findOne({
@@ -120,7 +120,6 @@ class ShoppingCartController {
                     where: { id: lineItem.ProductId }
                 })
             }
-
             res.status(201).json(order);
         } catch (err) {
             next(err)

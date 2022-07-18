@@ -12,9 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       LineItem.belongsTo(models.Product)
+      LineItem.belongsTo(models.ProductStock)
       LineItem.belongsTo(models.ShoppingCart)
       LineItem.belongsTo(models.Order)
-      LineItem.belongsTo(models.ProductStock)
+
     }
   }
   LineItem.init({

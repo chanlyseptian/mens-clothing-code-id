@@ -17,16 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ProductStock.init({
-    ProductId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"Product Id must not be empty"
-        }
-      }
-    }, 
     size: DataTypes.STRING,
-    stock: DataTypes.INTEGER
+    color: DataTypes.STRING,
+    stock: DataTypes.INTEGER,
+    ProductId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'ProductStock',

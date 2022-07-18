@@ -17,22 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   ProductImage.init({
     filename: DataTypes.STRING,
     fileType: DataTypes.STRING,
-    primary: {
-      type: DataTypes.BOOLEAN,
-      validate: {
-        notEmpty: {
-          msg:"Primary must not be empty"
-        }
-      }
-    }, 
-    ProductId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"Product Id must not be empty"
-        }
-      }
-    }, 
+    primary: DataTypes.BOOLEAN,
+    ProductId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'ProductImage',

@@ -147,6 +147,7 @@ class ProductController {
         totalSold,
         rating,
         views,
+        color,
       } = req.body;
 
       const result = await Product.create({
@@ -173,6 +174,7 @@ class ProductController {
               ProductId: result.id,
               size: size || 0,
               stock: stocks[index] || 0,
+              color: color[index] || 0,
             });
           });
         }
