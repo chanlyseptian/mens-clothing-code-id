@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       totalSold: DataTypes.INTEGER,
       rating: DataTypes.INTEGER,
       views: DataTypes.INTEGER,
+      finalPrice: DataTypes.INTEGER,
       UserId: {
         type: DataTypes.INTEGER,
         validate: {

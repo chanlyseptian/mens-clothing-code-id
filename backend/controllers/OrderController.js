@@ -30,8 +30,8 @@ class OrderController {
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
 
       res.status(200).json(result);
     } catch (err) {
@@ -52,23 +52,23 @@ class OrderController {
         offset: (page - 1) * limit,
         order: [[sorter, order]],
         where: {
-          status: status
-        }
+          status: status,
+        },
       });
 
       let totalData = Order.count({
         where: {
-          status: status
-        }
-      })
+          status: status,
+        },
+      });
 
       let result = {
         data: pageOrder,
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
 
       res.status(200).json(result);
     } catch (err) {
