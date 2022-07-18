@@ -11,7 +11,7 @@ npx sequelize-cli model:generate --name Order --attributes subtotal:integer,disc
 
 npx sequelize-cli model:generate --name ShoppingCart --attributes status:string,UserId:integer
 
-npx sequelize-cli model:generate --name LineItem --attributes qty:integer,status:string,ProductId:integer,ShoppingCartId:integer,OrderId:integer
+npx sequelize-cli model:generate --name LineItem --attributes qty:integer,status:string,ProductId:integer,ShoppingCartId:integer,OrderId:integer,ProductStockId:integer
 
 
 

@@ -31,7 +31,7 @@ class ShoppingCartController {
     static async addToCart(req, res, next) {
         try {
             const id = +req.userData.id
-            const { qty, ProductId } = req.body;
+            const { qty, ProductId, ProductStockId } = req.body;
 
             // cari keranjang yang open
             const shoppingCart = await ShoppingCart.findOne({
@@ -42,6 +42,7 @@ class ShoppingCartController {
             let result = await LineItem.create({
                 ShoppingCartId: shoppingCart.id,
                 ProductId,
+                ProductStockId,
                 qty,
                 status: "cart"
             })
