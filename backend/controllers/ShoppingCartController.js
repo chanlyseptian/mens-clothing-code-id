@@ -42,6 +42,7 @@ class ShoppingCartController {
             // masukkan product ke keranjang
             let result = await LineItem.create({
                 ShoppingCartId: shoppingCart.id,
+                ProductId,
                 ProductStockId,
                 qty,
                 status: "cart"
