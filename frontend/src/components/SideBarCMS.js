@@ -64,8 +64,8 @@ function SideBarCMS() {
                 </button>
               </li>
               <hr />
-              <li className="my-2 absolute bottom-5">
-                {/* <hr className="w-[280px] mb-3" />
+              {/* <li className="my-2 absolute bottom-5">
+                <hr className="w-[280px] mb-3" />
                 <button
                   className="flex items-center px-4 py-2 text-accentColor rounded-md hover:text-red-700"
                   onClick={() => {
@@ -76,8 +76,8 @@ function SideBarCMS() {
                 >
                   <RiLogoutCircleLine size={25} />
                   <span className="mx-4 font-medium">Logout</span>
-                </button> */}
-              </li>
+                </button>
+              </li> */}
             </ul>
           </div>
         </div>

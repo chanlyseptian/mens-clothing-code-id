@@ -32,7 +32,6 @@ const ProductCardContainerCMS = (props) => {
         </thead>
         <tbody>
           {data.map((product, index) => {
-            console.log(product);
             return (
               <tr key={index}>
                 <td className="pr-5 py-1">{index + 1}.</td>

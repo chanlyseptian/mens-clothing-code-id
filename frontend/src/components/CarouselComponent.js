@@ -1,22 +1,22 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import image_banner_1 from "./image_banner/banner_1.png";
+import image_banner_2 from "./image_banner/banner_2.jpg";
+import image_banner_3 from "./image_banner/banner_3.jpg";
 
 const dummyImg = [
   {
-    image:
-      "https://images.pexels.com/photos/1367243/pexels-photo-1367243.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    label: "Fresh, Handpicked Crops and Vegetables for your everyday needs!",
+    image: image_banner_2,
+    label: "Not Only Clothes, We Also Sell Men's Accessories",
   },
   {
-    image:
-      "https://images.pexels.com/photos/547263/pexels-photo-547263.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    label: "Our Products are 100% Organic, Pesticide-free!",
+    image: image_banner_1,
+    label: "On August 20th 10% Off All Items",
   },
   {
-    image:
-      "https://images.pexels.com/photos/128402/pexels-photo-128402.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    label: "Not only that it's more healthy, but it's also more delicious!",
+    image: image_banner_3,
+    label: "T-Shirt for Your Daily Activities",
   },
 ];
 
@@ -24,22 +24,29 @@ const CarouselComponent = () => {
   return (
     <>
       <Carousel
-        showThumbs={false}
+        showArrows={false}
+        showThumbs={true}
         showStatus={false}
         autoPlay={true}
         interval={3000}
         infiniteLoop={true}
+        className="w-11/12 mx-auto text-center pt-10"
       >
-        {dummyImg.map((img,index) => {
+        {dummyImg.map((img, index) => {
           return (
             <div key={index}>
-              <img className="object-cover" alt="" src={img.image} style={{ maxHeight: "80vh" }}></img>
+              <img
+                className="object-cover"
+                alt=""
+                src={img.image}
+                style={{ maxHeight: "50vh" }}
+              ></img>
               <p
                 className="legend"
                 style={{
                   padding: 10,
                   backgroundColor: "rgba(255, 255, 255, 0.81)",
-                  color: "rgba(11, 133, 25, 0.86)",
+                  color: "#061B31",
                   fontWeight: "bold",
                   fontSize: 18,
                   borderRadius: "0.375rem",

@@ -16,7 +16,6 @@ function AddProduct() {
     name: "",
     desc: "",
     price: 0,
-    stock: 0,
     weight: 0,
     category: "tops",
     condition: "available",
@@ -25,21 +24,57 @@ function AddProduct() {
   const [images, setImages] = useState([]);
   const [sizeRows, setSizeRows] = useState([1]);
 
+  const [sizeArr, setSizeArr] = useState([]);
+
+  useEffect(() => {
+    console.log(sizeArr);
+  }, [sizeArr]);
+
+  const addSize = () => {
+    setSizeRows([...sizeRows, sizeRows.length + 1]);
+    setSizeArr([
+      ...sizeArr,
+      {
+        type: "",
+        stock: 0,
+      },
+    ]);
+  };
+
+  const updateTypeChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], type: e.target.value };
+    setSizeArr(newArr);
+  };
+
+  const updateStockChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], stock: e.target.value };
+    setSizeArr(newArr);
+  };
+
   const addProductHandler = () => {
     let formData = new FormData();
     formData.append("name", form.name);
     formData.append("desc", form.desc);
     formData.append("price", form.price);
-    formData.append("stock", form.stock);
     formData.append("weight", form.weight);
     formData.append("category", form.category);
     formData.append("condition", form.condition);
+
+    if (sizeArr.length !== 0) {
+      for (const sizeStock of sizeArr) {
+        formData.append("sizes", sizeStock.type);
+        formData.append("stocks", sizeStock.stock);
+      }
+    }
 
     if (images.length !== 0) {
       for (const image of images) {
         formData.append("filename", image);
       }
     }
+    console.log(formData);
     dispatch(create(formData));
   };
 
@@ -54,7 +89,7 @@ function AddProduct() {
   };
 
   return (
-    <div className="px-10 lg:px-32 lg:ml-52 3xl:ml-12 overflow-scroll max-h-screen py-5 no-scrollbar">
+    <div className="px-10 lg:px-32 lg:ml-52 3xl:ml-12 min-h-screen py-5 no-scrollbar">
       <div className="">
         <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
           <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-cyan-900 flex items-center">
@@ -147,16 +182,6 @@ function AddProduct() {
               onChange={(e) => setForm({ ...form, price: e.target.value })}
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Stock
-            </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, stock: e.target.value })}
-            ></input>
-          </div>
         </div>
         <hr className="border-cyan-800 mx-5 mt-2" />
         <div className="px-5 py-5">
@@ -231,20 +256,15 @@ function AddProduct() {
             )}
           </div>
         </div>
-        {/* <hr className="border-cyan-800 mx-5 mt-2" /> */}
-        {/* <div className="grid grid-cols-2">
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="grid grid-cols-2">
           <div className="px-5 py-2">
             <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
               <h1 className="pl-5">Size Chart</h1>
             </div>
           </div>
           <div className="px-5 py-2 text-right">
-            <button
-              className="p-2"
-              onClick={() =>
-                setSizeRows((prevArr) => [...prevArr, prevArr.length + 1])
-              }
-            >
+            <button className="p-2" onClick={() => addSize()}>
               <h1 className="pl-5 text-base font-bold text-cyan-700 hover:text-cyan-900 ">
                 Add Rows
               </h1>
@@ -256,17 +276,20 @@ function AddProduct() {
                 sizeRows.map((row, index) => {
                   return (
                     <tr key={index}>
-                      <td className="pl-5 w-[80vw]">
+                      <td className="pl-5 ml-5 w-[200vw]">
                         <input
                           placeholder="Size Type (S/M/L/US/UK)"
+                          type="text"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateTypeChanged(index, e)}
                         />
                       </td>
-                      <td className="pl-5 w-[20vw]">
+                      <td className="ml-5 w-[80vw]">
                         <input
                           placeholder="Stock"
                           type="number"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateStockChanged(index, e)}
                         />
                       </td>
                     </tr>
@@ -277,7 +300,7 @@ function AddProduct() {
               )}
             </tbody>
           </table>
-        </div> */}
+        </div>
         <div className="px-5 py-5 text-center">
           <button
             className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-1/3 text-white uppercase"

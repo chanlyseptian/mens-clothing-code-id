@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.belongsTo(models.User); //type admin
       Product.hasMany(models.ProductImage);
+      Product.hasMany(models.ProductStock);
       Product.belongsToMany(models.Order, { through: models.LineItem });
       Product.belongsToMany(models.ShoppingCart, { through: models.LineItem });
     }
@@ -35,16 +36,6 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
         },
       },
-      stock: {
-        type: DataTypes.INTEGER,
-        validate: {
-          notEmpty: {
-            msg: "Stock must not be empty",
-          },
-          min: 0,
-        },
-      },
-      expire: DataTypes.DATE,
       weight: {
         type: DataTypes.INTEGER,
         validate: {
@@ -59,7 +50,6 @@ module.exports = (sequelize, DataTypes) => {
       totalSold: DataTypes.INTEGER,
       rating: DataTypes.INTEGER,
       views: DataTypes.INTEGER,
-      unit: DataTypes.STRING,
       UserId: {
         type: DataTypes.INTEGER,
         validate: {

@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+
 import { IoMdLogOut } from "react-icons/io";
 
-import { GiLoincloth } from "react-icons/gi";
 import Swal from "sweetalert2";
 
 const Header = () => {
-  const [query, setQuery] = useState("");
-  const navigate = useNavigate();
   return (
     // bg-gradient-to-r from-cyan-600 to-cyan-900
     <div className="bg-darkColor">
@@ -24,19 +20,6 @@ const Header = () => {
               MEN'S CLOTHING
             </span>
           </Link>
-        </div>
-        <div className="w-4/12 flex justify-center items-center">
-          <input
-            className="rounded  p-2 w-3/5"
-            placeholder="Search"
-            onChange={(e) => setQuery(e.target.value)}
-          ></input>
-          <button
-            className="ml-1 p-3 rounded bg-white text-darkColor hover:bg-accentColor hover:text-darkColor"
-            onClick={() => navigate(`/user/home/${query}`)}
-          >
-            <FaSearch />
-          </button>
         </div>
 
         <div className="w-4/12 flex justify-center items-center">
@@ -65,7 +48,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="w-2/12 flex justify-center items-center">
+        <div className="w-4/12 flex justify-center items-center">
           <div className=" flex flex-col justify-center md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium text-accentColor lg:mr-4 3xl:-mr-[137px] ">
             <Link
               to="/login"

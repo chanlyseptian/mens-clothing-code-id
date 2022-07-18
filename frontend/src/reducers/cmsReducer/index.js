@@ -13,6 +13,20 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         status: payload.status,
         data: payload.data,
       };
+    case "GET_PRODUCTS_BY_SEARCH":
+      return {
+        ...state,
+        action: "GET_PRODUCTS_BY_SEARCH",
+        status: payload.status,
+        data: payload.data,
+      };
+    case "GET_AND_FILTER_PRODUCTS":
+      return {
+        ...state,
+        action: "GET_AND_FILTER_PRODUCTS",
+        status: payload.status,
+        data: payload.data,
+      };
     case "GET_PRODUCT_BY_ID":
       return {
         ...state,

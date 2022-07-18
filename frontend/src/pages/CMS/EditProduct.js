@@ -15,26 +15,31 @@ function EditProduct() {
   const id = Number(useParams().id);
   const url = base_url;
 
+  const [images, setImages] = useState([]);
+  const [imageIsUploaded, setImageIsUploaded] = useState(false);
+  const [sizeRows, setSizeRows] = useState([1]);
+
+  const [sizeArr, setSizeArr] = useState([]);
+
   const [form, setForm] = useState({
     name: "",
     desc: "",
     price: 0,
-    stock: 0,
     weight: 0,
     category: "tops",
     condition: "available",
   });
 
+  const [sizeObj, setSizeObj] = useState([]);
+
   useEffect(() => {
     if (action === "GET_PRODUCT_BY_ID" && status === "data") {
+      setSizeArr(data.ProductStocks);
       setForm({
         name: data.name,
         desc: data.desc,
         price: data.price,
-        stock: data.stock,
-        expire: data.expire ? data.expire.split("T")[0] : "",
         weight: data.weight,
-        unit: data.unit,
         category: data.category,
         condition: data.condition,
       });
@@ -50,22 +55,48 @@ function EditProduct() {
     }
   });
 
-  const [images, setImages] = useState([]);
-  const [imageIsUploaded, setImageIsUploaded] = useState(false);
-  const [sizeRows, setSizeRows] = useState([1]);
+  useEffect(() => {
+    console.log(sizeArr);
+  }, [sizeArr]);
+
+  const addSize = () => {
+    setSizeRows([...sizeRows, sizeRows.length + 1]);
+    setSizeArr([
+      ...sizeArr,
+      {
+        type: "",
+        stock: 0,
+      },
+    ]);
+  };
+
+  const updateTypeChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], type: e.target.value };
+    setSizeArr(newArr);
+  };
+
+  const updateStockChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], stock: e.target.value };
+    setSizeArr(newArr);
+  };
 
   const editProductHandler = () => {
     let formData = new FormData();
-    console.log(form);
     formData.append("name", form.name);
     formData.append("desc", form.desc);
     formData.append("price", form.price);
-    formData.append("stock", form.stock);
     formData.append("weight", form.weight);
     formData.append("category", form.category);
     formData.append("condition", form.condition);
 
-    console.log(images);
+    if (sizeArr.length !== 0) {
+      for (const sizeStock of sizeArr) {
+        formData.append("sizes", sizeStock.type);
+        formData.append("stocks", sizeStock.stock);
+      }
+    }
 
     if (images.length !== 0) {
       for (const image of images) {
@@ -119,7 +150,7 @@ function EditProduct() {
 
           <div className="px-5 py-2 col-span-2">
             <textarea
-              rows="4"
+              rows="15"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
               value={form.desc || ""}
@@ -180,17 +211,6 @@ function EditProduct() {
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
               onChange={(e) => setForm({ ...form, price: e.target.value })}
               value={form.price || ""}
-            ></input>
-          </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Stock
-            </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, stock: e.target.value })}
-              value={form.stock || ""}
             ></input>
           </div>
         </div>
@@ -276,20 +296,15 @@ function EditProduct() {
               : console.log(imageIsUploaded, images)}
           </div>
         </div>
-        {/* <hr className="border-cyan-800 mx-5 mt-2" /> */}
-        {/* <div className="grid grid-cols-2">
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="grid grid-cols-2">
           <div className="px-5 py-2">
             <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
               <h1 className="pl-5">Size Chart</h1>
             </div>
           </div>
           <div className="px-5 py-2 text-right">
-            <button
-              className="p-2"
-              onClick={() =>
-                setSizeRows((prevArr) => [...prevArr, prevArr.length + 1])
-              }
-            >
+            <button className="p-2" onClick={() => addSize()}>
               <h1 className="pl-5 text-base font-bold text-cyan-700 hover:text-cyan-900 ">
                 Add Rows
               </h1>
@@ -297,21 +312,25 @@ function EditProduct() {
           </div>
           <table className="table-auto">
             <tbody>
-              {sizeRows.length !== 0 ? (
-                sizeRows.map((row, index) => {
+              {sizeArr !== undefined ? (
+                sizeArr.map((row, index) => {
                   return (
                     <tr key={index}>
-                      <td className="pl-5 w-[80vw]">
+                      <td className="pl-5 ml-5 w-[200vw]">
                         <input
-                          placeholder="Size Type (S/M/L/US/UK)"
+                          placeholder={row.size}
+                          type="text"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateTypeChanged(index, e)}
                         />
                       </td>
-                      <td className="pl-5 w-[20vw]">
+                      <td className="ml-5 w-[80vw]">
                         <input
                           placeholder="Stock"
                           type="number"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateStockChanged(index, e)}
+                          value={row.stock}
                         />
                       </td>
                     </tr>
@@ -322,7 +341,7 @@ function EditProduct() {
               )}
             </tbody>
           </table>
-        </div> */}
+        </div>
         <div className="px-5 py-5 text-center">
           <button
             className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-1/3 text-white uppercase"
