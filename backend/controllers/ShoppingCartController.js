@@ -1,4 +1,5 @@
-const { ShoppingCart, User, LineItem, Product, Order } = require('../models')
+const { ShoppingCart, User, LineItem, Product, Order, ProductStock } = require('../models')
+
 
 class ShoppingCartController {
     static async getAllShoppingCarts(req, res, next) {
@@ -19,7 +20,7 @@ class ShoppingCartController {
             })
             let lineItems = await LineItem.findAll({
                 // attributes: ["*"],
-                include: [Product],
+                include: [Product, ProductStock],
                 where: { ShoppingCartId: getCart.id }
             })
             let newVar = { ...getCart.dataValues, lineItems: lineItems }
@@ -31,7 +32,7 @@ class ShoppingCartController {
     static async addToCart(req, res, next) {
         try {
             const id = +req.userData.id
-            const { qty, ProductId, ProductStockId } = req.body;
+            const { qty, ProductStockId } = req.body;
 
             // cari keranjang yang open
             const shoppingCart = await ShoppingCart.findOne({
@@ -41,7 +42,6 @@ class ShoppingCartController {
             // masukkan product ke keranjang
             let result = await LineItem.create({
                 ShoppingCartId: shoppingCart.id,
-                ProductId,
                 ProductStockId,
                 qty,
                 status: "cart"
