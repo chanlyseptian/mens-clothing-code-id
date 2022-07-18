@@ -169,7 +169,6 @@ class ProductController {
         totalSold,
         rating,
         views,
-
         UserId: id,
       });
 
