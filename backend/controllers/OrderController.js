@@ -11,34 +11,64 @@ class OrderController {
   //hanya untuk admin
   static async getAllOrders(req, res, next) {
     try {
-      let orders = await Order.findAll({
+      const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
+      let pageOrder = await Order.findAndCountAll({
         include: Product,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
       });
-      res.status(200).json(orders);
+
+      let totalData = pageOrder.count
+      let result = {
+        data: pageOrder.rows,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+
+      res.status(200).json(result);
     } catch (err) {
       next(err);
     }
   }
-
-  // mengambil all order di admin
-  static async getPageAllOrders(req, res) {
+  static async getAllOrderByStatus(req, res, next) {
     try {
+      const status = req.params.status || "completed";
       const page = +req.query.page || 1;
-      const perPage = req.query.limit || 1;
-      const skip = (page - 1) * 10;
-      let pageOrder = await Order.findAll({
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
+      let pageOrder = await Order.findAndCountAll({
         include: Product,
-        limit: 1,
-        offset: (page - 1) * 5,
-        where,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          status: status
+        }
       });
-      res.status(200).json(pageOrder);
-    } catch (error) {
-      // console.log(error);
-      res.status(500).json(error);
+
+      let totalData = pageOrder.count
+      let result = {
+        data: pageOrder.rows,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
     }
   }
-
   static async create(req, res, next) {
     try {
       const id = +req.userData.id;
@@ -201,26 +231,6 @@ class OrderController {
   static async getOrdersByUserId(req, res, next) {
     try {
       const id = +req.userData.id;
-      let result = await Order.findAll({
-        include: [
-          {
-            model: Product,
-            include: [ProductImage],
-          },
-          User,
-        ],
-        where: { UserId: id },
-      });
-      res.status(201).json(result);
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  //mengambil page order dari user
-  static async getPageOrdersByUserId(req, res) {
-    try {
-      const id = +req.userData.id;
       const page = +req.query.page || 1;
       const perPage = req.query.limit || 1;
       const skip = (page - 1) * 10;
@@ -232,14 +242,13 @@ class OrderController {
           },
           User,
         ],
-        limit: 1,
+        limit: 5,
         offset: (page - 1) * 5,
         where: { UserId: id },
       });
       res.status(200).json(pageOrder);
-    } catch (error) {
-      // console.log(error);
-      res.status(500).json(error);
+    } catch (err) {
+      next(err);
     }
   }
 
