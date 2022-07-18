@@ -13,10 +13,4 @@ npx sequelize-cli model:generate --name ShoppingCart --attributes status:string,
 
 npx sequelize-cli model:generate --name LineItem --attributes qty:integer,status:string,ProductId:integer,ShoppingCartId:integer,OrderId:integer
 
-
-
-
-
-
-
-    
+npx sequelize-cli model:generate --name BannerImages --attributes filename:string,fileType:string,body:string,active:boolean
