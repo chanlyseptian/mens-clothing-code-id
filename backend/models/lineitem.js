@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       LineItem.belongsTo(models.Product)
       LineItem.belongsTo(models.ShoppingCart)
       LineItem.belongsTo(models.Order)
+      LineItem.belongsTo(models.ProductStock)
     }
   }
   LineItem.init({
