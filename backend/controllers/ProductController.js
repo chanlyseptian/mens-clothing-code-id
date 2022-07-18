@@ -1,4 +1,10 @@
-const { Product, User, ProductImage, ProductStock } = require("../models");
+const {
+  Product,
+  User,
+  ProductImage,
+  ProductStock,
+  promo,
+} = require("../models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
@@ -147,6 +153,9 @@ class ProductController {
         totalSold,
         rating,
         views,
+        potongan_harga,
+        tgl_mulai,
+        tgl_akhir,
       } = req.body;
 
       const result = await Product.create({
@@ -160,6 +169,7 @@ class ProductController {
         totalSold,
         rating,
         views,
+
         UserId: id,
       });
 
@@ -177,6 +187,12 @@ class ProductController {
           });
         }
       }
+
+      let finalPromo = await promo.create({
+        potongan_harga: potongan_harga || 0,
+        tgl_mulai,
+        tgl_akhir,
+      });
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
@@ -212,6 +228,9 @@ class ProductController {
         totalSold,
         rating,
         views,
+        potongan_harga,
+        tgl_mulai,
+        tgl_akhir,
       } = req.body;
       let result = await Product.update(
         {
@@ -247,6 +266,12 @@ class ProductController {
           );
         });
       }
+
+      let finalPromo = await promo.update({
+        potongan_harga: potongan_harga || 0,
+        tgl_mulai,
+        tgl_akhir,
+      });
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;

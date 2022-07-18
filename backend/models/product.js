@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.ProductStock);
       Product.belongsToMany(models.Order, { through: models.LineItem });
       Product.belongsToMany(models.ShoppingCart, { through: models.LineItem });
+      Product.hasOne(models.promo); //type admin
     }
   }
   Product.init(
