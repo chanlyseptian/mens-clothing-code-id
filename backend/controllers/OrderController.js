@@ -145,8 +145,8 @@ class OrderController {
 
       let result = await Order.update(
         {
-          paymentTrasaction: "debit",
-          status: "ready to collect",
+          paymentTrasaction: "completed",
+          status: "ready",
         },
         {
           where: { id: OrderId },
