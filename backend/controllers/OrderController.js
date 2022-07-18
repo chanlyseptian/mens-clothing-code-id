@@ -5,6 +5,7 @@ const {
   ShoppingCart,
   User,
   ProductImage,
+  ProductStock,
 } = require("../models");
 
 class OrderController {
@@ -186,7 +187,7 @@ class OrderController {
 
         await Product.update(
           {
-            stock: product.stock + lineItem.qty,
+            stock: product.ProductStock.stock + lineItem.qty,
             totalSold: product.totalSold - lineItem.qty,
           },
           {

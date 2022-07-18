@@ -1,4 +1,4 @@
-const { ShoppingCart, User, LineItem, Product, Order } = require('../models')
+const { ShoppingCart, User, LineItem, Product, Order, ProductStock } = require('../models')
 
 class ShoppingCartController {
     static async getAllShoppingCarts(req, res, next) {
@@ -31,7 +31,7 @@ class ShoppingCartController {
     static async addToCart(req, res, next) {
         try {
             const id = +req.userData.id
-            const { qty, ProductId } = req.body;
+            const {qty, ProductId, ProductStockId } = req.body;
 
             // cari keranjang yang open
             const shoppingCart = await ShoppingCart.findOne({
@@ -42,6 +42,7 @@ class ShoppingCartController {
             let result = await LineItem.create({
                 ShoppingCartId: shoppingCart.id,
                 ProductId,
+                ProductStockId,
                 qty,
                 status: "cart"
             })
@@ -112,7 +113,7 @@ class ShoppingCartController {
             for (const lineItem of lineItems){
                 const product = await Product.findByPk(lineItem.ProductId);
                 await Product.update({
-                    stock: product.stock - lineItem.qty,
+                    stock: product.ProductStock.stock - lineItem.qty,
                     totalSold: product.totalSold + lineItem.qty,
                 },{
                     where: { id: lineItem.ProductId }

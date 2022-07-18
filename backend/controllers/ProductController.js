@@ -127,6 +127,7 @@ class ProductController {
         price,
         stock,
         sizes,
+        colors,
         stocks,
         weight,
         category,
@@ -153,6 +154,7 @@ class ProductController {
       console.log(result.id)
       if(result.id){
 		console.log(sizes)
+    console.log(colors)
 		console.log(stocks)
 		if(sizes){
 			sizes.forEach(async (size, index) => {
@@ -162,7 +164,27 @@ class ProductController {
 					stock: stocks[index] || 0
 				})
 			})
-		}
+		} else if(colors){
+      colors.forEach(async (color, index) => {
+        await ProductStock.create({
+          ProductId: result.id,
+          color: color || 0,
+          stock: stocks[index] || 0
+        })
+      })
+    } else if (sizes&&colors){
+      sizes.forEach(async (size) => {
+        colors.forEach(async (color, index) => {
+          await ProductStock.create({
+            ProductId: result.id,
+            size: size || 0,
+            color: color || 0,
+            stock: stocks[index] || 0
+          })
+        })
+			})
+      
+    }
       }
 
       imagenames.forEach(async (imagename, index) => {
@@ -191,6 +213,7 @@ class ProductController {
         desc,
         price,
         sizes,
+        colors,
         stocks,
         stock,
         weight,
@@ -226,8 +249,15 @@ class ProductController {
           },{
             where: {
               ProductId: id,
-			  size: sizes[index],
+			        size: sizes[index],
             }
+          })
+        })
+        colors.forEach(async (color, index) => {
+          await ProductStock.create({
+            ProductId: result.id,
+            color: color || 0,
+            stock: stocks[index] || 0
           })
         })
       }
