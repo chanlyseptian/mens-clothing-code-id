@@ -134,6 +134,7 @@ class ProductController {
     try {
       const id = req.userData.id;
       const imagenames = req.files;
+      //const image = req.file.filename
       const {
         name,
         desc,
@@ -161,6 +162,7 @@ class ProductController {
         rating,
         views,
         UserId: id,
+        //imageSize:image
       });
 
       console.log(result.id);
@@ -193,6 +195,24 @@ class ProductController {
       next(err);
     }
   }
+
+  static async updateImageSize(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userId = req.userData.id;
+      const imageSize = req.file.filename;
+
+      let result = await Product.update({
+        imageSize:imageSize
+      }, {
+        where: { id: id, UserId: userId },
+      })
+      res.status(201).json(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   //just for admin
   static async update(req, res, next) {
     try {

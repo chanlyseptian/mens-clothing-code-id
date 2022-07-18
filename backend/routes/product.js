@@ -13,6 +13,12 @@ productRoute.post(
   ProductController.create
 ); //just for admin
 productRoute.put(
+  "/imageSize/:id",
+  authentication,
+  upload.single('imageSize'),
+  ProductController.updateImageSize
+); //just for admin
+productRoute.put(
   "/:id",
   authentication,
   upload.array("filename"),

@@ -5,15 +5,11 @@ const fileStorageEngine = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '--' + file.originalname)
+        console.log(file)
     }
 })
 
 const upload = multer({storage: fileStorageEngine})
 
-
-// app.post('/multi', upload.array('images'), (req, res) => {
-//     console.log(req.files)
-//     res.send("success")
-// })
 
 module.exports = upload
