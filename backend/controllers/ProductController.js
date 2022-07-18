@@ -272,7 +272,7 @@ class ProductController {
         tgl_mulai,
         tgl_akhir,
       });
-
+      let finalPrice = price - potongan_harga;
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
         await ProductImage.update(
