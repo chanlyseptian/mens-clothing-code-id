@@ -19,14 +19,6 @@ productRoute.put(
   ProductController.update
 ); //just for admin
 
-// productRoute.get("/category/:category", ProductController.getProductByCategory);
-productRoute.get("/nameAsc", ProductController.sortProductsNameAtoZ);
-productRoute.get("/nameDesc", ProductController.sortProductsNameZtoA);
-productRoute.get("/priceAsc", ProductController.sortProductsPriceAsc);
-productRoute.get("/priceDesc", ProductController.sortProductsPriceDesc);
-productRoute.get("/latest", ProductController.sortProductsLatest);
-productRoute.get("/ratingAsc", ProductController.sortProductsRatingAsc);
-productRoute.get("/ratingDesc", ProductController.sortProductsRatingDesc);
 productRoute.put("/views/:id", ProductController.addViews);
 productRoute.get("/:id", ProductController.getProductById);
 
