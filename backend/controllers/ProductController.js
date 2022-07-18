@@ -156,35 +156,16 @@ class ProductController {
 		console.log(sizes)
     console.log(colors)
 		console.log(stocks)
-		if(sizes){
-			sizes.forEach(async (size, index) => {
-				await ProductStock.create({
-					ProductId: result.id,
-					size: size || 0,
-					stock: stocks[index] || 0
-				})
-			})
-		} else if(colors){
-      colors.forEach(async (color, index) => {
+		if(sizes&&colors){
+			sizes.forEach(async (size,index) => {
         await ProductStock.create({
           ProductId: result.id,
-          color: color || 0,
+          size: size || 0,
+          color: colors[index] || 0,
           stock: stocks[index] || 0
         })
-      })
-    } else if (sizes&&colors){
-      sizes.forEach(async (size) => {
-        colors.forEach(async (color, index) => {
-          await ProductStock.create({
-            ProductId: result.id,
-            size: size || 0,
-            color: color || 0,
-            stock: stocks[index] || 0
-          })
-        })
 			})
-      
-    }
+		} 
       }
 
       imagenames.forEach(async (imagename, index) => {
@@ -240,28 +221,25 @@ class ProductController {
           where: { id: id, UserId: userId },
         }
       );
+        console.log(id)
+        console.log(sizes)
+        console.log(colors)
+        console.log(stocks)
 
-      if(result){
-        console.log("result true")
-        sizes.forEach(async (size, index) => {
-          await ProductStock.update({
-            stock: stocks[index]
-          },{
-            where: {
-              ProductId: id,
-			        size: sizes[index],
-            }
+        if(result){
+          console.log("result true")
+          sizes.forEach(async (color, index) => {
+            await ProductStock.update({
+              color: colors[index],
+              stock: stocks[index]
+            },{
+              where: {
+                ProductId: id,
+                size: sizes[index]
+              }
+            })
           })
-        })
-        colors.forEach(async (color, index) => {
-          await ProductStock.create({
-            ProductId: result.id,
-            color: color || 0,
-            stock: stocks[index] || 0
-          })
-        })
-      }
-
+        }
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
         await ProductImage.update(
