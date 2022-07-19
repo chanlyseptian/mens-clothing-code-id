@@ -1,17 +1,26 @@
-const jwt = require('jsonwebtoken')
-const secretCode = process.env.SECRET_CODE || 'twentyfour'
+const jwt = require("jsonwebtoken");
+const secretCode = process.env.SECRET_CODE || "twentyfour";
 
 const tokenGenerator = (data) => {
-    const {id, username, email, birthday, gender, salt, avatar, type} = data
-    return jwt.sign({
-        id, username, email, birthday, gender, salt, avatar, type
-    }, secretCode)
-}
+  const { id, username, email, salt, avatar, type } = data;
+  return jwt.sign(
+    {
+      id,
+      username,
+      email,
+      salt,
+      avatar,
+      type,
+    },
+    secretCode
+  );
+};
 
 const tokenVerifier = (data) => {
-    return jwt.verify(data, secretCode)
-}
+  return jwt.verify(data, secretCode);
+};
 
-module.exports= {
-    tokenGenerator, tokenVerifier
-}
+module.exports = {
+  tokenGenerator,
+  tokenVerifier,
+};

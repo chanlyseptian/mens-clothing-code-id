@@ -20,12 +20,6 @@ module.exports = {
       salt: {
         type: Sequelize.INTEGER
       },
-      birthday: {
-        type: Sequelize.DATE
-      },
-      gender: {
-        type: Sequelize.BOOLEAN
-      },
       avatar: {
         type: Sequelize.STRING
       },

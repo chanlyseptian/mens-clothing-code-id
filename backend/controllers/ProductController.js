@@ -156,6 +156,7 @@ class ProductController {
         potongan_harga,
         tgl_mulai,
         tgl_akhir,
+        finalPrice,
       } = req.body;
 
       const result = await Product.create({
@@ -169,6 +170,7 @@ class ProductController {
         totalSold,
         rating,
         views,
+        finalPrice: finalPrice || 0,
         UserId: id,
       });
 
@@ -187,10 +189,18 @@ class ProductController {
         }
       }
 
-      let finalPromo = await promo.create({
+      let newPromo = await promo.create({
         potongan_harga: potongan_harga || 0,
-        tgl_mulai,
-        tgl_akhir,
+        tgl_mulai: tgl_mulai || Date.now(),
+        tgl_akhir: tgl_akhir || Date.now(),
+        ProductId: result.id,
+      });
+      let newPrice = await Product.update({
+        finalPrice: price - potongan_harga,
+
+        where: {
+          id: result.id,
+        },
       });
 
       imagenames.forEach(async (imagename, index) => {

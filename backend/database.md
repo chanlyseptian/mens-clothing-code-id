@@ -1,7 +1,7 @@
 npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 
-npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string,salt:integer,birthday:date,gender:boolean,avatar:string,type:string
+npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string,salt:integer,avatar:string,type:string
 
 npx sequelize-cli model:generate --name Product --attributes name:string,desc:text,price:integer,weight:integer,category:string,condition:string,totalSold:integer,rating:integer,views:integer,finalPrice:integer,UserId:integer
 

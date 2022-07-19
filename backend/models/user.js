@@ -48,11 +48,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       salt: DataTypes.INTEGER,
-      birthday: DataTypes.DATE,
-      gender: {
-        type: DataTypes.BOOLEAN,
-        values: [true, false],
-      },
+
       avatar: DataTypes.STRING,
       type: {
         type: DataTypes.STRING,
