@@ -67,7 +67,7 @@ class ShoppingCartController {
             let subtotal = 0;
             lineItems.forEach(lineItem => {
                 totalQty = totalQty + lineItem.qty
-                subtotal = subtotal + (lineItem.qty * lineItem.Product.newPrice)
+                subtotal = subtotal + (lineItem.qty * lineItem.Product.finalPrice)
             })
 
             let discount

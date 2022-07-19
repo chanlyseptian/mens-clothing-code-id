@@ -195,12 +195,17 @@ class ProductController {
         tgl_akhir: tgl_akhir || Date.now(),
         ProductId: result.id,
       });
-      let newPrice = await Product.update({
-        finalPrice: result.price - newPromo.potongan_harga,
-        where: {
-          id: result.id,
+      let newPrice = await Product.update(
+        {
+          finalPrice: result.price - newPromo.potongan_harga,
         },
-      });
+
+        {
+          where: {
+            id: result.id,
+          },
+        }
+      );
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
