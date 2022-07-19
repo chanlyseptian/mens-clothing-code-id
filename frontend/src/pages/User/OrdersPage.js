@@ -14,27 +14,25 @@ const OrdersPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  
   const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(1);
-  
-  
+
   useEffect(() => {
     if (action === "GET_ORDERS_BY_USER_ID" && status === "data") {
       setOrders(data);
     }
   }, [status]);
-  
+
   useEffect(() => {
     dispatch(getOrdersByUserId(page, 5));
   }, [page]);
 
-  function changeDataPage (page) {
-    if(page < 1 ) {
-      return
+  function changeDataPage(page) {
+    if (page < 1) {
+      return;
     }
-    if(data.length < 5 && page > 1) {
-      return
+    if (data.length < 5 && page > 1) {
+      return;
     }
     setPage(page);
   }
@@ -83,32 +81,38 @@ const OrdersPage = () => {
             Cancelled
           </button>
           <div className="text-4xl flex items-center ">
-            {(page < 2 ) ?
+            {page < 2 ? (
               <button onClick={() => changeDataPage(page - 1)}>
                 <MdKeyboardArrowLeft className="text-gray-400" />
               </button>
-              :
-              <MdKeyboardArrowLeft className="text-darkColor cursor-pointer" onClick={() => changeDataPage(page - 1)} />
-            }
+            ) : (
+              <MdKeyboardArrowLeft
+                className="text-darkColor cursor-pointer"
+                onClick={() => changeDataPage(page - 1)}
+              />
+            )}
             <p className="text-sm">{page}</p>
-            {(data.length >= 5) ?
+            {data.length >= 5 ? (
               <button onClick={() => changeDataPage(page + 1)}>
                 <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
               </button>
-              :
-              <MdKeyboardArrowRight className="text-gray-400 cursor-pointer" onClick={() => changeDataPage(page + 1)} />
-            }
-            </div>
-          </div>
-
-          <hr className="mt-1" />
-
-          <div className="p-5 border border-1 bg-gray-100 mt-5">
-            {orders ? <OrderTable data={orders} /> : <></>}
+            ) : (
+              <MdKeyboardArrowRight
+                className="text-gray-400 cursor-pointer"
+                onClick={() => changeDataPage(page + 1)}
+              />
+            )}
           </div>
         </div>
-      </div>
-      );
-}
 
-      export default OrdersPage;
+        <hr className="mt-1" />
+
+        <div className="p-5 border border-1 bg-gray-100 mt-5">
+          {orders ? <OrderTable data={orders} /> : <></>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default OrdersPage;

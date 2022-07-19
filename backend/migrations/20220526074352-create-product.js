@@ -17,12 +17,6 @@ module.exports = {
       price: {
         type: Sequelize.INTEGER
       },
-      stock: {
-        type: Sequelize.INTEGER
-      },
-      expire: {
-        type: Sequelize.DATE
-      },
       weight: {
         type: Sequelize.INTEGER
       },
@@ -40,9 +34,6 @@ module.exports = {
       },
       views: {
         type: Sequelize.INTEGER
-      },
-      unit: {
-        type: Sequelize.STRING
       },
       UserId: {
         type: Sequelize.INTEGER

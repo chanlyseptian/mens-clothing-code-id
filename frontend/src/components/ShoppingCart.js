@@ -94,13 +94,13 @@ const ShoppingCart = () => {
   return (
     <div className="flex w-full relative">
       <div
-        className="text-xl right-[70px] lg:right-52 3xl:right-96 z-20 text-accentColor hover:text-white top-10 fixed cursor-pointer"
+        className="text-xl right-[70px] lg:right-96 3xl:right-96 z-20 text-accentColor hover:text-white top-10 fixed cursor-pointer"
         onClick={() => setShowCart(!showCart)}
       >
         <FaShoppingCart />
       </div>
       <div
-        className={`w-2 h-10 bg-white fixed top-16 right-[212px] 3xl:right-[388px] z-30 rounded-xl ${
+        className={`w-2 h-10 bg-white fixed top-16 right-[389px] 3xl:right-[388px] z-30 rounded-xl ${
           showCart ? "  block" : " hidden"
         }`}
       ></div>
@@ -179,10 +179,6 @@ const ShoppingCart = () => {
       </div>
       {/* <aside className="flex border-r border-lightColor transform top-0 left-0 w-48 fixed h-screen ease-in-out transition-all duration-300 z-[3] -translate-x-[185px] hover:translate-x-0">
         <div className="bg-darkColor w-full">
-<<<<<<< HEAD
-=======
-
->>>>>>> 88ffd2f3da575f03787eaede6e2b2c6e95fd2801
           <div className="mx-auto h-full w-full">
             <ul className="my-2 h-full text-accentColor">
               <li className="py-10 text-2xl flex justify-center items-center">Filter</li>
@@ -204,10 +200,6 @@ const ShoppingCart = () => {
                 <Checkbox className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" color="blue" />
                 <label>Grooming</label>
               </li>
-<<<<<<< HEAD
-            </ul>
-          </div>
-=======
 
 
             </ul>
@@ -215,7 +207,6 @@ const ShoppingCart = () => {
           </div>
 
 
->>>>>>> 88ffd2f3da575f03787eaede6e2b2c6e95fd2801
         </div>
       </aside> */}
       <main className="w-full max-h-full">
