@@ -281,12 +281,31 @@ class ProductController {
         });
       }
 
-      let finalPromo = await promo.update({
-        potongan_harga: potongan_harga || 0,
-        tgl_mulai,
-        tgl_akhir,
-      });
-      let finalPrice = price - potongan_harga;
+      let newPromo = await promo.create(
+        {
+          potongan_harga: potongan_harga || 0,
+          tgl_mulai: tgl_mulai || Date.now(),
+          tgl_akhir: tgl_akhir || Date.now(),
+          ProductId: result.id,
+        },
+        {
+          where: {
+            productId: id,
+          },
+        }
+      );
+      let newPrice = await Product.update(
+        {
+          finalPrice: result.price - newPromo.potongan_harga,
+        },
+
+        {
+          where: {
+            id: result.id,
+          },
+        }
+      );
+
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
         await ProductImage.update(
