@@ -2,7 +2,10 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import {
+  AddBanner,
   BannerManagement,
+  BannerDetails,
+  EditBanner,
   CMSDashboard,
   CMSSearchedDashboard,
   AddProduct,
@@ -17,8 +20,9 @@ const CMSRoute = () => {
     <Routes>
       <Route path="/" element={<Navigate replace to="/cms/dashboard" />} />
       <Route path="/banner" element={<BannerManagement />} />
-      {/* <Route path="/addBanner" element={<BannerManagement />} /> */}
-      {/* <Route path="/editBanner/:id" element={<BannerManagement />} /> */}
+      <Route path="/addBanner" element={<AddBanner />} />
+      <Route path="/bannerDetails/:id" element={<BannerDetails />} />
+      <Route path="/editBanner/:id" element={<EditBanner />} />
       <Route path="/dashboard" element={<CMSDashboard />}></Route>
       <Route
         path="/dashboard/:query"

@@ -22,6 +22,19 @@ class BannerItemsController {
       console.log(err);
     }
   }
+  static async getBannerDetails(req, res) {
+    try {
+      const id = +req.params.id;
+      const banner = await BannerImages.findOne({
+        where: {
+          id: id,
+        },
+      });
+      res.status(200).json(banner);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   static async getActiveBanners(req, res) {
     try {
       const page = +req.query.page || 1;
@@ -46,15 +59,14 @@ class BannerItemsController {
   }
   static async addBanner(req, res) {
     try {
-      const { body, filename, fileType } = req.body;
-      //   const { imagename, mimetype } = req.file;
-      // const filename = req.file.filename;
-      // const fileType = req.file.mimetype;
+      const { body, active } = req.body;
+      const filename = req.file.filename;
+      const mimetype = req.file.mimetype;
       const result = await BannerImages.create({
         filename: filename,
-        fileType: fileType,
+        fileType: mimetype,
         body: body,
-        active: false,
+        active: active,
       });
       res.status(201).json(result);
     } catch (err) {
@@ -63,15 +75,14 @@ class BannerItemsController {
   }
   static async editBanner(req, res) {
     try {
-      const { body, active, filename, fileType } = req.body;
-      //   const { imagename, mimetype } = req.file;
-      // const filename = req.file.filename;
-      // const fileType = req.file.mimetype;
+      const { body, active } = req.body;
+      const filename = req.file.filename;
+      const mimetype = req.file.mimetype;
       const id = +req.params.id;
       const result = await BannerImages.update(
         {
           filename: filename,
-          fileType: fileType,
+          fileType: mimetype,
           body: body,
           active: active,
         },

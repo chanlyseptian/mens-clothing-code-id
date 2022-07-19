@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import base_url from "../helpers/base_url";
 
 import { MdDescription } from "react-icons/md";
 
-const ProductCardContainerCMS = (props) => {
+const BannerContainer = (props) => {
   const navigate = useNavigate();
   const data = props.data;
+  const url = base_url;
 
   return (
     <div>
@@ -15,7 +17,7 @@ const ProductCardContainerCMS = (props) => {
             <th colSpan="2" className="text-center">
               Banner
             </th>
-            <th className="text-left">Upload Date</th>
+            <th className="text-center">Upload Date</th>
             <th className="text-center">Status</th>
             <th className="text-right">Details</th>
           </tr>
@@ -26,14 +28,19 @@ const ProductCardContainerCMS = (props) => {
               <tr key={index}>
                 <td className="pr-5 py-1">{index + 1}.</td>
                 <td className="w-3/6 py-1">
-                  <img
-                    className="w-[400px] h-[200px] hover:shadow-xl hover:scale-125 cursor-pointer object-cover"
-                    alt=""
-                    src={banner.filename}
-                    // src={`${url}/images/${product.ProductImages[0].filename}`}
-                  />
+                  <div className="hover:scale-125">
+                    <img
+                      className="w-[400px] h-[200px] hover:shadow-xl cursor-pointer object-cover"
+                      alt=""
+                      // src={banner.filename}
+                      src={`${url}/images/${banner.filename}`}
+                    />
+                    <p className="text-center py-1 text-darkColor font-bold">
+                      {banner.body}
+                    </p>
+                  </div>
                 </td>
-                <td className="w-2/6 py-1">
+                <td className="w-2/6 py-1 text-center">
                   {String(banner.createdAt).slice(0, 10)}
                 </td>
                 {banner.active === true ? (
@@ -48,7 +55,7 @@ const ProductCardContainerCMS = (props) => {
 
                 <td className="w-2/6 py-1">
                   <button
-                    onClick={() => navigate(`/cms/editBanner/${banner.id}`)}
+                    onClick={() => navigate(`/cms/bannerDetails/${banner.id}`)}
                   >
                     <MdDescription
                       size={30}
@@ -65,4 +72,4 @@ const ProductCardContainerCMS = (props) => {
   );
 };
 
-export default ProductCardContainerCMS;
+export default BannerContainer;

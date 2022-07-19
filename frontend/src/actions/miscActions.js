@@ -42,6 +42,43 @@ export const getBanners = () => {
   };
 };
 
+export const getBannerDetails = (id) => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "GET_BANNER_DETAILS",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+    axios({
+      method: "GET",
+      url: `${url}/${id}`,
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_BANNER_DETAILS",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_BANNER_DETAILS",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
 export const getActiveBanners = () => {
   return (dispatch) => {
     //loading
@@ -79,7 +116,7 @@ export const getActiveBanners = () => {
   };
 };
 
-export const addBanner = () => {
+export const addBanner = (form) => {
   return (dispatch) => {
     //loading
     dispatch({
@@ -92,9 +129,15 @@ export const addBanner = () => {
     axios({
       method: "POST",
       url: `${url}/add`,
+      data: form,
     })
-      .then((response) => {
+      .then(async (response) => {
         // completed
+        await Swal.fire(
+          "Add Banner Success!",
+          "Congratulations, You've created a Banner!",
+          "success"
+        );
         dispatch({
           type: "ADD_BANNER",
           payload: {
@@ -116,7 +159,7 @@ export const addBanner = () => {
   };
 };
 
-export const editBanners = (id) => {
+export const editBanner = (id, data) => {
   return (dispatch) => {
     //loading
     dispatch({
@@ -127,11 +170,17 @@ export const editBanners = (id) => {
       },
     });
     axios({
-      method: "GET",
+      method: "PUT",
       url: `${url}/edit/${id}`,
+      data: data,
     })
-      .then((response) => {
+      .then(async (response) => {
         // completed
+        await Swal.fire(
+          "Edit Banner Success!",
+          "Congratulations, You've edited your Banner!",
+          "success"
+        );
         dispatch({
           type: "EDIT_BANNER",
           payload: {
@@ -150,5 +199,17 @@ export const editBanners = (id) => {
           },
         });
       });
+  };
+};
+
+export const clear = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "CLEAR",
+      payload: {
+        status: "empty",
+        data: "Empty",
+      },
+    });
   };
 };

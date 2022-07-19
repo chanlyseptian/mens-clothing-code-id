@@ -7,6 +7,9 @@ import ProfileCMS from "./ProfileCMS";
 import RegisterCMS from "./RegisterCMS";
 import ProductDetails from "./ProductDetails";
 import BannerManagement from "./BannerManagement";
+import AddBanner from "./AddBanner";
+import BannerDetails from "./BannerDetails";
+import EditBanner from "./EditBanner";
 
 export {
   CMSDashboard,
@@ -18,4 +21,7 @@ export {
   RegisterCMS,
   ProductDetails,
   BannerManagement,
+  AddBanner,
+  BannerDetails,
+  EditBanner,
 };
