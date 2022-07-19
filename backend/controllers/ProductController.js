@@ -196,8 +196,7 @@ class ProductController {
         ProductId: result.id,
       });
       let newPrice = await Product.update({
-        finalPrice: price - potongan_harga,
-
+        finalPrice: result.price - newPromo.potongan_harga,
         where: {
           id: result.id,
         },
@@ -214,6 +213,7 @@ class ProductController {
       });
       res.status(201).json(result);
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }
