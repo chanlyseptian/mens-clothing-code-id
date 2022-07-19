@@ -153,6 +153,7 @@ class ProductController {
 
       console.log(result.id)
       if(result.id){
+    console.log(result)
 		console.log(sizes)
     console.log(colors)
 		console.log(stocks)
@@ -193,10 +194,10 @@ class ProductController {
         name,
         desc,
         price,
+        stock,
         sizes,
         colors,
         stocks,
-        stock,
         weight,
         category,
         condition,
@@ -228,19 +229,21 @@ class ProductController {
 
         if(result){
           console.log("result true")
+          console.log(result)
           sizes.forEach(async (size,index) => {
-            console.log(Product.ProductStockid),
             await ProductStock.update({
-              stock: stock
+              stock: stocks[index]
             },{
               where: {
                 ProductId: id,
                 size: sizes[index],
-                color: colors[index],
+                color:colors[index]
               }
             })
-          })
+          }) 
         }
+        console.log("end")
+
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
         await ProductImage.update(
