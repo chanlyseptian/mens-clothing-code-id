@@ -5,71 +5,39 @@ const {
   ShoppingCart,
   User,
   ProductImage,
-  ProductStock,
 } = require("../models");
 
 class OrderController {
   //hanya untuk admin
   static async getAllOrders(req, res, next) {
     try {
-      const page = +req.query.page || 1;
-      const limit = req.query.limit || 5;
-      const sorter = req.query.sorter || "id";
-      const order = req.query.order || "asc";
-      const skip = (page - 1) * limit;
-      let pageOrder = await Order.findAndCountAll({
-        include: Product,
-        limit: limit,
-        offset: (page - 1) * limit,
-        order: [[sorter, order]],
+      let orders = await Order.findAll({
+        include: [Product,ProductStock]
       });
-
-      let totalData = pageOrder.count
-      let result = {
-        data: pageOrder.rows,
-        page: page,
-        limit: limit,
-        totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
-
-      res.status(200).json(result);
+      res.status(200).json(orders);
     } catch (err) {
       next(err);
     }
   }
-  static async getAllOrderByStatus(req, res, next) {
+
+  // mengambil all order di admin
+  static async getPageAllOrders(req, res) {
     try {
-      const status = req.params.status || "completed";
       const page = +req.query.page || 1;
-      const limit = req.query.limit || 5;
-      const sorter = req.query.sorter || "id";
-      const order = req.query.order || "asc";
-      const skip = (page - 1) * limit;
-      let pageOrder = await Order.findAndCountAll({
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageOrder = await Order.findAll({
         include: Product,
-        limit: limit,
-        offset: (page - 1) * limit,
-        order: [[sorter, order]],
-        where: {
-          status: status
-        }
+        limit: 1,
+        offset: (page - 1) * 5,
       });
-
-      let totalData = pageOrder.count
-      let result = {
-        data: pageOrder.rows,
-        page: page,
-        limit: limit,
-        totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
-
-      res.status(200).json(result);
-    } catch (err) {
-      next(err);
+      res.status(200).json(pageOrder);
+    } catch (error) {
+      // console.log(error);
+      res.status(500).json(error);
     }
   }
+
   static async create(req, res, next) {
     try {
       const id = +req.userData.id;
@@ -87,7 +55,7 @@ class OrderController {
       });
       //cari data line item dimana OrderId sama dengan id di table order yang dibuat diatas
       let resultGet = await LineItem.findOne({
-        include: [Product, Order],
+        include: [Product, ProductStock, Order],
         where: { OrderId: resultLine.OrderId },
       });
 
@@ -146,7 +114,7 @@ class OrderController {
       let result = await Order.update(
         {
           paymentTrasaction: "debit",
-          status: "ready",
+          status: "ready to collect",
         },
         {
           where: { id: OrderId },
@@ -187,7 +155,7 @@ class OrderController {
 
         await Product.update(
           {
-            stock: product.ProductStock.stock + lineItem.qty,
+            stock: product.stock + lineItem.qty,
             totalSold: product.totalSold - lineItem.qty,
           },
           {
@@ -211,7 +179,7 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage],
+            include: [ProductImage,ProductStock],
           },
           User,
         ],
@@ -232,6 +200,26 @@ class OrderController {
   static async getOrdersByUserId(req, res, next) {
     try {
       const id = +req.userData.id;
+      let result = await Order.findAll({
+        include: [
+          {
+            model: Product,
+            include: [ProductImage,ProductStock],
+          },
+          User,
+        ],
+        where: { UserId: id },
+      });
+      res.status(201).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  //mengambil page order dari user
+  static async getPageOrdersByUserId(req, res) {
+    try {
+      const id = +req.userData.id;
       const page = +req.query.page || 1;
       const perPage = req.query.limit || 1;
       const skip = (page - 1) * 10;
@@ -239,17 +227,18 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage],
+            include: [ProductImage,ProductStock],
           },
           User,
         ],
-        limit: 5,
+        limit: 1,
         offset: (page - 1) * 5,
         where: { UserId: id },
       });
       res.status(200).json(pageOrder);
-    } catch (err) {
-      next(err);
+    } catch (error) {
+      // console.log(error);
+      res.status(500).json(error);
     }
   }
 
@@ -268,6 +257,23 @@ class OrderController {
       next(err);
     }
   }
+  static async orderUnpaid(req, res, next) {
+    try {
+      const id = +req.userData.id;
+      let result = await Order.findOne(
+        {},
+        {
+          where: { UserId: id, status: "unpaid" },
+        }
+      );
+      res.status(201).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
 }
+
+
 
 module.exports = OrderController;

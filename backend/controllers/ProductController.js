@@ -242,7 +242,6 @@ class ProductController {
             })
           }) 
         }
-        console.log("end")
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
