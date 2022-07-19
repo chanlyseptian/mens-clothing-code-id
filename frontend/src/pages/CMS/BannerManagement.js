@@ -2,18 +2,43 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { IoMdAddCircle } from "react-icons/io";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { BannerContainer } from "../../components/";
-import { getBanners } from "../../actions/miscActions";
+import {
+  getBanners,
+  getActiveBanners,
+  getInactiveBanners,
+} from "../../actions/miscActions";
 
 const BannerManagement = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  const [option, setOption] = useState("");
   const [sorter, setSorter] = useState("");
+  const [order, setOrder] = useState("");
   const { action, status, data } = useSelector((state) => state.miscReducer);
+  let pageAttribute = `?page=${page}&limit=5`;
+
   useEffect(() => {
-    dispatch(getBanners());
-  }, [page]);
+    if (option === "newest") {
+      setSorter("createdAt");
+      setOrder("asc");
+      let sortAttribute = `${pageAttribute}&sorter=${sorter}&order=${order}`;
+      dispatch(getBanners(sortAttribute));
+    } else if (option === "oldest") {
+      setSorter("createdAt");
+      setOrder("desc");
+      let sortAttribute = `${pageAttribute}&sorter=${sorter}&order=${order}`;
+      dispatch(getBanners(sortAttribute));
+    } else if (option === "active") {
+      dispatch(getActiveBanners());
+    } else if (option === "inactive") {
+      dispatch(getInactiveBanners());
+    } else {
+      dispatch(getBanners(pageAttribute));
+    }
+  }, [page, option]);
   return (
     <div className="px-10 lg:px-16 lg:ml-52 3xl:ml-12">
       <div className="flex items-center justify-between p-4 mb-2">
@@ -38,7 +63,7 @@ const BannerManagement = () => {
                 className="border hover:border-cyan-800 focus:border-cyan-900 w-full rounded-md bg-white py-1 px-4 text-darkColor text-sm"
                 name="condition"
                 id="condition"
-                onChange={(e) => setSorter(e.target.value)}
+                onChange={(e) => setOption(e.target.value)}
               >
                 {/* <option value="featured">Featured</option> */}
                 <option value="newest">Newest</option>
@@ -47,10 +72,29 @@ const BannerManagement = () => {
                 <option value="inactive">Inactive</option>
               </select>
             </div>
+            <div className="text-4xl flex justify-center items-center ">
+              {data.page > 1 ? (
+                <button onClick={() => setPage(page - 1)}>
+                  <MdKeyboardArrowLeft className="text-gray-400" />
+                </button>
+              ) : (
+                ""
+              )}
+              <p className="text-sm">{data.page}</p>
+              {data.page < data.totalPage ? (
+                <button onClick={() => setPage(page + 1)}>
+                  <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
         </div>
         <div className="">
-          {action === "GET_BANNERS" && status === "data" ? (
+          {(action === "GET_BANNERS" && status === "data") ||
+          (action === "GET_ACTIVE_BANNERS" && status === "data") ||
+          (action === "GET_INACTIVE_BANNERS" && status === "data") ? (
             <BannerContainer data={data.data} />
           ) : (
             console.log(action, data)

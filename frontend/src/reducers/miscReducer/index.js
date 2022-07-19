@@ -20,6 +20,13 @@ const miscReducer = (state = initialState, { type, payload }) => {
         status: payload.status,
         data: payload.data,
       };
+    case "GET_INACTIVE_BANNERS":
+      return {
+        ...state,
+        action: "GET_INACTIVE_BANNERS",
+        status: payload.status,
+        data: payload.data,
+      };
     case "ADD_BANNER":
       return {
         ...state,

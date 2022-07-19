@@ -10,6 +10,7 @@ bannerImagesRoute.post(
   BannerImagesController.addBanner
 );
 bannerImagesRoute.get("/active", BannerImagesController.getActiveBanners);
+bannerImagesRoute.get("/inactive", BannerImagesController.getInactiveBanners);
 bannerImagesRoute.get("/:id", BannerImagesController.getBannerDetails);
 bannerImagesRoute.put(
   "/edit/:id",

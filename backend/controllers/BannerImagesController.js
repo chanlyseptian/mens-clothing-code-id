@@ -4,11 +4,13 @@ class BannerItemsController {
   static async getBanners(req, res) {
     try {
       const page = +req.query.page || 1;
-      const limit = 10;
+      const limit = +req.query.limit || 5;
+      const sorter = req.query.sorter || "createdAt";
+      const order = req.query.order || "desc";
       let banners = await BannerImages.findAll({
         limit: limit,
         offset: (page - 1) * limit,
-        order: [["createdAt", "desc"]],
+        order: [[sorter, order]],
       });
       let totalData = await BannerImages.count();
       let result = {
@@ -44,6 +46,28 @@ class BannerItemsController {
         offset: (page - 1) * limit,
         order: [["createdAt", "desc"]],
         where: { active: true },
+      });
+      let totalData = await BannerImages.count();
+      let result = {
+        data: banners,
+        page: page,
+        limit: limit,
+        totalPage: Math.ceil(totalData / limit),
+      };
+      res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  static async getInactiveBanners(req, res) {
+    try {
+      const page = +req.query.page || 1;
+      const limit = 10;
+      let banners = await BannerImages.findAll({
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [["createdAt", "desc"]],
+        where: { active: false },
       });
       let totalData = await BannerImages.count();
       let result = {

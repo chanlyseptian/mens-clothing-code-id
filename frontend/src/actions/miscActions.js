@@ -5,7 +5,7 @@ import base_url from "../helpers/base_url";
 
 const url = base_url + "/banners";
 
-export const getBanners = () => {
+export const getBanners = (attribute) => {
   return (dispatch) => {
     //loading
     dispatch({
@@ -17,7 +17,7 @@ export const getBanners = () => {
     });
     axios({
       method: "GET",
-      url: url,
+      url: url + attribute,
     })
       .then((response) => {
         // completed
@@ -107,6 +107,43 @@ export const getActiveBanners = () => {
         // failed
         dispatch({
           type: "GET_ACTIVE_BANNERS",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const getInactiveBanners = () => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "GET_INACTIVE_BANNERS",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+    axios({
+      method: "GET",
+      url: `${url}/inactive`,
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_INACTIVE_BANNERS",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_INACTIVE_BANNERS",
           payload: {
             status: "error",
             data: error.message,
