@@ -228,14 +228,15 @@ class ProductController {
 
         if(result){
           console.log("result true")
-          sizes.forEach(async (color, index) => {
+          sizes.forEach(async (size,index) => {
+            console.log(Product.ProductStockid),
             await ProductStock.update({
-              color: colors[index],
-              stock: stocks[index]
+              stock: stock
             },{
               where: {
                 ProductId: id,
-                size: sizes[index]
+                size: sizes[index],
+                color: colors[index],
               }
             })
           })

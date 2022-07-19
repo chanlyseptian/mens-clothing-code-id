@@ -19,7 +19,7 @@ class ShoppingCartController {
             })
             let lineItems = await LineItem.findAll({
                 // attributes: ["*"],
-                include: [Product],
+                include: [Product,ProductStock],
                 where: { ShoppingCartId: getCart.id }
             })
             let newVar = { ...getCart.dataValues, lineItems: lineItems }
@@ -112,11 +112,16 @@ class ShoppingCartController {
 
             for (const lineItem of lineItems){
                 const product = await Product.findByPk(lineItem.ProductId);
+                const productstock = await ProductStock.findByPk(lineItem.ProductStockId);
                 await Product.update({
-                    stock: product.ProductStock.stock - lineItem.qty,
                     totalSold: product.totalSold + lineItem.qty,
                 },{
                     where: { id: lineItem.ProductId }
+                })
+                await ProductStock.update({
+                    stock: productstock.stock - lineItem.qty,
+                },{
+                    where: { id: lineItem.ProductStockId }
                 })
             }
 
