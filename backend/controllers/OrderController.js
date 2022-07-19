@@ -4,6 +4,7 @@ const {
   LineItem,
   ShoppingCart,
   User,
+  ProductStock,
   ProductImage,
 } = require("../models");
 
@@ -179,8 +180,9 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage,ProductStock],
+            include: [ProductImage, ProductStock],
           },
+
           User,
         ],
         where: {

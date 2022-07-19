@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Order.belongsTo(models.User)
       Order.belongsToMany(models.Product, { through: models.LineItem })
+      Order.belongsToMany(models.ProductStock, { through: models.LineItem })
       Order.belongsToMany(models.ShoppingCart, { through: models.LineItem })
     }
   }
