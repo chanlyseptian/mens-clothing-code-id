@@ -1,4 +1,6 @@
 const { Product, User, ProductImage, ProductStock } = require("../models");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -6,7 +8,7 @@ class ProductController {
       const page = +req.query.page || 1;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4;
+      const limit = req.query.limit || 5;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
@@ -15,26 +17,89 @@ class ProductController {
         order: [[sorter, order]],
       });
 
-      let totalProduct = await Product.count();
-
+      let totalData = await Product.count();
       let result = {
         data: products,
         page: page,
         limit: limit,
-        totalPage: Math.ceil(totalProduct / limit),
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
       };
       res.status(200).json(result);
     } catch (err) {
       next(err);
     }
   }
+
+  static async getProductsBySearch(req, res, next) {
+    try {
+      const page = +req.query.page || 1;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const limit = req.query.limit || 5;
+      const search = req.query.search;
+      const filter = req.query.filter || [];
+      let products;
+
+      products = await Product.findAndCountAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          [Op.or]: [
+            {
+              name: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              desc: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              category: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+          ],
+        },
+      });
+
+      // ----- Filter products by categories -----
+      if (filter.length !== 0) {
+        console.log(filter);
+        console.log("ada filter");
+        console.log(products.rows);
+        products.rows = products.rows.filter((prd) =>
+          filter.includes(prd.category)
+        );
+      }
+
+      // ----- Output Data for FE -----
+      let totalData = products.count;
+      let result = {
+        data: products.rows,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
+      };
+
+      res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   static async getByCategories(req, res, next) {
     try {
       const category = req.params.category || "tops";
       const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
-      let limit = 4;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
@@ -46,11 +111,18 @@ class ProductController {
         },
       });
 
+      let totalData = await Product.count({
+        where: {
+          category: category,
+        },
+      });
+
       let result = {
         data: products,
         page: page,
         limit: limit,
-        totalData: products.length,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
       };
       res.status(200).json(result);
     } catch (err) {
@@ -66,6 +138,7 @@ class ProductController {
         name,
         desc,
         price,
+        stock,
         sizes,
         stocks,
         weight,
@@ -80,6 +153,7 @@ class ProductController {
         name,
         desc,
         price,
+        stock: stock || 0,
         weight,
         category,
         condition,
@@ -131,6 +205,7 @@ class ProductController {
         price,
         sizes,
         stocks,
+        stock,
         weight,
         category,
         condition,
@@ -138,13 +213,12 @@ class ProductController {
         rating,
         views,
       } = req.body;
-
-      console.log(req.body);
       let result = await Product.update(
         {
           name,
           desc,
           price,
+          stock,
           weight,
           category,
           condition,

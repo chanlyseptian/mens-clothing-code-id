@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { GiClothes } from "react-icons/gi";
+import { GiClothes, GiBlackFlag } from "react-icons/gi";
 import { FaUserEdit } from "react-icons/fa";
 import url from "../helpers/base_url";
 import { FaUserLock } from "react-icons/fa";
@@ -57,10 +57,10 @@ function SideBarCMS() {
               <li className="my-2">
                 <button
                   className="flex items-center px-4 py-2 text-accentColor rounded-md hover:text-white"
-                  onClick={() => navigate("/cms/profile")}
+                  onClick={() => navigate("/cms/banner")}
                 >
-                  <FaUserEdit size={25} />
-                  <span className="mx-4 font-medium">Profile</span>
+                  <GiBlackFlag size={25} />
+                  <span className="mx-4 font-medium">Banner Management</span>
                 </button>
               </li>
               <hr />

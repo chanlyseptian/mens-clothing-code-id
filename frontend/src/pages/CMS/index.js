@@ -6,6 +6,8 @@ import EditProduct from "./EditProduct";
 import ProfileCMS from "./ProfileCMS";
 import RegisterCMS from "./RegisterCMS";
 import ProductDetails from "./ProductDetails";
+import BannerManagement from "./BannerManagement";
+import AddProductBulky from "./AddProductBulky";
 
 export {
   CMSDashboard,
@@ -16,4 +18,6 @@ export {
   ProfileCMS,
   RegisterCMS,
   ProductDetails,
+  BannerManagement,
+  AddProductBulky
 };

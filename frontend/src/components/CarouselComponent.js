@@ -1,15 +1,14 @@
 import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import image_banner_1 from "./image_banner/banner_1.png"
-import image_banner_2 from "./image_banner/banner_2.jpg"
-import image_banner_3 from "./image_banner/banner_3.jpg"
+import image_banner_1 from "./image_banner/banner_1.png";
+import image_banner_2 from "./image_banner/banner_2.jpg";
+import image_banner_3 from "./image_banner/banner_3.jpg";
 
 const dummyImg = [
   {
     image: image_banner_2,
-    label:"Not Only Clothes, We Also Sell Men's Accessories"
-    
+    label: "Not Only Clothes, We Also Sell Men's Accessories",
   },
   {
     image: image_banner_1,
@@ -25,11 +24,13 @@ const CarouselComponent = () => {
   return (
     <>
       <Carousel
-        showThumbs={false}
+        showArrows={false}
+        showThumbs={true}
         showStatus={false}
         autoPlay={true}
         interval={3000}
         infiniteLoop={true}
+        className="w-11/12 mx-auto text-center pt-10"
       >
         {dummyImg.map((img, index) => {
           return (
@@ -38,7 +39,7 @@ const CarouselComponent = () => {
                 className="object-cover"
                 alt=""
                 src={img.image}
-                style={{ maxHeight: "60vh" }}
+                style={{ maxHeight: "50vh" }}
               ></img>
               <p
                 className="legend"

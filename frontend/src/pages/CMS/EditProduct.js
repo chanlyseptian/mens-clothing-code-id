@@ -150,7 +150,7 @@ function EditProduct() {
 
           <div className="px-5 py-2 col-span-2">
             <textarea
-              rows="4"
+              rows="15"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
               value={form.desc || ""}

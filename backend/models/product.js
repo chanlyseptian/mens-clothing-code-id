@@ -36,16 +36,6 @@ module.exports = (sequelize, DataTypes) => {
           min: 1,
         },
       },
-      stock: {
-        type: DataTypes.INTEGER,
-        validate: {
-          notEmpty: {
-            msg: "Stock must not be empty",
-          },
-          min: 0,
-        },
-      },
-      expire: DataTypes.DATE,
       weight: {
         type: DataTypes.INTEGER,
         validate: {
@@ -60,7 +50,6 @@ module.exports = (sequelize, DataTypes) => {
       totalSold: DataTypes.INTEGER,
       rating: DataTypes.INTEGER,
       views: DataTypes.INTEGER,
-      unit: DataTypes.STRING,
       UserId: {
         type: DataTypes.INTEGER,
         validate: {
