@@ -3,28 +3,26 @@ import Swal from "sweetalert2";
 
 import base_url from "../helpers/base_url";
 
-const url = base_url + "/products";
+const url = base_url + "/banners";
 
-export const getAllProducts = (attribute) => {
+export const getBanners = (attribute) => {
   return (dispatch) => {
-    // loading
+    //loading
     dispatch({
-      type: "GET_ALL_PRODUCTS",
+      type: "GET_BANNERS",
       payload: {
         status: "loading",
         data: "loading",
       },
     });
-
-    //success
     axios({
       method: "GET",
       url: url + attribute,
     })
       .then((response) => {
-        console.log(response.data);
+        // completed
         dispatch({
-          type: "GET_ALL_PRODUCTS",
+          type: "GET_BANNERS",
           payload: {
             status: "data",
             data: response.data,
@@ -32,8 +30,9 @@ export const getAllProducts = (attribute) => {
         });
       })
       .catch((error) => {
+        // failed
         dispatch({
-          type: "GET_ALL_PRODUCTS",
+          type: "GET_BANNERS",
           payload: {
             status: "error",
             data: error.message,
@@ -43,118 +42,34 @@ export const getAllProducts = (attribute) => {
   };
 };
 
-export const getProductsBySearch = (attribute) => {
-  console.log("SEARCH ONLY");
+export const getBannerDetails = (id) => {
   return (dispatch) => {
-    // loading
+    //loading
     dispatch({
-      type: "GET_PRODUCTS_BY_SEARCH",
+      type: "GET_BANNER_DETAILS",
       payload: {
         status: "loading",
         data: "loading",
       },
     });
-
-    //success
-    axios({
-      method: "GET",
-      url: url + "/search" + attribute,
-    })
-      .then((response) => {
-        dispatch({
-          type: "GET_PRODUCTS_BY_SEARCH",
-          payload: {
-            status: "data",
-            data: response.data,
-          },
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: "GET_PRODUCTS_BY_SEARCH",
-          payload: {
-            status: "error",
-            data: error.message,
-          },
-        });
-      });
-  };
-};
-
-export const getAndFilterProducts = (attribute, filter) => {
-  console.log("SEARCH AND FILTER");
-  console.log(filter);
-  return (dispatch) => {
-    // loading
-    dispatch({
-      type: "GET_AND_FILTER_PRODUCTS",
-      payload: {
-        status: "loading",
-        data: "loading",
-      },
-    });
-
-    //success
-    axios({
-      method: "GET",
-      url: url + "/search" + attribute,
-      data: {},
-      params: {
-        filter: filter,
-      },
-    })
-      .then((response) => {
-        console.log(response.data);
-        dispatch({
-          type: "GET_AND_FILTER_PRODUCTS",
-          payload: {
-            status: "data",
-            data: response.data,
-          },
-        });
-      })
-      .catch((error) => {
-        console.log(error.message);
-        dispatch({
-          type: "GET_AND_FILTER_PRODUCTS",
-          payload: {
-            status: "error",
-            data: error.message,
-          },
-        });
-      });
-  };
-};
-
-export const getProductById = (id) => {
-  return (dispatch) => {
-    // loading
-    dispatch({
-      type: "GET_PRODUCT_BY_ID",
-      payload: {
-        status: "loading",
-        data: "loading",
-      },
-    });
-
-    //success
     axios({
       method: "GET",
       url: `${url}/${id}`,
     })
       .then((response) => {
+        // completed
         dispatch({
-          type: "GET_PRODUCT_BY_ID",
+          type: "GET_BANNER_DETAILS",
           payload: {
             status: "data",
             data: response.data,
           },
         });
       })
-      //error
       .catch((error) => {
+        // failed
         dispatch({
-          type: "GET_PRODUCT_BY_ID",
+          type: "GET_BANNER_DETAILS",
           payload: {
             status: "error",
             data: error.message,
@@ -164,49 +79,114 @@ export const getProductById = (id) => {
   };
 };
 
-export const create = (data) => {
+export const getActiveBanners = () => {
   return (dispatch) => {
-    // loading
+    //loading
     dispatch({
-      type: "CREATE",
+      type: "GET_ACTIVE_BANNERS",
       payload: {
         status: "loading",
         data: "loading",
       },
     });
+    axios({
+      method: "GET",
+      url: `${url}/active`,
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_ACTIVE_BANNERS",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_ACTIVE_BANNERS",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
 
-    //success
+export const getInactiveBanners = () => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "GET_INACTIVE_BANNERS",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+    axios({
+      method: "GET",
+      url: `${url}/inactive`,
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_INACTIVE_BANNERS",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_INACTIVE_BANNERS",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const addBanner = (form) => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "ADD_BANNER",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
     axios({
       method: "POST",
-      url: url,
-      data: data,
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
+      url: `${url}/add`,
+      data: form,
     })
       .then(async (response) => {
+        // completed
         await Swal.fire(
-          "Add Product Success!",
-          "Congratulations, You've created a Product!",
+          "Add Banner Success!",
+          "Congratulations, You've created a Banner!",
           "success"
         );
         dispatch({
-          type: "CREATE",
+          type: "ADD_BANNER",
           payload: {
             status: "data",
             data: response.data,
           },
         });
       })
-      //error
-      .catch(async (error) => {
-        await Swal.fire(
-          "Add Product Failed",
-          "Please input only positive numbers",
-          "error"
-        );
+      .catch((error) => {
+        // failed
         dispatch({
-          type: "CREATE",
+          type: "ADD_BANNER",
           payload: {
             status: "error",
             data: error.message,
@@ -216,51 +196,57 @@ export const create = (data) => {
   };
 };
 
-export const update = (data, id) => {
-  console.log(data, id);
+export const editBanner = (id, data) => {
   return (dispatch) => {
-    // loading
+    //loading
     dispatch({
-      type: "UPDATE",
+      type: "EDIT_BANNER",
       payload: {
         status: "loading",
         data: "loading",
       },
     });
-
-    //success
     axios({
       method: "PUT",
-      url: `${url}/${id}`,
+      url: `${url}/edit/${id}`,
       data: data,
-      headers: {
-        access_token: localStorage.getItem("access_token"),
-      },
     })
       .then(async (response) => {
-        console.log(response.data);
+        // completed
         await Swal.fire(
-          "Edit Product Success!",
-          "Congratulations, You've edited your Product!",
+          "Edit Banner Success!",
+          "Congratulations, You've edited your Banner!",
           "success"
         );
         dispatch({
-          type: "UPDATE",
+          type: "EDIT_BANNER",
           payload: {
             status: "data",
             data: response.data,
           },
         });
       })
-      //error
       .catch((error) => {
+        // failed
         dispatch({
-          type: "UPDATE",
+          type: "EDIT_BANNER",
           payload: {
             status: "error",
             data: error.message,
           },
         });
       });
+  };
+};
+
+export const clear = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "CLEAR",
+      payload: {
+        status: "empty",
+        data: "Empty",
+      },
+    });
   };
 };

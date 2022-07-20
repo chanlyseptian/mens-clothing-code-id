@@ -1,42 +1,24 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Products', {
+    await queryInterface.createTable('BannerImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      filename: {
         type: Sequelize.STRING
       },
-      desc: {
-        type: Sequelize.TEXT
-      },
-      price: {
-        type: Sequelize.INTEGER
-      },
-      weight: {
-        type: Sequelize.INTEGER
-      },
-      category: {
+      fileType: {
         type: Sequelize.STRING
       },
-      condition: {
+      body: {
         type: Sequelize.STRING
       },
-      totalSold: {
-        type: Sequelize.INTEGER
-      },
-      rating: {
-        type: Sequelize.INTEGER
-      },
-      views: {
-        type: Sequelize.INTEGER
-      },
-      UserId: {
-        type: Sequelize.INTEGER
+      active: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -49,6 +31,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Products');
+    await queryInterface.dropTable('BannerImages');
   }
 };

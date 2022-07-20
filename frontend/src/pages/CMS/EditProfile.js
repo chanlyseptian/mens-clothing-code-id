@@ -64,7 +64,7 @@ function CMSProfile() {
   });
 
   return (
-    <div className="mx-auto container md:w-1/2 sm:w-96  overflow-scroll max-h-screen py-5 no-scrollbar">
+    <div className="px-10 lg:px-32 lg:ml-52 3xl:ml-12 overflow-scroll max-h-screen py-5 no-scrollbar">
       <div className="">
         <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
           <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-darkColor flex items-center">
@@ -75,6 +75,7 @@ function CMSProfile() {
           Edit Profile
           <hr className="border-midColor mx-5 mt-2" />
         </div>
+
         <div className="px-5 ">
           <div className="flex space-x-8">
             <div className="mx-auto w-40 h-40 bg-white border-4 border-midColor relative cursor-pointer rounded-full flex justify-center items-center">
@@ -111,11 +112,14 @@ function CMSProfile() {
           </div>
         </div>
         <hr className="border-midColor mx-5 mt-8" />
-        <div className="grid grid-cols-2 mt-10">
+
+        <div className="grid grid-cols-3 mt-10">
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Username
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="text"
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
@@ -123,10 +127,13 @@ function CMSProfile() {
               onChange={(e) => setForm({ ...form, username: e.target.value })}
             ></input>
           </div>
+
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Email
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="text"
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
@@ -134,10 +141,13 @@ function CMSProfile() {
               onChange={(e) => setForm({ ...form, email: e.target.value })}
             ></input>
           </div>
+
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Password
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="password"
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
@@ -148,6 +158,8 @@ function CMSProfile() {
             <label className="block text-midColor text-lg font-bold pb-2">
               Birth Date
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="date"
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-2/5"
@@ -159,6 +171,8 @@ function CMSProfile() {
             <label className="block text-midColor text-lg font-bold pb-2">
               Gender
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <select
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-2/5"
               name="gender"

@@ -4,54 +4,47 @@ const initialState = {
   data: "Loading",
 };
 
-const cmsReducer = (state = initialState, { type, payload }) => {
+const miscReducer = (state = initialState, { type, payload }) => {
   switch (type) {
-    case "GET_ALL_PRODUCTS":
+    case "GET_BANNERS":
       return {
         ...state,
-        action: "GET_ALL_PRODUCTS",
+        action: "GET_BANNERS",
         status: payload.status,
         data: payload.data,
       };
-    case "GET_PRODUCTS_BY_SEARCH":
+    case "GET_ACTIVE_BANNERS":
       return {
         ...state,
-        action: "GET_PRODUCTS_BY_SEARCH",
+        action: "GET_ACTIVE_BANNERS",
         status: payload.status,
         data: payload.data,
       };
-    case "GET_AND_FILTER_PRODUCTS":
+    case "GET_INACTIVE_BANNERS":
       return {
         ...state,
-        action: "GET_AND_FILTER_PRODUCTS",
+        action: "GET_INACTIVE_BANNERS",
         status: payload.status,
         data: payload.data,
       };
-    case "GET_PRODUCT_BY_ID":
+    case "ADD_BANNER":
       return {
         ...state,
-        action: "GET_PRODUCT_BY_ID",
+        action: "ADD_BANNER",
         status: payload.status,
         data: payload.data,
       };
-    case "CREATE":
+    case "GET_BANNER_DETAILS":
       return {
         ...state,
-        action: "CREATE",
+        action: "GET_BANNER_DETAILS",
         status: payload.status,
         data: payload.data,
       };
-    case "UPDATE":
+    case "EDIT_BANNER":
       return {
         ...state,
-        action: "UPDATE",
-        status: payload.status,
-        data: payload.data,
-      };
-    case "DELETE_PRODUCT":
-      return {
-        ...state,
-        action: "DELETE_PRODUCT",
+        action: "EDIT_BANNER",
         status: payload.status,
         data: payload.data,
       };
@@ -60,4 +53,4 @@ const cmsReducer = (state = initialState, { type, payload }) => {
   }
 };
 
-export default cmsReducer;
+export default miscReducer;

@@ -1,8 +1,5 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { BiPencil } from "react-icons/bi";
-import { BsFillStarFill } from "react-icons/bs";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import intToRupiah from "../../helpers/rupiah";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,21 +29,25 @@ const ProductDetails = () => {
           </h1>
         </div>
         <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
-          <div className="flex">
-            <h1 className="pl-5">Product Detail</h1>
-            <button
-              className=" text-darkColor hover:text-cyan-600 cursor-pointer"
-              onClick={() => navigate(`/cms/edit/${id}`)}
-            >
-              <div className="flex">
-                <div className="ml-[500px] 3xl:ml-[625px]">
-                  <TbEdit className="text-2xl 3xl:text-3xl font-bold mr-1" />
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="pl-5">Product Detail</h1>
+            </div>
+            <div className="mr-5">
+              <button
+                className=" text-darkColor hover:text-cyan-600 cursor-pointer"
+                onClick={() => navigate(`/cms/edit/${id}`)}
+              >
+                <div className="flex items-center">
+                  <div className="">
+                    <TbEdit className="text-2xl 3xl:text-3xl font-bold mr-1" />
+                  </div>
+                  <div>
+                    <h1 className="text-xl font-bold">EDIT</h1>
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold">EDIT</h1>
-                </div>
-              </div>
-            </button>
+              </button>
+            </div>
           </div>
           <hr className="border-cyan-800 mx-5 mt-2" />
         </div>
@@ -72,7 +73,7 @@ const ProductDetails = () => {
                     >
                       <div className="text-7xl">
                         <img
-                          className="object-cover w-full h-40"
+                          className="object-cover w-full h-40 hover:scale-125"
                           src={
                             img
                               ? url + "/images/" + img.filename
@@ -113,7 +114,7 @@ const ProductDetails = () => {
 
           <div className="px-5 py-2 col-span-2">
             <textarea
-              rows="4"
+              rows="15"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
               value={data.desc}
               disabled
@@ -176,17 +177,44 @@ const ProductDetails = () => {
               disabled
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Stock
-            </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              value={data.stock}
-              disabled
-            ></input>
+        </div>
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="px-5 py-2">
+          <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
+            <h1 className="pl-5">Size Chart</h1>
           </div>
+        </div>
+        <div className="grid grid-cols-2">
+          <table className="table-auto">
+            <tbody>
+              {data.ProductStocks !== undefined ? (
+                data.ProductStocks.map((row, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="pl-5 ml-5 w-[200vw]">
+                        <input
+                          placeholder="Size Type (S/M/L/US/UK)"
+                          type="text"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          value={row.size}
+                        />
+                      </td>
+                      <td className="ml-5 w-[80vw]">
+                        <input
+                          placeholder="Stock"
+                          type="number"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          value={row.stock}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
+                <></>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

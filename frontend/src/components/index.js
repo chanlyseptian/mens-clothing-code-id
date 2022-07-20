@@ -14,6 +14,7 @@ import SideBarCMS from "./SideBarCMS";
 import StripeContainer from "./StripeContainer";
 import CarouselComponent from "./CarouselComponent";
 import Category from "./Category";
+import BannerContainer from "./BannerContainer";
 
 export {
   ProductCard,
@@ -32,4 +33,5 @@ export {
   StripeContainer,
   CarouselComponent,
   Category,
+  BannerContainer,
 };

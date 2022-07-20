@@ -16,16 +16,17 @@ class OrderController {
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
       const skip = (page - 1) * limit;
-      let pageOrder = await Order.findAndCountAll({
+      let pageOrder = await Order.findAll({
         include: Product,
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
       });
 
-      let totalData = pageOrder.count
+      let totalData = await Order.count();
+
       let result = {
-        data: pageOrder.rows,
+        data: pageOrder,
         page: page,
         limit: limit,
         totalData: totalData,
@@ -45,7 +46,7 @@ class OrderController {
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
       const skip = (page - 1) * limit;
-      let pageOrder = await Order.findAndCountAll({
+      let pageOrder = await Order.findAll({
         include: Product,
         limit: limit,
         offset: (page - 1) * limit,
@@ -55,9 +56,14 @@ class OrderController {
         }
       });
 
-      let totalData = pageOrder.count
+      let totalData = Order.count({
+        where: {
+          status: status
+        }
+      })
+
       let result = {
-        data: pageOrder.rows,
+        data: pageOrder,
         page: page,
         limit: limit,
         totalData: totalData,

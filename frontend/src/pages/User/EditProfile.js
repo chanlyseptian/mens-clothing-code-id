@@ -110,11 +110,15 @@ function CMSProfile() {
           </div>
         </div>
         <hr className="border-midColor mx-5 mt-8" />
-        <div className="grid grid-cols-2 mt-10">
+
+        <div className="grid grid-cols-3 mt-10">
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Username
             </label>
+          </div>
+
+          <div className="px-5 py-2 col-span-2">
             <input
               type="text"
               className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
@@ -122,10 +126,13 @@ function CMSProfile() {
               onChange={(e) => setForm({ ...form, username: e.target.value })}
             ></input>
           </div>
+
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Email
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="text"
               className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
@@ -137,6 +144,8 @@ function CMSProfile() {
             <label className="block text-midColor text-lg font-bold pb-2">
               Password
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="password"
               className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
@@ -147,9 +156,11 @@ function CMSProfile() {
             <label className="block text-midColor text-lg font-bold pb-2">
               Birth Date
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <input
               type="date"
-              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-2/5"
+              className="border hover:border-midColor focus:border-darkColor p-2 rounded-md bg-white w-full"
               value={form.birthday}
               onChange={(e) => setForm({ ...form, birthday: e.target.value })}
             ></input>
@@ -158,8 +169,10 @@ function CMSProfile() {
             <label className="block text-midColor text-lg font-bold pb-2">
               Gender
             </label>
+          </div>
+          <div className="px-5 py-2 col-span-2">
             <select
-              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-2/5"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               name="gender"
               id="gender"
               value={form.gender}

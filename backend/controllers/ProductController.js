@@ -1,6 +1,6 @@
 const { Product, User, ProductImage, ProductStock } = require("../models");
-const Sequelize = require('sequelize')
-const Op = Sequelize.Op
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -10,36 +10,37 @@ class ProductController {
       const order = req.query.order || "asc";
       const limit = req.query.limit || 5;
 
-      let products = await Product.findAndCountAll({
+      let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
       });
 
-      let totalData = products.count
+      let totalData = await Product.count();
       let result = {
-        data: products.rows,
+        data: products,
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
       res.status(200).json(result);
     } catch (err) {
       next(err);
     }
   }
+
   static async getProductsBySearch(req, res, next) {
-    try {   
+    try {
       const page = +req.query.page || 1;
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
       const limit = req.query.limit || 5;
-      const search = req.query.search
-      const filter = req.body.filter || []
-      let products
-     
+      const search = req.query.search;
+      const filter = req.query.filter || [];
+      let products;
+
       products = await Product.findAndCountAll({
         include: [User, ProductImage, ProductStock],
         limit: limit,
@@ -48,43 +49,50 @@ class ProductController {
         where: {
           [Op.or]: [
             {
-              name : {
-                [Op.like]: `%${search}%`
-              }
-          },{
-            desc : {
-              [Op.like]: `%${search}%`
-            }
-          },{
-            category : {
-              [Op.like]: `%${search}%`
-            }
-          }]
+              name: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              desc: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              category: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+          ],
         },
-      })
+      });
 
       // ----- Filter products by categories -----
-      if(filter.length !== 0){
-        console.log(search)
-        console.log("ada filter")
-        products.rows  = products.rows.filter( prd => filter.includes(prd.category))
+      if (filter.length !== 0) {
+        console.log(filter);
+        console.log("ada filter");
+        console.log(products.rows);
+        products.rows = products.rows.filter((prd) =>
+          filter.includes(prd.category)
+        );
       }
 
       // ----- Output Data for FE -----
-      let totalData = products.count
+      let totalData = products.count;
       let result = {
         data: products.rows,
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
-      
+        totalPage: Math.ceil(totalData / limit),
+      };
+
       res.status(200).json(result);
     } catch (err) {
-      next(err);
+      console.log(err);
     }
   }
+
   static async getByCategories(req, res, next) {
     try {
       const category = req.params.category || "tops";
@@ -93,24 +101,29 @@ class ProductController {
       const sorter = req.query.sorter || "id";
       const order = req.query.order || "asc";
 
-      let products = await Product.findAndCountAll({
+      let products = await Product.findAll({
         include: [User, ProductImage, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
         where: {
-          category: category
-        }
+          category: category,
+        },
       });
 
-      let totalData = products.count
+      let totalData = await Product.count({
+        where: {
+          category: category,
+        },
+      });
+
       let result = {
-        data: products.rows,
+        data: products,
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
       res.status(200).json(result);
     } catch (err) {
       next(err);
@@ -150,19 +163,19 @@ class ProductController {
         UserId: id,
       });
 
-      console.log(result.id)
-      if(result.id){
-		console.log(sizes)
-		console.log(stocks)
-		if(sizes){
-			sizes.forEach(async (size, index) => {
-				await ProductStock.create({
-					ProductId: result.id,
-					size: size || 0,
-					stock: stocks[index] || 0
-				})
-			})
-		}
+      console.log(result.id);
+      if (result.id) {
+        console.log(sizes);
+        console.log(stocks);
+        if (sizes) {
+          sizes.forEach(async (size, index) => {
+            await ProductStock.create({
+              ProductId: result.id,
+              size: size || 0,
+              stock: stocks[index] || 0,
+            });
+          });
+        }
       }
 
       imagenames.forEach(async (imagename, index) => {
@@ -218,18 +231,21 @@ class ProductController {
         }
       );
 
-      if(result){
-        console.log("result true")
+      if (result) {
+        console.log("result true");
         sizes.forEach(async (size, index) => {
-          await ProductStock.update({
-            stock: stocks[index]
-          },{
-            where: {
-              ProductId: id,
-			  size: sizes[index],
+          await ProductStock.update(
+            {
+              stock: stocks[index],
+            },
+            {
+              where: {
+                ProductId: id,
+                size: sizes[index],
+              },
             }
-          })
-        })
+          );
+        });
       }
 
       imagenames.forEach(async (imagename, index) => {
