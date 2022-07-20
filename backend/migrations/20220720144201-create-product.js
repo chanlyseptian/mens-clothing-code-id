@@ -44,6 +44,12 @@ module.exports = {
       views: {
         type: Sequelize.INTEGER
       },
+      finalPrice: {
+        type: Sequelize.INTEGER
+      },
+      imageSize: {
+        type: Sequelize.STRING
+      },
       UserId: {
         type: Sequelize.INTEGER
       },
