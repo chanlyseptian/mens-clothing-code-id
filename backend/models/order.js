@@ -11,10 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Order.belongsTo(models.User)
-      Order.belongsToMany(models.Product, { through: models.LineItem })
-      Order.belongsToMany(models.ProductStock, { through: models.LineItem })
-      Order.belongsToMany(models.ShoppingCart, { through: models.LineItem })
     }
   }
   Order.init({
@@ -24,22 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     totalDue: DataTypes.INTEGER,
     totalQty: DataTypes.INTEGER,
     paymentTrasaction: DataTypes.STRING,
-    status: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          msg:"Status must not be empty"
-        }
-      }
-    },
-    UserId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"UserId must not be empty"
-        }
-      }
-    },
+    status: DataTypes.STRING,
+    UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Order',

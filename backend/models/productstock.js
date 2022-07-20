@@ -11,20 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ProductStock.belongsTo(models.Product)
-      ProductStock.belongsToMany(models.Order, { through: models.LineItem });
-      ProductStock.belongsToMany(models.ShoppingCart, { through: models.LineItem });
     }
   }
   ProductStock.init({
-    ProductId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"Product Id must not be empty"
-        }
-      }
-    }, 
+    ProductId: DataTypes.INTEGER,
     size: DataTypes.STRING,
     color: DataTypes.STRING,
     stock: DataTypes.INTEGER

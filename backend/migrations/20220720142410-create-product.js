@@ -20,6 +20,15 @@ module.exports = {
       weight: {
         type: Sequelize.INTEGER
       },
+      length: {
+        type: Sequelize.INTEGER
+      },
+      width: {
+        type: Sequelize.INTEGER
+      },
+      height: {
+        type: Sequelize.INTEGER
+      },
       category: {
         type: Sequelize.STRING
       },
@@ -35,14 +44,8 @@ module.exports = {
       views: {
         type: Sequelize.INTEGER
       },
-      finalPrice: {
-        type: Sequelize.INTEGER
-      },
       UserId: {
         type: Sequelize.INTEGER
-      },
-      imageSize: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
