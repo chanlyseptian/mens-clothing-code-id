@@ -1,4 +1,4 @@
-const { ShoppingCart, User, LineItem, Product, Order } = require('../models')
+const { ShoppingCart, User, LineItem, Product, Order, ProductStock } = require('../models')
 
 class ShoppingCartController {
     static async getAllShoppingCarts(req, res, next) {
@@ -19,7 +19,7 @@ class ShoppingCartController {
             })
             let lineItems = await LineItem.findAll({
                 // attributes: ["*"],
-                include: [Product],
+                include: [Product, ProductStock],
                 where: { ShoppingCartId: getCart.id }
             })
             let newVar = { ...getCart.dataValues, lineItems: lineItems }
@@ -31,7 +31,7 @@ class ShoppingCartController {
     static async addToCart(req, res, next) {
         try {
             const id = +req.userData.id
-            const { qty, ProductId } = req.body;
+            const { qty, ProductId, ProductStockId } = req.body;
 
             // cari keranjang yang open
             const shoppingCart = await ShoppingCart.findOne({
@@ -42,6 +42,7 @@ class ShoppingCartController {
             let result = await LineItem.create({
                 ShoppingCartId: shoppingCart.id,
                 ProductId,
+                ProductStockId,
                 qty,
                 status: "cart"
             })
@@ -67,7 +68,7 @@ class ShoppingCartController {
             let subtotal = 0;
             lineItems.forEach(lineItem => {
                 totalQty = totalQty + lineItem.qty
-                subtotal = subtotal + (lineItem.qty * lineItem.Product.price)
+                subtotal = subtotal + (lineItem.qty * lineItem.Product.finalPrice)
             })
 
             let discount
@@ -111,11 +112,16 @@ class ShoppingCartController {
 
             for (const lineItem of lineItems){
                 const product = await Product.findByPk(lineItem.ProductId);
+                const productstock = await ProductStock.findByPk(lineItem.ProductStockId);
                 await Product.update({
-                    stock: product.stock - lineItem.qty,
                     totalSold: product.totalSold + lineItem.qty,
                 },{
                     where: { id: lineItem.ProductId }
+                })
+                await ProductStock.update({
+                    stock: productstock.stock - lineItem.qty,
+                },{
+                    where: { id: lineItem.ProductStockId }
                 })
             }
 
