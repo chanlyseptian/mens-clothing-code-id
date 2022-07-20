@@ -35,8 +35,14 @@ module.exports = {
       views: {
         type: Sequelize.INTEGER
       },
+      finalPrice: {
+        type: Sequelize.INTEGER
+      },
       UserId: {
         type: Sequelize.INTEGER
+      },
+      imageSize: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

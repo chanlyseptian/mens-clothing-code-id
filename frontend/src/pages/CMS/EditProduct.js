@@ -177,7 +177,7 @@ function EditProduct() {
 
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Condition
+              Availability
             </label>
             <select
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"

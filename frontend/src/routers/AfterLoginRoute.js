@@ -9,6 +9,7 @@ import {
   OrdersPage,
   FilteredOrdersPage,
   OrderDetailsPage,
+  TrackingPage,
 } from "../pages/User";
 
 function AfterLoginRoutes() {
@@ -23,6 +24,7 @@ function AfterLoginRoutes() {
       <Route path="/orders" element={<OrdersPage />}></Route>
       <Route path="/orders/:query" element={<FilteredOrdersPage />}></Route>
       <Route path="/orderDetail/:id" element={<OrderDetailsPage />}></Route>
+      <Route path="/tracking/:id" element={<TrackingPage />}></Route>
     </Routes>
   );
 }

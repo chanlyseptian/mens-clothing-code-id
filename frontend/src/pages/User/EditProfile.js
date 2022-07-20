@@ -32,11 +32,15 @@ function CMSProfile() {
         username: data.username,
         email: data.email,
         gender: data.gender,
-        birthday: data.birthday.split("T")[0],
         password: "",
         avatar: null,
         type: data.type,
       });
+      if (data.birthday === null) {
+        setForm({ ...form, birthday: null });
+      } else {
+        setForm({ birthday: data.birthday.split("T")[0] });
+      }
     } else if (action === "UPDATE_USER" && status === "data") {
       dispatch(getUser());
     }

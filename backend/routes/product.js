@@ -18,6 +18,12 @@ productRoute.put(
   upload.array("filename"),
   ProductController.update
 ); //just for admin
+productRoute.put(
+  "/imageSize/:id",
+  authentication,
+  upload.single("imageSize"),
+  ProductController.updateImageSize
+); //just for admin
 productRoute.get("/:id", ProductController.getProductById);
 productRoute.put("/views/:id", ProductController.addViews);
 

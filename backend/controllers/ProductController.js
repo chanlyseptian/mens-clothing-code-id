@@ -1,4 +1,10 @@
-const { Product, User, ProductImage, ProductStock } = require("../models");
+const {
+  Product,
+  User,
+  ProductImage,
+  ProductStock,
+  Promo,
+} = require("../models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
@@ -140,6 +146,7 @@ class ProductController {
         price,
         stock,
         sizes,
+        colors,
         stocks,
         weight,
         category,
@@ -160,33 +167,52 @@ class ProductController {
         totalSold,
         rating,
         views,
+        finalPrice: price || 0,
         UserId: id,
       });
 
       console.log(result.id);
       if (result.id) {
         console.log(sizes);
+        console.log(colors);
         console.log(stocks);
-        if (sizes) {
+        if (sizes && colors) {
           sizes.forEach(async (size, index) => {
             await ProductStock.create({
               ProductId: result.id,
               size: size || 0,
+              color: colors[index] || 0,
               stock: stocks[index] || 0,
             });
           });
         }
       }
 
-      imagenames.forEach(async (imagename, index) => {
-        const isPrimary = index === 0 ? true : false;
-        await ProductImage.create({
-          filename: imagename.filename,
-          ProductId: result.id,
-          fileType: imagename.mimetype,
-          primary: isPrimary,
-        });
-      });
+      // let newPromo = await promo.create({
+      //   potongan_harga: potongan_harga || 0,
+      //   tgl_mulai: tgl_mulai || Date.now(),
+      //   tgl_akhir: tgl_akhir || Date.now(),
+      //   ProductId: result.id,
+      // });
+
+      // let newPrice = await Product.update({
+      //     finalPrice: result.price - newPromo.potongan_harga,
+      //   },
+      //   {
+      //     where: {
+      //       id: result.id,
+      //     },
+      // });
+
+      // imagenames.forEach(async (imagename, index) => {
+      //   const isPrimary = index === 0 ? true : false;
+      //   await ProductImage.create({
+      //     filename: imagename.filename,
+      //     ProductId: result.id,
+      //     fileType: imagename.mimetype,
+      //     primary: isPrimary,
+      //   });
+      // });
       res.status(201).json(result);
     } catch (err) {
       next(err);
@@ -204,6 +230,7 @@ class ProductController {
         desc,
         price,
         sizes,
+        colors,
         stocks,
         stock,
         weight,
@@ -217,7 +244,7 @@ class ProductController {
         {
           name,
           desc,
-          price,
+          finalPrice: price,
           stock,
           weight,
           category,
@@ -231,6 +258,11 @@ class ProductController {
         }
       );
 
+      console.log(id);
+      console.log(sizes);
+      console.log(colors);
+      console.log(stocks);
+
       if (result) {
         console.log("result true");
         sizes.forEach(async (size, index) => {
@@ -242,27 +274,28 @@ class ProductController {
               where: {
                 ProductId: id,
                 size: sizes[index],
+                color: colors[index],
               },
             }
           );
         });
       }
 
-      imagenames.forEach(async (imagename, index) => {
-        const isPrimary = index === 0 ? true : false;
-        await ProductImage.update(
-          {
-            filename: imagename.filename,
-            fileType: imagename.mimetype,
-            primary: isPrimary,
-          },
-          {
-            where: {
-              ProductId: id,
-            },
-          }
-        );
-      });
+      // imagenames.forEach(async (imagename, index) => {
+      //   const isPrimary = index === 0 ? true : false;
+      //   await ProductImage.update(
+      //     {
+      //       filename: imagename.filename,
+      //       fileType: imagename.mimetype,
+      //       primary: isPrimary,
+      //     },
+      //     {
+      //       where: {
+      //         ProductId: id,
+      //       },
+      //     }
+      //   );
+      // });
       res.status(201).json(result);
     } catch (err) {
       console.log(err);
@@ -295,6 +328,26 @@ class ProductController {
       res.status(201).json(result);
     } catch (err) {
       next(err);
+    }
+  }
+
+  static async updateImageSize(req, res, next) {
+    try {
+      const id = req.params.id;
+      const userId = req.userData.id;
+      const imageSize = req.file.filename;
+
+      let result = await Product.update(
+        {
+          imageSize: imageSize,
+        },
+        {
+          where: { id: id, UserId: userId },
+        }
+      );
+      res.status(201).json(result);
+    } catch (err) {
+      console.log(err);
     }
   }
 }

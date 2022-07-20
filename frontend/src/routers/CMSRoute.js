@@ -13,6 +13,7 @@ import {
   EditProfile,
   ProfileCMS,
   ProductDetails,
+  Promos,
 } from "../pages/CMS";
 
 const CMSRoute = () => {
@@ -33,6 +34,7 @@ const CMSRoute = () => {
       <Route path="/edit/:id" element={<EditProduct />}></Route>
       <Route path="/profile" element={<ProfileCMS />}></Route>
       <Route path="/editProfile" element={<EditProfile />}></Route>
+      <Route path="/promos" element={<Promos />}></Route>
     </Routes>
   );
 };

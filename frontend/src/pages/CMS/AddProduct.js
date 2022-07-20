@@ -149,7 +149,7 @@ function AddProduct() {
 
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Condition
+              Availability
             </label>
             <select
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
@@ -164,16 +164,6 @@ function AddProduct() {
 
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Weight
-            </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, weight: e.target.value })}
-            ></input>
-          </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
               Price
             </label>
             <input
@@ -182,11 +172,60 @@ function AddProduct() {
               onChange={(e) => setForm({ ...form, price: e.target.value })}
             ></input>
           </div>
+
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Weight
+            </label>
+            <input
+              type="number"
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md w-full"
+              onChange={(e) => setForm({ ...form, weight: e.target.value })}
+            ></input>
+          </div>
+        </div>
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="px-5 py-5">
+          <h1 className="text-cyan-900 text-lg font-bold pb-5">
+            Dimensional Weight
+          </h1>
+          <div className="grid grid-cols-3">
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Length
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                onChange={(e) => setForm({ ...form, length: e.target.value })}
+              ></input>
+            </div>
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Width
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                onChange={(e) => setForm({ ...form, width: e.target.value })}
+              ></input>
+            </div>
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Height
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                onChange={(e) => setForm({ ...form, height: e.target.value })}
+              ></input>
+            </div>
+          </div>
         </div>
         <hr className="border-cyan-800 mx-5 mt-2" />
         <div className="px-5 py-5">
           <h1 className="text-cyan-900 text-lg font-bold">
-            Upload Images (Choose up to 4)
+            Upload Images (Choose up to 5)
           </h1>
           <div className=" flex space-x-8">
             {images !== undefined ? (
@@ -230,28 +269,132 @@ function AddProduct() {
             )}
 
             {images.length === 0 && (
-              <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded">
-                <label
-                  className="cursor-pointer custom-file-upload"
-                  htmlFor="file-upload"
-                >
-                  <div className="text-2xl text-end text-white">
-                    <IoAddCircleOutline />
+              <div className="flex">
+                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                  <div>
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-2xl text-end text-white">
+                        <IoAddCircleOutline />
+                      </div>
+                      <div className="text-7xl">
+                        <RiTShirtAirFill className="m-auto" />
+                      </div>
+                      <p className="text-center">ADD IMAGE</p>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => addImagesHandler(e.target.files)}
+                    />
                   </div>
-                  <div className="text-7xl">
-                    <RiTShirtAirFill className="m-auto" />
+                </div>
+                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                  <div>
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-2xl text-end text-white">
+                        <IoAddCircleOutline />
+                      </div>
+                      <div className="text-7xl">
+                        <RiTShirtAirFill className="m-auto" />
+                      </div>
+                      <p className="text-center">ADD IMAGE</p>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => addImagesHandler(e.target.files)}
+                    />
                   </div>
-                  <p className="text-center">ADD IMAGE</p>
-                </label>
-                <input
-                  className="hidden"
-                  type="file"
-                  multiple="multiple"
-                  accept="image/*"
-                  name="filename"
-                  id="file-upload"
-                  onChange={(e) => addImagesHandler(e.target.files)}
-                />
+                </div>
+                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                  <div>
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-2xl text-end text-white">
+                        <IoAddCircleOutline />
+                      </div>
+                      <div className="text-7xl">
+                        <RiTShirtAirFill className="m-auto" />
+                      </div>
+                      <p className="text-center">ADD IMAGE</p>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => addImagesHandler(e.target.files)}
+                    />
+                  </div>
+                </div>
+                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                  <div>
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-2xl text-end text-white">
+                        <IoAddCircleOutline />
+                      </div>
+                      <div className="text-7xl">
+                        <RiTShirtAirFill className="m-auto" />
+                      </div>
+                      <p className="text-center">ADD IMAGE</p>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => addImagesHandler(e.target.files)}
+                    />
+                  </div>
+                </div>
+                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                  <div>
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
+                    >
+                      <div className="text-2xl text-end text-white">
+                        <IoAddCircleOutline />
+                      </div>
+                      <div className="text-7xl">
+                        <RiTShirtAirFill className="m-auto" />
+                      </div>
+                      <p className="text-center">ADD IMAGE</p>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => addImagesHandler(e.target.files)}
+                    />
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -276,7 +419,7 @@ function AddProduct() {
                 sizeRows.map((row, index) => {
                   return (
                     <tr key={index}>
-                      <td className="pl-5 ml-5 w-[200vw]">
+                      <td className="pl-5 w-[900vw]">
                         <input
                           placeholder="Size Type (S/M/L/US/UK)"
                           type="text"
@@ -284,7 +427,15 @@ function AddProduct() {
                           onChange={(e) => updateTypeChanged(index, e)}
                         />
                       </td>
-                      <td className="ml-5 w-[80vw]">
+                      <td className="pl-5 w-[300vw]">
+                        <input
+                          placeholder="Color"
+                          type="text"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateTypeChanged(index, e)}
+                        />
+                      </td>
+                      <td className="pl-5 w-[220vw]">
                         <input
                           placeholder="Stock"
                           type="number"

@@ -10,6 +10,7 @@ import BannerManagement from "./BannerManagement";
 import AddBanner from "./AddBanner";
 import BannerDetails from "./BannerDetails";
 import EditBanner from "./EditBanner";
+import Promos from "./Promos";
 
 export {
   CMSDashboard,
@@ -24,4 +25,5 @@ export {
   AddBanner,
   BannerDetails,
   EditBanner,
+  Promos,
 };
