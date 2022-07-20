@@ -11,20 +11,20 @@ const OrderTable = (props) => {
       <table className="w-full text-sm lg:text-base" cellSpacing="0">
         <thead>
           <tr className="h-12 uppercase">
-            <th className="text-right text-cyan-900 ">No</th>
+            <th className="text-right text-darkColor ">No</th>
 
-            <th className="md:visible invisible text-right text-cyan-900  ">
+            <th className="md:visible invisible text-right text-darkColor  ">
               Order Date
             </th>
-            <th className="lg:text-right text-left text-cyan-900">
+            <th className="lg:text-right text-left text-darkColor">
               Total Quantity
             </th>
-            <th className="md:visible invisible text-right text-cyan-900 ">
+            <th className="md:visible invisible text-right text-darkColor ">
               Price
             </th>
-            <th className="text-right text-cyan-900 ">Total price</th>
-            <th className="text-right text-cyan-900 ">Status</th>
-            <th className="text-right text-cyan-900">Details</th>
+            <th className="text-right text-darkColor ">Total price</th>
+            <th className="text-right text-darkColor ">Status</th>
+            <th className="text-right text-darkColor">Details</th>
           </tr>
         </thead>
         <tbody>
@@ -38,13 +38,13 @@ const OrderTable = (props) => {
                   >
                     <td className="pb-4 md:table-cell p-2 text-right">
                       <Link to="#">
-                        <p className="md:table-cell text-cyan-900">
+                        <p className="md:table-cell text-midColor">
                           {index + 1}.
                         </p>
                       </Link>
                     </td>
                     <td className="md:visible invisible text-right md:table-cell pb-3 ">
-                      <span className="text-sm lg:text-base text-cyan-900 fot-medium">
+                      <span className="text-sm lg:text-base text-midColor fot-medium">
                         {String(order.createdAt)
                           .split("T")[0]
                           .split("-")
@@ -53,18 +53,18 @@ const OrderTable = (props) => {
                       </span>
                     </td>
                     <td className="p-2 text-right md:table-cell pb-3">
-                      <span className="text-sm lg:text-base font-medium text-cyan-900 ">
+                      <span className="text-sm lg:text-base font-medium text-midColor ">
                         {order.totalQty}
                       </span>
                     </td>
 
                     <td className="md:visible invisible text-right md:table-cell pb-3">
-                      <span className="text-sm lg:text-base font-medium text-cyan-900">
+                      <span className="text-sm lg:text-base font-medium text-midColor">
                         {`Rp${intToRupiah(+order.subtotal)}`}
                       </span>
                     </td>
                     <td className="text-right md:table-cell pb-3">
-                      <span className="text-sm lg:text-base font-medium text-cyan-900">
+                      <span className="text-sm lg:text-base font-medium text-midColor">
                         {`Rp${intToRupiah(+order.totalDue)}`}
                       </span>
                     </td>
@@ -99,7 +99,7 @@ const OrderTable = (props) => {
                       className="text-right md:table-cell pb-3 absolute right-5 top-3 cursor-pointer"
                       onClick={() => navigate("/user/orderDetail/" + order.id)}
                     >
-                      <span className="text-sm lg:text-2xl font-medium text-cyan-900 ">
+                      <span className="text-sm lg:text-2xl font-medium text-darkColor ">
                         <MdEventNote className="" />
                       </span>
                     </td>

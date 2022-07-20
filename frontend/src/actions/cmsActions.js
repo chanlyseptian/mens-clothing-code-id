@@ -5,7 +5,7 @@ import base_url from "../helpers/base_url";
 
 const url = base_url + "/products";
 
-export const getAllProducts = () => {
+export const getAllProducts = (attribute) => {
   return (dispatch) => {
     // loading
     dispatch({
@@ -19,9 +19,11 @@ export const getAllProducts = () => {
     //success
     axios({
       method: "GET",
-      url: url,
+      url: url + attribute,
+      
     })
       .then((response) => {
+        console.log(response.data);
         dispatch({
           type: "GET_ALL_PRODUCTS",
           payload: {
@@ -33,6 +35,89 @@ export const getAllProducts = () => {
       .catch((error) => {
         dispatch({
           type: "GET_ALL_PRODUCTS",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const getProductsBySearch = (attribute) => {
+  console.log("SEARCH ONLY");
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "GET_PRODUCTS_BY_SEARCH",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "GET",
+      url: url + "/search" + attribute,
+    })
+      .then((response) => {
+        dispatch({
+          type: "GET_PRODUCTS_BY_SEARCH",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_PRODUCTS_BY_SEARCH",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const getAndFilterProducts = (attribute, filter) => {
+  console.log("SEARCH AND FILTER");
+  console.log(filter);
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "GET_AND_FILTER_PRODUCTS",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "GET",
+      url: url + "/search" + attribute,
+      data: {},
+      params: {
+        filter: filter,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        dispatch({
+          type: "GET_AND_FILTER_PRODUCTS",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        dispatch({
+          type: "GET_AND_FILTER_PRODUCTS",
           payload: {
             status: "error",
             data: error.message,
@@ -149,6 +234,9 @@ export const update = (data, id) => {
       method: "PUT",
       url: `${url}/${id}`,
       data: data,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
     })
       .then(async (response) => {
         console.log(response.data);

@@ -115,3 +115,9 @@ button.stripe-btn:active {
   border-top: 1px solid #d4e0e0;
 }
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

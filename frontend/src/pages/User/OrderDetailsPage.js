@@ -107,11 +107,11 @@ const OrderDetailsPage = () => {
             className="px-16 lg:px-24 3xl:px-[100px] mt-4  relative z-10 flex cursor-pointer"
             onClick={() => navigate(-1)}
           >
-            <h1 className="text-lg hover:text-cyan-600 font-semibold text-cyan-900 flex items-center">
+            <h1 className="text-lg hover:text-cyan-600 font-semibold text-darkColor flex items-center">
               <MdOutlineArrowBackIos className="mr-1" /> Back
             </h1>
           </div>
-          <h1 className="font-semibold text-center text-3xl text-cyan-900 mt-5">
+          <h1 className="font-semibold text-center text-3xl text-darkColor mt-5">
             Order Summary
           </h1>
           <hr className="mt-5 mx-24" />
@@ -124,31 +124,31 @@ const OrderDetailsPage = () => {
                 <tbody>
                   <tr>
                     <td className="hidden pb-4 md:table-cell">
-                      <h1 className="font-semibold text-md text-cyan-900">
+                      <h1 className="font-semibold text-md text-darkColor">
                         Transaction
                       </h1>
                     </td>
                     <td>
                       <Link to="#">
                         {data.paymentTrasaction !== null ? (
-                          <p className="mb-4 md:ml-4 text-cyan-900">
+                          <p className="mb-4 md:ml-4 text-darkColor">
                             : {data.paymentTrasaction.toUpperCase()}
                           </p>
                         ) : (
-                          <p className="mb-4 md:ml-4 text-cyan-900">: -</p>
+                          <p className="mb-4 md:ml-4 text-darkColor">: -</p>
                         )}
                       </Link>
                     </td>
                   </tr>
                   <tr>
                     <td className="hidden pb-4 md:table-cell">
-                      <h1 className="font-semibold text-md text-cyan-900">
+                      <h1 className="font-semibold text-md text-darkColor">
                         Order Date
                       </h1>
                     </td>
                     <td>
                       <Link to="#">
-                        <p className="mb-4 md:ml-4 text-cyan-900">
+                        <p className="mb-4 md:ml-4 text-darkColor">
                           : {String(data.createdAt).slice(0, 10)}
                         </p>
                       </Link>
@@ -156,29 +156,29 @@ const OrderDetailsPage = () => {
                   </tr>
                   <tr>
                     <td className="hidden pb-4 md:table-cell">
-                      <h1 className="font-semibold text-md text-cyan-900">
+                      <h1 className="font-semibold text-md text-darkColor">
                         Status
                       </h1>
                     </td>
                     <td>
                       <Link to="#">
                         {data.status === "unpaid" ? (
-                          <p className="mb-4 md:ml-4 text-cyan-900 font-bold">
-                            <span className="text-cyan-900 font-normal">
+                          <p className="mb-4 md:ml-4 text-darkColor font-bold">
+                            <span className="text-darkColor font-normal">
                               :{" "}
                             </span>
                             {data.status.toUpperCase()}
                           </p>
                         ) : data.status === "ready to collect" ? (
                           <p className="mb-4 md:ml-4 text-green-700 font-bold">
-                            <span className="text-cyan-900 font-normal">
+                            <span className="text-darkColor font-normal">
                               :{" "}
                             </span>{" "}
                             COMPLETED
                           </p>
                         ) : (
                           <p className="mb-4 md:ml-4 text-red-700 font-bold">
-                            <span className="text-cyan-900 font-normal">
+                            <span className="text-darkColor font-normal">
                               :{" "}
                             </span>{" "}
                             {data.status.toUpperCase()}
@@ -198,18 +198,18 @@ const OrderDetailsPage = () => {
             >
               <thead className="bg-gray-200 ">
                 <tr className="h-12 uppercase">
-                  <th className=" text-center text-cyan-900">Image</th>
-                  <th className="text-center text-cyan-900">Product</th>
+                  <th className=" text-center text-darkColor">Image</th>
+                  <th className="text-center text-darkColor">Product</th>
                   <th className="text-center">
-                    <span className="lg:hidden text-cyan-900" title="Quantity">
+                    <span className="lg:hidden text-darkColor" title="Quantity">
                       Qty
                     </span>
-                    <span className="hidden lg:inline text-cyan-900">
+                    <span className="hidden lg:inline text-darkColor">
                       Quantity
                     </span>
                   </th>
-                  <th className="text-center text-cyan-900">Unit price</th>
-                  <th className="text-center text-cyan-900">Total price</th>
+                  <th className="text-center text-darkColor">Unit price</th>
+                  <th className="text-center text-darkColor">Total price</th>
                 </tr>
               </thead>
               <tbody className="text-center py-10">
@@ -229,23 +229,23 @@ const OrderDetailsPage = () => {
                           />
                         </Link>
                       </td>
-                      <td className="text-center text-cyan-900">
+                      <td className="text-center text-darkColor">
                         <Link to="#">
                           <p className="mb-2 md:ml-4">{product.name}</p>
                         </Link>
                       </td>
-                      <td className="text-center text-cyan-900">
+                      <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-medium">
                           {product.LineItem.qty}
                         </span>
                       </td>
-                      <td className="text-center text-cyan-900">
+                      <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-medium">
                           {product.price}
                         </span>
                       </td>
-                      <td className="text-center text-cyan-900">
-                        <span className="text-sm lg:text-base font-bold text-cyan-900">
+                      <td className="text-center text-darkColor">
+                        <span className="text-sm lg:text-base font-bold text-darkColor">
                           {product.price * product.LineItem.qty}
                         </span>
                       </td>
@@ -256,7 +256,7 @@ const OrderDetailsPage = () => {
             </table>
             <div className="flex px-2  mr-12 mt-5 mb-10  justify-center">
               <div className="bg-white w-96 justify-center rounded-lg h-[300px]">
-                <h1 className="font-semibold text-base text-center mt-2 text-cyan-900">
+                <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
                   Subtotal
                 </h1>
                 <hr className="mt-2" />
@@ -265,12 +265,12 @@ const OrderDetailsPage = () => {
                     <tbody>
                       <tr className="">
                         <td className="hidden pb-4 md:table-cell">
-                          <h1 className="text-cyan-900 text-md">Price</h1>
+                          <h1 className="text-darkColor text-md">Price</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 text-cyan-900 font-semibold ">
-                              <span className="text-cyan-900 font-normal">
+                            <p className="mb-4 md:ml-4 text-darkColor font-semibold ">
+                              <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
                               {intToRupiah(data.subtotal)}
@@ -280,11 +280,11 @@ const OrderDetailsPage = () => {
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
-                          <h1 className="text-cyan-900 text-md">Discount</h1>
+                          <h1 className="text-darkColor text-md">Discount</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 text-cyan-900 font-semibold">
+                            <p className="mb-4 md:ml-4 text-darkColor font-semibold">
                               {data.discount !== 0
                                 ? `-${intToRupiah(data.discount)}`
                                 : `: ${intToRupiah(data.discount)}`}
@@ -294,12 +294,12 @@ const OrderDetailsPage = () => {
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
-                          <h1 className="text-cyan-900 text-md">Tax</h1>
+                          <h1 className="text-darkColor text-md">Tax</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 font-semibold text-cyan-900">
-                              <span className="text-cyan-900 font normal">
+                            <p className="mb-4 md:ml-4 font-semibold text-darkColor">
+                              <span className="text-darkColor font normal">
                                 :{" "}
                               </span>{" "}
                               {intToRupiah(data.tax)}
@@ -309,12 +309,12 @@ const OrderDetailsPage = () => {
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
-                          <h1 className="text-cyan-900 text-md">Total</h1>
+                          <h1 className="text-darkColor text-md">Total</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 font-bold text-cyan-900 text-lg">
-                              <span className="text-cyan-900 font-normal">
+                            <p className="mb-4 md:ml-4 font-bold text-darkColor text-lg">
+                              <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
                               {intToRupiah(data.totalDue)}

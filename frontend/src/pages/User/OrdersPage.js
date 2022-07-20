@@ -28,14 +28,14 @@ function OrdersPage() {
   return (
     <div className="py-3 p-24 3xl:px-48 3xl:ml-6 h-[820px]">
       <div className="container mx-auto h-[499px]">
-        <h1 className="font-semibold text-center text-3xl text-cyan-900 mt-10">
+        <h1 className="font-semibold text-center text-3xl text-darkColor mt-10">
           Your Orders
         </h1>
         <hr className="mt-5" />
 
         <div className="flex flex-wrap  w-full justify-end space-x-6 py-4">
           <button
-            className="text-base rounded-md border-bottom text-cyan-800 border-0 px-3 bg-gray-200 font-semibold"
+            className="text-base rounded-md border-bottom text-midColor border-0 px-3 bg-gray-200 font-semibold"
             onClick={() => {
               navigate(`/user/orders`);
             }}
@@ -43,7 +43,7 @@ function OrdersPage() {
             All
           </button>
           <button
-            className="text-base rounded-md  text-cyan-800 hover:text-cyan-900 hover:font-semibold"
+            className="text-base rounded-md  text-midColor hover:text-darkColor hover:font-semibold"
             onClick={() => {
               navigate(`/user/orders/unpaid`);
             }}
@@ -52,7 +52,7 @@ function OrdersPage() {
           </button>
 
           <button
-            className="text-base rounded-md  text-cyan-800 hover:text-cyan-900 hover:font-semibold"
+            className="text-base rounded-md  text-midColor hover:text-darkColor hover:font-semibold"
             onClick={() => {
               navigate(`/user/orders/ready`);
             }}
@@ -61,7 +61,7 @@ function OrdersPage() {
           </button>
 
           <button
-            className="text-base rounded-md  text-cyan-800 hover:text-cyan-900 hover:font-semibold"
+            className="text-base rounded-md  text-midColor hover:text-darkColor hover:font-semibold"
             onClick={() => {
               navigate(`/user/orders/cancelled`);
             }}

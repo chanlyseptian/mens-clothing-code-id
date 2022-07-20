@@ -43,7 +43,7 @@ const ProductDetailsUser = () => {
       input: "number",
       inputLabel: "How much do you want ?",
       inputPlaceholder: "Enter qty",
-      confirmButtonColor: "#008080",
+      confirmButtonColor: "#041C32",
     });
 
     if (qty >= 1 && qty <= data.stock) {
@@ -72,19 +72,18 @@ const ProductDetailsUser = () => {
 
   return (
     <div>
-     
       <div
         className="px-16 lg:px-24 3xl:px-[218px] mt-4  relative z-10 flex cursor-pointer"
         onClick={() => navigate(-1)}
       >
-        <h1 className="text-md hover:text-cyan-600 font-semibold text-cyan-900 flex items-center">
+        <h1 className="text-md hover:text-lightColor font-semibold text-darkColor flex items-center">
           <MdOutlineArrowBackIos className="mr-1" /> Back
         </h1>
       </div>
       <div className="-mt-5 grid md:grid-cols-12 sm:grid-cols-1 lg:px-20 3xl:px-[200px]">
         <div className="md:col-span-4 sm:col-span-12 sm:min-h-screen mx-auto ">
           <div className="flex px-5">
-            <h1 className="text-lg flex items-center pt-10 pb-5 text-cyan-900 font-bold"></h1>
+            <h1 className="text-lg flex items-center pt-10 pb-5 text-darkColor font-bold"></h1>
           </div>
           <div className="max-w-sm lg:mr-16 3xl:max-w-lg px-5 rounded overflow-hidden">
             <Swiper spaceBetween={50} slidesPerView={1}>
@@ -102,7 +101,7 @@ const ProductDetailsUser = () => {
                 : "Loading"}
             </Swiper>
             <div className="flex justify-center items-center">
-              <div className="font-bold text-xl text-center mt-2 text-cyan-800">
+              <div className="font-bold text-xl text-center mt-2 text-darkColor">
                 {data.name}
               </div>
             </div>
@@ -111,37 +110,39 @@ const ProductDetailsUser = () => {
         <div className="border-r w-5 border-gray-200 3xl:ml-12" />
         <div className="md:col-span-7 sm:col-span-12 overflow-scroll no-scrollbar ">
           <div className="p-5">
-            <h1 className="text-xl font-bold pt-10 pb-1 text-cyan-900">
+            <h1 className="text-xl font-bold pt-10 pb-1 text-darkColor">
               Description
             </h1>
-            <p className="text-justify mb-3 text-cyan-900">{data.desc}</p>
+            <p className="text-justify mb-3 text-darkColor">{data.desc}</p>
             <hr />
-            <h1 className="pt-3 text-lg font-bold text-cyan-900">Category</h1>
-            <p className="mb-3 text-cyan-900 capitalize">{data.category}</p>
+            <h1 className="pt-3 text-lg font-bold text-darkColor">Category</h1>
+            <p className="mb-3 text-darkColor capitalize">{data.category}</p>
             <hr />
-            <h1 className="pt-3 text-lg font-bold text-cyan-900">Condition</h1>
-            <p className="mb-3 text-cyan-900 capitalize">{data.condition}</p>
+            <h1 className="pt-3 text-lg font-bold text-darkColor">Condition</h1>
+            <p className="mb-3 text-darkColor capitalize">{data.condition}</p>
             <hr />
-            <h1 className="pt-3 text-lg font-bold text-cyan-900 capitalize">
+            <h1 className="pt-3 text-lg font-bold text-darkColor capitalize">
               Unit
             </h1>
-            <p className="mb-3 text-cyan-900">{data.unit}</p>
+            <p className="mb-3 text-darkColor">{data.unit}</p>
             <hr />
-            <h1 className="pt-3 text-lg font-bold text-cyan-900">Stock</h1>
+            <h1 className="pt-3 text-lg font-bold text-darkColor">Stock</h1>
             <p>{data.stock}</p>
             <hr />
-            <h1 className="pt-3 text-lg font-bold text-cyan-900 ">Views</h1>
-            <p className="mb-3 text-cyan-900">{data.views}</p>
+            <h1 className="pt-3 text-lg font-bold text-darkColor ">Views</h1>
+            <p className="mb-3 text-darkColor">{data.views}</p>
             <hr />
             <div className="flex justify-between items-center">
               <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-cyan-900">Price</h1>
-                <p className="mb-3 text-cyan-900 font-semibold">
+                <h1 className="pt-3 text-lg font-bold text-darkColor">Price</h1>
+                <p className="mb-3 text-darkColor font-semibold">
                   Rp. {intToRupiah(data.price)}
                 </p>
               </div>
               <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-cyan-900">Rating</h1>
+                <h1 className="pt-3 text-lg font-bold text-darkColor">
+                  Rating
+                </h1>
                 <p>
                   <div className="flex justify-center mt-2">
                     {data.rating !== 0 && data.rating !== null
@@ -157,7 +158,7 @@ const ProductDetailsUser = () => {
                 </p>
               </div>
               <div className="flex flex-col items-center">
-                <h1 className="pt-3 text-lg font-bold text-cyan-900">
+                <h1 className="pt-3 text-lg font-bold text-darkColor">
                   Total Sold
                 </h1>
                 <p>{data.totalSold}</p>
@@ -166,7 +167,7 @@ const ProductDetailsUser = () => {
             <hr className="mt-2" />
             <div className="flex justify-center mt-5 w-full 3xl:mt-6">
               <button
-                className="bg-cyan-700 text-white hover:bg-cyan-900 p-4 font-semibold rounded-md w-full"
+                className="bg-darkColor text-white hover:bg-lightColor p-4 font-semibold rounded-md w-full"
                 onClick={() => inputQty()}
               >
                 Add To Cart

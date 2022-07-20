@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const Footer = () => {
   const navigate = useNavigate();
   return (
-    <div className="text-cyan-900 ">
+    <div className="text-darkColor">
       <div className="grid p-20 md:grid-cols-3 sm:grid-cols-1 bg-gray-200  ">
         <div className=" flex items-center 3xl:mx-auto ">
           <div className="flex grid-cols-4 text-6xl space-x-4">
@@ -29,8 +29,8 @@ const Footer = () => {
           </div>
         </div>
         <div className="w-full  flex flex-col text-center  ml-12 m-1">
-          <h1 className=" text-2xl text-cyan-900 font-semibold">About</h1>
-          <p className="text-sm text-justify text-cyan-800 mt-2">
+          <h1 className=" text-2xl text-darkColor font-semibold">About</h1>
+          <p className="text-sm text-justify text-darkColor mt-2">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime quas
             sequi similique culpa, quia exercitationem eos porro blanditiis
             quidem impedit esse animi tenetur illo eius velit magni? Est placeat
@@ -59,8 +59,8 @@ const Footer = () => {
           </p>
         </div>
       </div>
-      <div className="flex text-center text-white bg-gradient-to-r from-cyan-600 to-cyan-900 h-16">
-        <div className="m-auto text-xl">
+      <div className="flex text-center text-white bg-darkColor h-16">
+        <div className="m-auto text-xl text-accentColor">
           <p>&copy;Copyright 2022 Men's Clothing</p>
         </div>
       </div>

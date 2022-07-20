@@ -4,10 +4,12 @@ import { RiTShirtAirFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 
-import Swal from "sweetalert2";
-
 import { useDispatch, useSelector } from "react-redux";
 import { create } from "../../actions/cmsActions";
+import Swal from "sweetalert2";
+import chart from "../../images/chart.webp";
+import hpp from "../../images/hpp.jpg"
+
 
 function AddProduct() {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
@@ -18,33 +20,65 @@ function AddProduct() {
     name: "",
     desc: "",
     price: 0,
-    stock: 0,
-    expire: null,
     weight: 0,
-    unit: "",
     category: "tops",
     condition: "available",
   });
 
   const [images, setImages] = useState([]);
+  const [sizeRows, setSizeRows] = useState([1]);
+
+  const [sizeArr, setSizeArr] = useState([]);
+
+  useEffect(() => {
+    console.log(sizeArr);
+  }, [sizeArr]);
+
+  const addSize = () => {
+    setSizeRows([...sizeRows, sizeRows.length + 1]);
+    setSizeArr([
+      ...sizeArr,
+      {
+        type: "",
+        stock: 0,
+      },
+    ]);
+  };
+
+  const updateTypeChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], type: e.target.value };
+    setSizeArr(newArr);
+  };
+
+  const updateStockChanged = (index, e) => {
+    let newArr = [...sizeArr];
+    newArr[index] = { ...newArr[index], stock: e.target.value };
+    setSizeArr(newArr);
+  };
 
   const addProductHandler = () => {
     let formData = new FormData();
     formData.append("name", form.name);
     formData.append("desc", form.desc);
     formData.append("price", form.price);
-    formData.append("stock", form.stock);
-    formData.append("expire", form.expire);
     formData.append("weight", form.weight);
-    formData.append("unit", form.unit);
     formData.append("category", form.category);
     formData.append("condition", form.condition);
+
+    if (sizeArr.length !== 0) {
+      for (const sizeStock of sizeArr) {
+        formData.append("sizes", sizeStock.type);
+        formData.append("stocks", sizeStock.stock);
+      }
+    }
 
     if (images.length !== 0) {
       for (const image of images) {
         formData.append("filename", image);
       }
     }
+    console.log(formData);
     dispatch(create(formData));
   };
 
@@ -58,24 +92,34 @@ function AddProduct() {
     setImages([...images, ...files]);
   };
 
+  const sizeChart = ()=>{
+    Swal.fire({
+        imageUrl :""
+      
+    })
+  }
+
   return (
-    <div className="mx-auto container md:w-1/2 sm:w-96  overflow-scroll max-h-screen py-5 no-scrollbar">
+    <div className="px-10 lg:px-32 lg:ml-52 3xl:ml-12 min-h-screen py-5 no-scrollbar">
       <div className="">
         <div className="flex cursor-pointer" onClick={() => navigate(-1)}>
           <h1 className="text-lg hover:text-cyan-600 font-semibold pt-10 pb-5 text-cyan-900 flex items-center">
             <MdOutlineArrowBackIos className="mr-1" /> Back
           </h1>
         </div>
-        <div className="py-4 text-3xl font-bold text-cyan-900 text-center 3xl:mt-3 3xl:mb-8">
-          Add Product
+        <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
+          <h1 className="pl-5">Add Product</h1>
           <hr className="border-cyan-800 mx-5 mt-2" />
         </div>
 
-        <div className="grid grid-cols-2 ">
+        <div className="grid grid-cols-3 ">
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
               Name
             </label>
+          </div>
+
+          <div className="px-5 py-2 col-span-2">
             <input
               type="text"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
@@ -85,35 +129,50 @@ function AddProduct() {
 
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Price
+              Description
             </label>
-            <input
-              type="number"
+          </div>
+
+          <div className="px-5 py-2 col-span-2">
+            <textarea
+              rows="4"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, price: e.target.value })}
-            ></input>
+              onChange={(e) => setForm({ ...form, desc: e.target.value })}
+            ></textarea>
           </div>
 
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Stock
+              Category
             </label>
-            <input
-              type="number"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, stock: e.target.value })}
-            ></input>
+            <select
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+              name="category"
+              id="category"
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            >
+              <option value="tops">Tops</option>
+              <option value="bottoms">Bottoms</option>
+              <option value="accessories">Accessories</option>
+              <option value="grooming">Grooming</option>
+            </select>
           </div>
+
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Expired Date
+              Condition
             </label>
-            <input
-              type="date"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-2/5"
-              onChange={(e) => setForm({ ...form, expire: e.target.value })}
-            ></input>
+            <select
+              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+              name="condition"
+              id="condition"
+              onChange={(e) => setForm({ ...form, condition: e.target.value })}
+            >
+              <option value="available">Available</option>
+              <option value="soldout">Sold-Out</option>
+            </select>
           </div>
+
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
               Weight
@@ -126,129 +185,138 @@ function AddProduct() {
           </div>
           <div className="px-5 py-2">
             <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Unit
+              Price
             </label>
             <input
-              type="text"
+              type="number"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, unit: e.target.value })}
+              onChange={(e) => setForm({ ...form, price: e.target.value })}
             ></input>
           </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Category
-            </label>
-            <select
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-2/5"
-              name="category"
-              id="category"
-              onChange={(e) => setForm({ ...form, category: e.target.value })}
-            >
-              <option value="tops">Tops</option>
-              <option value="bottoms">Bottoms</option>
-              <option value="accessories">Accessories</option>
-              <option value="grooming">Grooming</option>
-            </select>
-          </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Condition
-            </label>
-            <select
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-2/5"
-              name="condition"
-              id="condition"
-              onChange={(e) => setForm({ ...form, condition: e.target.value })}
-            >
-              <option value="available">Available</option>
-              <option value="soldout">Sold-Out</option>
-            </select>
-          </div>
-          <div className="px-5 py-5">
-            <h1 className="text-cyan-900 text-lg font-bold">Images</h1>
-            <div className=" flex space-x-8">
-              {images !== undefined ? (
-                Array.from(images).map((img, index) => {
-                  return (
-                    <div
-                      className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
-                      key={index}
+        </div>
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="px-5 py-5">
+          <h1 className="text-cyan-900 text-lg font-bold">
+            Upload Images (Choose up to 4)
+          </h1>
+          <div className=" flex space-x-8">
+            {images !== undefined ? (
+              Array.from(images).map((img, index) => {
+                return (
+                  <div
+                    className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
+                    key={index}
+                  >
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
                     >
-                      <label
-                        className="cursor-pointer custom-file-upload"
-                        htmlFor="file-upload"
-                      >
-                        <div className="text-7xl">
-                          <img
-                            className="object-cover w-full h-40"
-                            src={
-                              img
-                                ? URL.createObjectURL(img)
-                                : "https://www.w3schools.com/howto/img_avatar.png"
-                            }
-                          />
-                        </div>
-                      </label>
-                      <input
-                        className="hidden"
-                        type="file"
-                        multiple="multiple"
-                        accept="image/*"
-                        name="filename"
-                        id="file-upload"
-                        onChange={(e) =>
-                          setImages([...images, ...e.target.files])
-                        }
-                      />
-                    </div>
+                      <div className="text-7xl">
+                        <img
+                          className="object-cover w-full h-40"
+                          src={
+                            img
+                              ? URL.createObjectURL(img)
+                              : "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                        />
+                      </div>
+                    </label>
+                    <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) =>
+                        setImages([...images, ...e.target.files])
+                      }
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <></>
+            )}
+
+            {images.length === 0 && (
+              <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded">
+                <label
+                  className="cursor-pointer custom-file-upload"
+                  htmlFor="file-upload"
+                >
+                  <div className="text-2xl text-end text-white">
+                    <IoAddCircleOutline />
+                  </div>
+                  <div className="text-7xl">
+                    <RiTShirtAirFill className="m-auto" />
+                  </div>
+                  <p className="text-center">ADD IMAGE</p>
+                </label>
+                <input
+                  className="hidden"
+                  type="file"
+                  multiple="multiple"
+                  accept="image/*"
+                  name="filename"
+                  id="file-upload"
+                  onChange={(e) => addImagesHandler(e.target.files)}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="grid grid-cols-2">
+          <div className="px-5 py-2">
+            <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
+              <h1 className="pl-5">Size Chart</h1>
+            </div>
+            <img className = "cursor-pointer"src = {chart} onClick = {() =>Swal.fire({width : 1000,imageUrl : `${chart}`, imageHeight: 500}) }></img>
+          </div>
+          <div className="px-5 py-2 text-right">
+            <button className="p-2" onClick={() => addSize()}>
+              <h1 className="pl-5 text-base font-bold text-cyan-700 hover:text-cyan-900 ">
+                Add Rows
+              </h1>
+            </button>
+            
+          </div>
+          <table className="table-auto">
+            <tbody>
+              {sizeRows.length !== 0 ? (
+                sizeRows.map((row, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="pl-5 ml-5 w-[200vw]">
+                        <input
+                          placeholder="Size Type (S/M/L/US/UK)"
+                          type="text"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateTypeChanged(index, e)}
+                        />
+                      </td>
+                      <td className="ml-5 w-[80vw]">
+                        <input
+                          placeholder="Stock"
+                          type="number"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          onChange={(e) => updateStockChanged(index, e)}
+                        />
+                      </td>
+                    </tr>
                   );
                 })
               ) : (
                 <></>
               )}
-
-              {images.length === 0 && (
-                <div className="flex-shrink-0 my-5 w-36 h-36 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded">
-                  <label
-                    className="cursor-pointer custom-file-upload"
-                    htmlFor="file-upload"
-                  >
-                    <div className="text-2xl text-end text-white">
-                      <IoAddCircleOutline />
-                    </div>
-                    <div className="text-7xl">
-                      <RiTShirtAirFill className="m-auto" />
-                    </div>
-                    <p className="text-center">ADD IMAGE</p>
-                  </label>
-                  <input
-                    className="hidden"
-                    type="file"
-                    multiple="multiple"
-                    accept="image/*"
-                    name="filename"
-                    id="file-upload"
-                    onChange={(e) => addImagesHandler(e.target.files)}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="px-5 py-2">
-            <label className="block text-cyan-900 text-lg font-bold pb-2">
-              Description
-            </label>
-            <textarea
-              rows="4"
-              className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              onChange={(e) => setForm({ ...form, desc: e.target.value })}
-            ></textarea>
-          </div>
+            </tbody>
+          </table>
         </div>
-
-        <div className="px-5 py-5">
+        <div className="px-5 py-5 text-center">
           <button
-            className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-full text-white uppercase"
+            className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-1/3 text-white uppercase"
             name="condition"
             id="condition"
             onClick={() => {
@@ -257,7 +325,7 @@ function AddProduct() {
           >
             Add
           </button>
-        </div>
+        </div>  
       </div>
     </div>
   );

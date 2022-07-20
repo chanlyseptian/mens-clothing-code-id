@@ -2,15 +2,19 @@ import React from "react";
 import { AiFillStar } from "react-icons/ai";
 import intToRupiah from "../helpers/rupiah";
 import base_url from "../helpers/base_url";
-import { oneStar, twoStars, threeStars,fourStars, fiveStars} from "../helpers/stars"
+import {
+  oneStar,
+  twoStars,
+  threeStars,
+  fourStars,
+  fiveStars,
+} from "../helpers/stars";
 import { useNavigate } from "react-router-dom";
 
 const ProductCard = (props) => {
   const data = props.product;
   const url = base_url;
   const navigate = useNavigate();
-
-  
 
   return (
     <>
@@ -23,10 +27,11 @@ const ProductCard = (props) => {
         />
         <div className="p-2 flex justify-between">
           <div>
-            <p className="text-cyan-800 text-start">{data.name}</p>
+            <p className="text-midColor text-start">{data.name}</p>
             <div>
-              <p className="font-bold text-cyan-900 text-start">Rp. {intToRupiah(data.price)} </p>
- 
+              <p className="font-bold text-darkColor text-start">
+                Rp. {intToRupiah(data.price)}{" "}
+              </p>
             </div>
             <div className="flex grid-cols-5 mt-1 text-start">
               <div className="flex col-span-2 w-12 text-start">
@@ -44,7 +49,7 @@ const ProductCard = (props) => {
               </div>
             </div>
           </div>
-          <div className="text-sm text-cyan-800">
+          <div className="text-sm text-midColor">
             <p className="text-[12px] capitalize text-end">{data.category}</p>
             <p className="font-semibold text-end">Sold: {data.totalSold}</p>
           </div>

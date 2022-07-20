@@ -11,10 +11,66 @@ class OrderController {
   //hanya untuk admin
   static async getAllOrders(req, res, next) {
     try {
-      let orders = await Order.findAll({
+      const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
+      let pageOrder = await Order.findAll({
         include: Product,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
       });
-      res.status(200).json(orders);
+
+      let totalData = await Order.count();
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+  static async getAllOrderByStatus(req, res, next) {
+    try {
+      const status = req.params.status || "completed";
+      const page = +req.query.page || 1;
+      const limit = req.query.limit || 5;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const skip = (page - 1) * limit;
+      let pageOrder = await Order.findAll({
+        include: Product,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          status: status
+        }
+      });
+
+      let totalData = Order.count({
+        where: {
+          status: status
+        }
+      })
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit)
+      }
+
+      res.status(200).json(result);
     } catch (err) {
       next(err);
     }
@@ -181,7 +237,10 @@ class OrderController {
   static async getOrdersByUserId(req, res, next) {
     try {
       const id = +req.userData.id;
-      let result = await Order.findAll({
+      const page = +req.query.page || 1;
+      const perPage = req.query.limit || 1;
+      const skip = (page - 1) * 10;
+      let pageOrder = await Order.findAll({
         include: [
           {
             model: Product,
@@ -189,9 +248,11 @@ class OrderController {
           },
           User,
         ],
+        limit: 5,
+        offset: (page - 1) * 5,
         where: { UserId: id },
       });
-      res.status(201).json(result);
+      res.status(200).json(pageOrder);
     } catch (err) {
       next(err);
     }
