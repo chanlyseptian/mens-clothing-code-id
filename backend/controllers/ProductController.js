@@ -17,7 +17,7 @@ class ProductController {
       const limit = req.query.limit || 5;
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -139,6 +139,7 @@ class ProductController {
   static async create(req, res, next) {
     try {
       const id = req.userData.id;
+
       const imagenames = req.files;
       const {
         name,
@@ -153,10 +154,8 @@ class ProductController {
         totalSold,
         rating,
         views,
-        potongan_harga,
-        tgl_mulai,
-        tgl_akhir,
         finalPrice,
+        promoId,
       } = req.body;
 
       const result = await Product.create({
@@ -171,6 +170,7 @@ class ProductController {
         rating,
         views,
         finalPrice: finalPrice || 0,
+        promoId,
         UserId: id,
       });
 
@@ -189,15 +189,14 @@ class ProductController {
         }
       }
 
-      let newPromo = await promo.create({
-        potongan_harga: potongan_harga || 0,
-        tgl_mulai: tgl_mulai || Date.now(),
-        tgl_akhir: tgl_akhir || Date.now(),
-        ProductId: result.id,
+      let getPromo = await promo.findOne({
+        where: { id: result.promoId },
       });
+      console.log(getPromo);
+
       let newPrice = await Product.update(
         {
-          finalPrice: result.price - newPromo.potongan_harga,
+          finalPrice: result.price - getPromo.potongan_harga,
         },
 
         {
