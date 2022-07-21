@@ -1,6 +1,10 @@
 const { Product, User, ProductImage, ProductStock, Promo } = require("../models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+const XLSX = require('xlsx')
+const fs = require('fs')
+
+
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -169,20 +173,21 @@ class ProductController {
       });
 
       console.log(result.id)
-      if(result.id){
-		    console.log(sizes)
+      if (result.id) {
+        console.log(sizes)
         console.log(colors)
-		    console.log(stocks)
-		    if(sizes&&colors){
-			    sizes.forEach(async (size,index) => {
+        console.log(stocks)
+        if (sizes && colors) {
+          sizes.forEach(async (size, index) => {
             await ProductStock.create({
               ProductId: result.id,
               size: size || 0,
               color: colors[index] || 0,
-              stock: stocks[index] || 0
+              stock: stocks[index] || 0,
+
             })
-			    })
-		    } 
+          })
+        }
       }
 
       let newPromo = await Promo.create({
@@ -193,13 +198,13 @@ class ProductController {
       });
 
       let newPrice = await Product.update({
-          finalPrice: result.price - newPromo.potongan_harga,
-        },
-        { 
+        finalPrice: result.price - newPromo.potongan_harga,
+      },
+        {
           where: {
             id: result.id,
           },
-      });
+        });
 
       imagenames.forEach(async (imagename, index) => {
         const isPrimary = index === 0 ? true : false;
@@ -264,12 +269,12 @@ class ProductController {
       console.log(colors)
       console.log(stocks)
 
-      if(result){
+      if (result) {
         console.log("result true")
         sizes.forEach(async (size, index) => {
           await ProductStock.update({
             stock: stocks[index]
-          },{
+          }, {
             where: {
               ProductId: id,
               size: sizes[index],
@@ -359,9 +364,54 @@ class ProductController {
       const imageSize = req.file.filename;
 
       let result = await Product.update({
-        imageSize:imageSize
+        imageSize: imageSize
       }, {
         where: { id: id, UserId: userId },
+      })
+      res.status(201).json(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async createBulkProduct(req, res, next) {
+    try {
+      const types = req.files
+      types.forEach((type, index) => {
+        if (type.originalname.includes('xlsx')) {
+          const workbook = XLSX.readFile(`assets/${type.filename}`)
+          const sheets = workbook.Sheets['Sheet1']
+          const dataJson = XLSX.utils.sheet_to_json(sheets)
+          console.log(dataJson)
+          const userId = req.userData.id;
+
+          dataJson.forEach(async (data, index) => {
+            let result = await Product.create({
+              name: data.name,
+              desc: data.desc,
+              price: data.price,
+              stock: 0,
+              weight: data.weight,
+              category: data.category,
+              UserId: userId,
+              finalPrice: data.price,
+            })
+            const sizes = data.sizes.split(',')
+            const colors = data.colors.split(',')
+            const stocks = data.stocks.split(',')
+            const images = data.imagesName.split(',')
+            sizes.forEach(async (size, index) => {
+              let stock = await ProductStock.create({
+                size: sizes[index],
+                color: colors[index],
+                stock: stocks[index],
+                ProductId: result.id
+              })
+            })
+
+          })
+
+        }
       })
       res.status(201).json(result);
     } catch (err) {

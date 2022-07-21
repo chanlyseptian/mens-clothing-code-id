@@ -1,11 +1,15 @@
 const multer = require('multer');
 const fileStorageEngine = multer.diskStorage({
     destination: (req, file, cb) =>{
-        cb(null, '../backend/images')
+        if (file.mimetype.includes('image')){
+            cb(null, '../backend/images')
+        } else {
+            cb(null, '../backend/assets')
+        }
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + '--' + file.originalname)
-        console.log(file)
+        //console.log(file)
     }
 })
 

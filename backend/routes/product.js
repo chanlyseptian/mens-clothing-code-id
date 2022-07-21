@@ -12,12 +12,21 @@ productRoute.post(
   upload.array("filename"),
   ProductController.create
 ); //just for admin
+
+productRoute.post(
+  "/bulkProduct",
+  authentication,
+  // upload.array("filename"),
+  ProductController.createBulkProduct
+); //just for admin
+
 productRoute.put(
   "/imageSize/:id",
   authentication,
   upload.single('imageSize'),
   ProductController.updateImageSize
 ); //just for admin
+
 productRoute.put(
   "/:id",
   authentication,
