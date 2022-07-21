@@ -12,6 +12,9 @@ productRoute.post(
   upload.array("filename"),
   ProductController.create
 ); //just for admin
+
+
+
 productRoute.put(
   "/:id",
   authentication,
