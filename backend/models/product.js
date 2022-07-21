@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       rating: DataTypes.INTEGER,
       views: DataTypes.INTEGER,
       finalPrice: DataTypes.INTEGER,
-      promoId: DataTypes.INTEGER,
+      PromoId: DataTypes.INTEGER,
       imageSize: DataTypes.STRING,
       UserId: {
         type: DataTypes.INTEGER,

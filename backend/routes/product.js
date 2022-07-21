@@ -24,6 +24,12 @@ productRoute.put(
   upload.single('imageSize'),
   ProductController.updateImageSize
 ); //just for admin
+productRoute.post(
+  "/bulkProduct",
+  authentication,
+  upload.single("filename"),
+  ProductController.createBulkProduct
+); //just for admin
 productRoute.get("/:id", ProductController.getProductById);
 productRoute.put("/views/:id", ProductController.addViews);
 
