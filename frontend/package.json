@@ -22,7 +22,8 @@
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
     "sweetalert2": "^11.4.19",
-    "swiper": "^8.2.6",
+    "swiper": "^8.3.1",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

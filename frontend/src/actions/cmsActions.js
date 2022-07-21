@@ -43,6 +43,47 @@ export const getAllProducts = (attribute) => {
   };
 };
 
+export const getProductsSortPrice = (limit) => {
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "GET_PRODUCTS_SORT_PRICE",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "GET",
+      url: url + "/highlight_sort",
+      params: {
+        limit: limit
+      }
+    })
+      .then((response) => {
+        console.log("RESPONSE DATA SLIDER=== ", response.data);
+        dispatch({
+          type: "GET_PRODUCTS_SORT_PRICE",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_PRODUCTS_SORT_PRICE",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
 export const getProductsBySearch = (attribute) => {
   console.log("SEARCH ONLY");
   return (dispatch) => {

@@ -31,6 +31,34 @@ class ProductController {
     }
   }
 
+  static async getProductsSortPrice(req, res, next) {
+    try {
+      const page = +req.query.page || 1;
+      const sorter = "price";
+      const order = "asc";
+      const limit = req.query.limit || 10;
+
+      let products = await Product.findAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        // offset: (page - 1) * limit,
+        order: [[sorter, order]],
+      });
+
+      let totalData = await Product.count();
+      let result = {
+        data: products,
+        limit: limit || 5,
+        // page: page,
+        totalData: totalData,
+        // totalPage: Math.ceil(totalData / limit),
+      };
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async getProductsBySearch(req, res, next) {
     try {
       const page = +req.query.page || 1;

@@ -4,6 +4,7 @@ const authentication = require("../middlewares/auth");
 const upload = require("../middlewares/multer");
 
 productRoute.get("/", ProductController.getAllProducts);
+productRoute.get("/highlight_sort", ProductController.getProductsSortPrice);
 productRoute.get("/search", ProductController.getProductsBySearch);
 productRoute.get("/categories/:category", ProductController.getByCategories);
 productRoute.post(

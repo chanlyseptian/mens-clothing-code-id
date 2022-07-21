@@ -2,6 +2,10 @@ const initialState = {
   action: "",
   status: "loading",
   data: "Loading",
+
+  actionPrice: "",
+  statusPrice: "loading",
+  dataPrice: "Loading",
 };
 
 const cmsReducer = (state = initialState, { type, payload }) => {
@@ -12,6 +16,13 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         action: "GET_ALL_PRODUCTS",
         status: payload.status,
         data: payload.data,
+      };
+    case "GET_PRODUCTS_SORT_PRICE":
+      return {
+        ...state,
+        actionPrice: "GET_PRODUCTS_SORT_PRICE",
+        statusPrice: payload.status,
+        dataPrice: payload.data,
       };
     case "GET_PRODUCTS_BY_SEARCH":
       return {
