@@ -56,6 +56,26 @@ class promoController {
       res.status(500).json(error);
     }
   }
+
+  static async deletePromo(req, res) {
+    try {
+      const id = req.params.id;
+
+      let deletePromo = await promo.destroy({
+        where: { id },
+      });
+      deletePromo[0] === 1
+        ? res.status(201).json({
+            message: "promo deleted successfully",
+          })
+        : res.status(404).json({
+            message: "promo not found",
+          });
+    } catch (error) {
+      //   console.log(error);
+      res.status(500).json(error);
+    }
+  }
 }
 
 module.exports = promoController;
