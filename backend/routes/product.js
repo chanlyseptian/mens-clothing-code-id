@@ -16,7 +16,7 @@ productRoute.post(
 productRoute.post(
   "/bulkProduct",
   authentication,
-  // upload.array("filename"),
+  upload.array("filename"),
   ProductController.createBulkProduct
 ); //just for admin
 

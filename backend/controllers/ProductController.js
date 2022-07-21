@@ -410,10 +410,9 @@ class ProductController {
             })
 
           })
-
         }
+        res.status(201).json('sukses');
       })
-      res.status(201).json(result);
     } catch (err) {
       console.log(err);
     }
