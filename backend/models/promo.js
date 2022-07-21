@@ -11,14 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Promo.belongsTo(models.Product);
+      Promo.hasMany(models.Product);
     }
   }
   Promo.init({
+    nama_promo: DataTypes.STRING,
     potongan_harga: DataTypes.INTEGER,
     tgl_mulai: DataTypes.DATE,
-    tgl_akhir: DataTypes.DATE,
-    ProductId: DataTypes.INTEGER
+    tgl_akhir: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Promo',

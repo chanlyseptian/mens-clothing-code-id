@@ -11,7 +11,7 @@ class ProductController {
       const limit = req.query.limit || 5;
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -42,7 +42,7 @@ class ProductController {
       let products;
 
       products = await Product.findAndCountAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -102,7 +102,7 @@ class ProductController {
       const order = req.query.order || "asc";
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -162,6 +162,7 @@ class ProductController {
         rating,
         views,
         finalPrice: price || 0,
+        PromoId: 1,
         UserId: id,
       });
 
@@ -198,15 +199,15 @@ class ProductController {
       //     },
       // });
 
-      // imagenames.forEach(async (imagename, index) => {
-      //   const isPrimary = index === 0 ? true : false;
-      //   await ProductImage.create({
-      //     filename: imagename.filename,
-      //     ProductId: result.id,
-      //     fileType: imagename.mimetype,
-      //     primary: isPrimary,
-      //   });
-      // });
+      imagenames.forEach(async (imagename, index) => {
+        const isPrimary = index === 0 ? true : false;
+        await ProductImage.create({
+          filename: imagename.filename,
+          ProductId: result.id,
+          fileType: imagename.mimetype,
+          primary: isPrimary,
+        });
+      });
       res.status(201).json(result);
     } catch (err) {
       next(err);
@@ -272,21 +273,21 @@ class ProductController {
         })
       }
 
-      // imagenames.forEach(async (imagename, index) => {
-      //   const isPrimary = index === 0 ? true : false;
-      //   await ProductImage.update(
-      //     {
-      //       filename: imagename.filename,
-      //       fileType: imagename.mimetype,
-      //       primary: isPrimary,
-      //     },
-      //     {
-      //       where: {
-      //         ProductId: id,
-      //       },
-      //     }
-      //   );
-      // });
+      imagenames.forEach(async (imagename, index) => {
+        const isPrimary = index === 0 ? true : false;
+        await ProductImage.update(
+          {
+            filename: imagename.filename,
+            fileType: imagename.mimetype,
+            primary: isPrimary,
+          },
+          {
+            where: {
+              ProductId: id,
+            },
+          }
+        );
+      });
       res.status(201).json(result);
     } catch (err) {
       console.log(err);
@@ -296,7 +297,7 @@ class ProductController {
     const id = req.params.id;
     try {
       let result = await Product.findByPk(id, {
-        include: [ProductImage, ProductStock],
+        include: [ProductImage, ProductStock, Promo],
       });
       res.status(201).json(result);
     } catch (err) {

@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      nama_promo: {
+        type: Sequelize.STRING
+      },
       potongan_harga: {
         type: Sequelize.INTEGER
       },
@@ -16,9 +19,6 @@ module.exports = {
       },
       tgl_akhir: {
         type: Sequelize.DATE
-      },
-      ProductId: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
