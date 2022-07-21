@@ -3,7 +3,7 @@ npx sequelize-cli db:migrate
 
 npx sequelize-cli model:generate --name User --attributes username:string,email:string,password:string,salt:integer,avatar:string,type:string
 
-npx sequelize-cli model:generate --name Product --attributes name:string,desc:text,price:integer,weight:integer,category:string,condition:string,totalSold:integer,rating:integer,views:integer,finalPrice:integer,UserId:integer
+npx sequelize-cli model:generate --name Product --attributes name:string,desc:text,price:integer,weight:integer,category:string,condition:string,totalSold:integer,rating:integer,views:integer,finalPrice:integer,promoId:integer,UserId:integer
 
 npx sequelize-cli model:generate --name ProductImage --attributes filename:string,fileType:string,primary:boolean,ProductId:integer
 
@@ -15,4 +15,4 @@ npx sequelize-cli model:generate --name LineItem --attributes qty:integer,status
 
 
 
-npx sequelize-cli model:generate --name promo --attributes potongan_harga:integer,tgl_mulai:date,tgl_akhir:date,ProductId:integer
+npx sequelize-cli model:generate --name promo --attributes name_promo:string,potongan_harga:integer,tgl_mulai:date,tgl_akhir:date

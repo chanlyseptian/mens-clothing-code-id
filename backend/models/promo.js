@@ -8,15 +8,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      promo.belongsTo(models.Product);
+      promo.hasMany(models.Product);
     }
   }
   promo.init(
     {
+      name_promo: DataTypes.STRING,
       potongan_harga: DataTypes.INTEGER,
       tgl_mulai: DataTypes.DATE,
       tgl_akhir: DataTypes.DATE,
-      ProductId: DataTypes.INTEGER,
     },
     {
       sequelize,

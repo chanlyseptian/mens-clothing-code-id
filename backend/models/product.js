@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.ProductStock);
       Product.belongsToMany(models.Order, { through: models.LineItem });
       Product.belongsToMany(models.ShoppingCart, { through: models.LineItem });
-      Product.hasOne(models.promo); //type admin
+      Product.belongsTo(models.promo);
     }
   }
   Product.init(
@@ -52,6 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       rating: DataTypes.INTEGER,
       views: DataTypes.INTEGER,
       finalPrice: DataTypes.INTEGER,
+      promoId: DataTypes.INTEGER,
       UserId: {
         type: DataTypes.INTEGER,
         validate: {

@@ -38,6 +38,9 @@ module.exports = {
       finalPrice: {
         type: Sequelize.INTEGER
       },
+      promoId: {
+        type: Sequelize.INTEGER
+      },
       UserId: {
         type: Sequelize.INTEGER
       },
