@@ -376,9 +376,7 @@ class ProductController {
 
   static async createBulkProduct(req, res, next) {
     try {
-      const types = req.files
-      types.forEach((type, index) => {
-        if (type.originalname.includes('xlsx')) {
+      const type = req.file
           const workbook = XLSX.readFile(`assets/${type.filename}`)
           const sheets = workbook.Sheets['Sheet1']
           const dataJson = XLSX.utils.sheet_to_json(sheets)
@@ -410,9 +408,9 @@ class ProductController {
             })
 
           })
-        }
+        
         res.status(201).json('sukses');
-      })
+      
     } catch (err) {
       console.log(err);
     }
