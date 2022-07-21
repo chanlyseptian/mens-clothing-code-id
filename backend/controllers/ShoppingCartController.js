@@ -61,7 +61,7 @@ class ShoppingCartController {
             })
 
             const lineItems = await LineItem.findAll({
-                include: Product,
+                include: Product, ProductStock,
                 where: { ShoppingCartId: shoppingCart.id }
             })
 
@@ -69,28 +69,20 @@ class ShoppingCartController {
             let subtotal = 0;
             lineItems.forEach(lineItem => {
                 totalQty = totalQty + lineItem.qty
-                subtotal = subtotal + (lineItem.qty * lineItem.Product.price)
+                subtotal = subtotal + (lineItem.qty * lineItem.Product.finalPrice)
+
             })
-
-            let discount
-            if (totalQty > 2) {
-                discount = (subtotal * 5) / 100
-            } else {
-                discount = 0
-            }
-
-            let totalDiscount = subtotal - discount
+            
 
             let totalTax = (subtotal * 10) / 100
-
-            let totalDue = totalDiscount + totalTax
-
+            console.log(totalTax)
+            let totalDue = subtotal + totalTax
             let order = await Order.create({
                 subtotal: subtotal,
-                discount: discount,
+                //discount: discount,
                 totalDue: totalDue,
                 totalQty: totalQty,
-                tax: totalTax,
+                tax: 10,
                 status: 'unpaid',
                 UserId: id
             })
@@ -113,11 +105,16 @@ class ShoppingCartController {
 
             for (const lineItem of lineItems){
                 const product = await Product.findByPk(lineItem.ProductId);
+                const productStock = await ProductStock.findByPk(lineItem.ProductStockId);
                 await Product.update({
-                    stock: product.stock - lineItem.qty,
                     totalSold: product.totalSold + lineItem.qty,
                 },{
                     where: { id: lineItem.ProductId }
+                })
+                await ProductStock.update({
+                    stock: productStock.stock - lineItem.qty,
+                },{
+                    where: { id: lineItem.ProductStockId }
                 })
             }
             res.status(201).json(order);

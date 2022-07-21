@@ -5,6 +5,7 @@ const {
   ShoppingCart,
   User,
   ProductImage,
+  ProductStock
 } = require("../models");
 
 class OrderController {
@@ -17,7 +18,7 @@ class OrderController {
       const order = req.query.order || "asc";
       const skip = (page - 1) * limit;
       let pageOrder = await Order.findAll({
-        include: Product,
+        include: [Product, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -92,7 +93,7 @@ class OrderController {
       });
       //cari data line item dimana OrderId sama dengan id di table order yang dibuat diatas
       let resultGet = await LineItem.findOne({
-        include: [Product, Order],
+        include: [Product, ProductStock, Order],
         where: { OrderId: resultLine.OrderId },
       });
 
@@ -192,8 +193,15 @@ class OrderController {
 
         await Product.update(
           {
-            stock: product.stock + lineItem.qty,
             totalSold: product.totalSold - lineItem.qty,
+          },
+          {
+            where: { id: lineItem.ProductId },
+          }
+        );
+        await ProductStock.update(
+          {
+            stock: ProductStock.stock + lineItem.qty
           },
           {
             where: { id: lineItem.ProductId },
@@ -244,7 +252,7 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage],
+            include: [ProductImage, ProductStock],
           },
           User,
         ],

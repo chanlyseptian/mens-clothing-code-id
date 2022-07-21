@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       Product.hasMany(models.ProductStock);
       Product.belongsToMany(models.Order, { through: models.LineItem });
       Product.belongsToMany(models.ShoppingCart, { through: models.LineItem });
+      Product.hasOne(models.Promo); 
     }
   }
   Product.init({
@@ -32,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     views: DataTypes.INTEGER,
     unit: DataTypes.STRING,
     UserId: DataTypes.INTEGER,
-    imageSize: DataTypes.STRING
+    imageSize: DataTypes.STRING,
+    finalPrice: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Product',

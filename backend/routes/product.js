@@ -25,6 +25,7 @@ productRoute.put(
   ProductController.update
 ); //just for admin
 
+
 productRoute.put("/views/:id", ProductController.addViews);
 productRoute.get("/:id", ProductController.getProductById);
 
