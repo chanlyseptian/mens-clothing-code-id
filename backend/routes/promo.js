@@ -1,9 +1,9 @@
 const promoRoutes = require("express").Router();
 
-const promoController = require("../controllers/promoController");
+const PromoController = require("../controllers/PromoController");
 const authentication = require("../middlewares/auth");
-promoRoutes.get("/", authentication, promoController.getPromo);
-promoRoutes.post("/", authentication, promoController.createPromo);
-promoRoutes.put("/:id", authentication, promoController.updatePromo);
-promoRoutes.delete("/:id", authentication, promoController.deletePromo);
+promoRoutes.get("/", authentication, PromoController.getPromo);
+promoRoutes.post("/", authentication, PromoController.createPromo);
+promoRoutes.put("/:id", authentication, PromoController.updatePromo);
+promoRoutes.delete("/:id", authentication, PromoController.deletePromo);
 module.exports = promoRoutes;

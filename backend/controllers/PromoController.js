@@ -1,6 +1,6 @@
 const { Promo } = require("../models");
 
-class promoController {
+class PromoController {
   static async getPromo(req, res) {
     try {
       let getPromo = await Promo.findAll();
@@ -79,4 +79,4 @@ class promoController {
   }
 }
 
-module.exports = promoController;
+module.exports = PromoController;
