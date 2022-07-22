@@ -54,62 +54,67 @@ class ShoppingCartController {
     static async checkout(req, res, next) {
         try {
             const id = +req.userData.id
-
+            
             const shoppingCart = await ShoppingCart.findOne({
                 where: { status: "open", UserId: id }
             })
-
+            
             const lineItems = await LineItem.findAll({
                 include: Product,
                 where: { ShoppingCartId: shoppingCart.id }
             })
-
+            
             let totalQty = 0;
             let subtotal = 0;
+            let totalWeight = 0;
             lineItems.forEach(lineItem => {
                 totalQty = totalQty + lineItem.qty
                 subtotal = subtotal + (lineItem.qty * lineItem.Product.finalPrice)
+                totalWeight = totalWeight + (lineItem.Product.weight * lineItem.qty)
+                // console.log(lineItem)
             })
-
+            
             let discount
             if (totalQty > 2) {
                 discount = (subtotal * 5) / 100
             } else {
                 discount = 0
             }
-
+            
             let totalDiscount = subtotal - discount
-
+            
             let totalTax = (subtotal * 10) / 100
-
+            
             let totalDue = totalDiscount + totalTax
-
+            console.log(totalWeight)
+            
             let order = await Order.create({
                 subtotal: subtotal,
                 discount: discount,
                 totalDue: totalDue,
                 totalQty: totalQty,
+                totalWeight: totalWeight,
                 tax: totalTax,
                 status: 'unpaid',
                 UserId: id
             })
-
+            
             let update = await LineItem.update({
                 status: 'order',
                 OrderId: order.id,
             }, { where: { ShoppingCartId: shoppingCart.id } })
-
+            
             await ShoppingCart.update({
                 status: 'close'
             }, {
                 where: { status: 'open', UserId: id }
             })
-
-            await ShoppingCart.create({
+                
+                await ShoppingCart.create({
                 UserId: id,
                 status: "open"
             })
-
+            
             for (const lineItem of lineItems){
                 const product = await Product.findByPk(lineItem.ProductId);
                 const productstock = await ProductStock.findByPk(lineItem.ProductStockId);
