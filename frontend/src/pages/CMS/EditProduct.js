@@ -58,6 +58,7 @@ function EditProduct() {
         PromoId: data.PromoId,
       });
     }
+
     // else if (action === "UPDATE" && status === "data") {
     //   dispatch(getUser());
     // }
@@ -109,13 +110,13 @@ function EditProduct() {
     formData.append("desc", form.desc);
     formData.append("price", form.price);
     formData.append("weight", form.weight);
-    formData.append("len", form.len);
-    formData.append("width", form.width);
     formData.append("height", form.height);
+    formData.append("width", form.width);
+    formData.append("len", form.len);
     formData.append("category", form.category);
-    formData.append("condition", form.condition);
-    formData.append("imageSize", form.imageSize);
     formData.append("PromoId", form.PromoId);
+    formData.append("condition", form.condition);
+    (form.imageSize) ? formData.append("imageSize", form.imageSize) : formData.append("oldImageSize", data.imageSize);
 
     if (sizeArr.length !== 0) {
       for (const sizeStock of sizeArr) {
@@ -247,8 +248,8 @@ function EditProduct() {
             >
               {actionPromo === "GET_PROMOS" && statusPromo === "data"
                 ? dataPromo.map((promo) => {
-                    return <option value={promo.id}>{promo.nama_promo}</option>;
-                  })
+                  return <option key={promo.id} value={promo.id}>{promo.nama_promo}</option>;
+                })
                 : console.log(actionPromo, statusPromo, dataPromo)}
             </select>
           </div>
@@ -272,78 +273,104 @@ function EditProduct() {
           <div className=" flex space-x-8">
             {data.ProductImages !== undefined && imageIsUploaded === false
               ? data.ProductImages.map((img, index) => {
-                  return (
-                    <div
-                      className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
-                      key={index}
+                return (
+                  <div
+                    className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md"
+                    key={index}
+                  >
+                    <label
+                      className="custom-file-upload"
+                    // htmlFor="file-upload"
                     >
-                      <label
-                        className="cursor-pointer custom-file-upload"
-                        htmlFor="file-upload"
-                      >
-                        <div className="text-7xl">
-                          <img
-                            className="object-cover w-full h-40"
-                            src={
-                              img
-                                ? url + "/images/" + img.filename
-                                : "https://www.w3schools.com/howto/img_avatar.png"
-                            }
-                          />
-                        </div>
-                      </label>
-                      <input
-                        className="hidden"
-                        type="file"
-                        multiple="multiple"
-                        accept="image/*"
-                        name="filename"
-                        id="file-upload"
-                        onChange={(e) => {
-                          setImages([...images, ...e.target.files]);
-                          setImageIsUploaded(true);
-                        }}
-                      />
-                    </div>
-                  );
-                })
-              : images !== undefined && imageIsUploaded === true
-              ? Array.from(images).map((img, index) => {
-                  return (
-                    <div
-                      className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
-                      key={index}
+                      <div className="text-7xl">
+                        <img
+                          className="object-cover w-full h-40"
+                          src={
+                            img
+                              ? url + "/images/" + img.filename
+                              : "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                        />
+                      </div>
+                    </label>
+                    {/* <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) => {
+                        setImages([...images, ...e.target.files]);
+                        setImageIsUploaded(true);
+                      }}
+                    /> */}
+                  </div>
+                );
+              })
+              : ""}
+
+            {images.length !== 0
+              ? images.map((img, index) => {
+                return (
+                  <div
+                    className="flex-shrink-0 flex-col my-5 w-36 h-36   shadow-lg rounded-md cursor-pointer"
+                    key={index}
+                  >
+                    <label
+                      className="cursor-pointer custom-file-upload"
+                      htmlFor="file-upload"
                     >
-                      <label
-                        className="cursor-pointer custom-file-upload"
-                        htmlFor="file-upload"
-                      >
-                        <div className="text-7xl">
-                          <img
-                            className="object-cover w-full h-40"
-                            src={
-                              img
-                                ? URL.createObjectURL(img)
-                                : "https://www.w3schools.com/howto/img_avatar.png"
-                            }
-                          />
-                        </div>
-                      </label>
-                      <input
-                        className="hidden"
-                        type="file"
-                        multiple="multiple"
-                        accept="image/*"
-                        name="filename"
-                        id="file-upload"
-                        onChange={(e) =>
-                          setImages([...images, ...e.target.files])
-                        }
-                      />
-                    </div>
-                  );
-                })
-              : console.log(imageIsUploaded, images)}
+                      <div className="text-7xl">
+                        <img
+                          className="object-cover w-full h-40"
+                          src={
+                            img
+                              ? URL.createObjectURL(img)
+                              : "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                        />
+                      </div>
+                    </label>
+                    {/* <input
+                      className="hidden"
+                      type="file"
+                      multiple="multiple"
+                      accept="image/*"
+                      name="filename"
+                      id="file-upload"
+                      onChange={(e) =>
+                        setImages([...images, ...e.target.files])
+                      }
+                    /> */}
+                  </div>
+                );
+              })
+              : ""}
+
+            {<div
+              className="flex-shrink-0 flex-col my-5 w-36 h-36 shadow-lg rounded-md"
+            >
+              <label
+                className="cursor-pointer custom-file-upload"
+                htmlFor="file-upload"
+              >
+                <div className="text-7xl h-full flex justify-center items-center">
+                  <AiOutlinePlusCircle />
+                </div>
+              </label>
+              <input
+                className="hidden"
+                type="file"
+                multiple="multiple"
+                accept="image/*"
+                name="filename"
+                id="file-upload"
+                onChange={(e) =>
+                  setImages([...images, ...e.target.files])
+                }
+              />
+            </div>}
           </div>
         </div>
         <hr className="border-cyan-800 mx-5 mt-2" />
@@ -359,14 +386,14 @@ function EditProduct() {
                   htmlFor="imageSize"
                 >
                   <div className="text-7xl">
-                    <img
+                    {(data) && <img
                       className="object-cover w-full h-40"
                       src={
                         data.imageSize
                           ? url + "/images/" + data.imageSize
                           : "https://www.w3schools.com/howto/img_avatar.png"
                       }
-                    />
+                    />}
                   </div>
                 </label>
                 <input

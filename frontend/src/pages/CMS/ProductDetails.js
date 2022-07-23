@@ -257,7 +257,7 @@ const ProductDetails = () => {
                     htmlFor="imageSize"
                   >
                     <div className="text-7xl">
-                      <img
+                      {(action==="GET_PRODUCT_BY_ID" && status==="data")?<img
                         className="object-cover w-full h-40"
                         src={url + "/images/" + data.imageSize}
                         onClick={() =>
@@ -267,7 +267,7 @@ const ProductDetails = () => {
                             imageHeight: 500,
                           })
                         }
-                      />
+                      />:""}
                     </div>
                   </label>
                 </div>

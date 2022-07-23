@@ -171,6 +171,7 @@ class ProductController {
       const id = req.userData.id;
       const imageSize = req.files.imageSize[0].filename;
       const imagenames = req.files.filename;
+      console.log(imagenames)
       const {
         name,
         desc,
@@ -272,7 +273,7 @@ class ProductController {
     try {
       const id = req.params.id;
       const userId = req.userData.id;
-      const imageSize = req.files.imageSize[0].filename;
+      console.log(req.files.imageSize)
       const imagenames = req.files.filename;
       const {
         name,
@@ -291,7 +292,12 @@ class ProductController {
         totalSold,
         rating,
         views,
+        oldImageSize
       } = req.body;
+      
+      const newImageSize = oldImageSize || req.files.imageSize[0].filename
+      // const imageSize = req.files.imageSize[0].filename;
+
       let result = await Product.update(
         {
           name,
@@ -302,12 +308,12 @@ class ProductController {
           width,
           len,
           category,
-          imageSize,
+          imageSize: newImageSize,
           PromoId,
           condition,
-          totalSold,
-          rating,
-          views,
+          // totalSold,
+          // rating,
+          // views,
         },
         {
           where: { id: id, UserId: userId },
@@ -372,26 +378,26 @@ class ProductController {
         );
       }
 
-      imagenames.forEach(async (imagename, index) => {
-        const isPrimary = index === 0 ? true : false;
-        await ProductImage.update(
-          {
+      if(imagenames.length>1){
+        imagenames.forEach(async (imagename, index) => {
+          const isPrimary = index === 0 ? true : false;
+          await ProductImage.create({
             filename: imagename.filename,
+            ProductId: id,
             fileType: imagename.mimetype,
             primary: isPrimary,
-          },
-          {
-            where: {
-              ProductId: id,
-            },
-          }
-        );
-      });
+          });
+        });
+      }
+
       res.status(201).json(result);
     } catch (err) {
       console.log(err);
     }
   }
+
+
+
   static async getProductById(req, res, next) {
     const id = req.params.id;
     try {

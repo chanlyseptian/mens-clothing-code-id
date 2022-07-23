@@ -6,6 +6,11 @@ const initialState = {
   actionSort: "",
   statusSort: "loading",
   dataSort: "loading",
+
+  actionUpdate: "",
+  statusUpdate: "",
+  dataUpdate: "",
+
 };
 
 const cmsReducer = (state = initialState, { type, payload }) => {
@@ -55,9 +60,9 @@ const cmsReducer = (state = initialState, { type, payload }) => {
     case "UPDATE":
       return {
         ...state,
-        action: "UPDATE",
-        status: payload.status,
-        data: payload.data,
+        actionUpdate: "UPDATE",
+        statusUpdate: payload.status,
+        dataUpdate: payload.data,
       };
     case "DELETE_PRODUCT":
       return {
