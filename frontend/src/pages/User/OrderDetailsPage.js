@@ -38,15 +38,20 @@ const OrderDetailsPage = () => {
     (state) => state.rajaOngkirReducer
   );
 
+  const { actionCost, statusCost, dataCost } = useSelector(
+    (state) => state.rajaOngkirReducer
+  );
+
   useEffect(() => {
     dispatch(getOrder(id));
   }, []);
 
+  const [shippingCost, setShippingCost] = useState(0);
   const [provinceId, setProvinceId] = useState(0);
   const [shippingDetail, setShippingDetail] = useState({
     origin: 152,
     destination: 0,
-    weight: 0,
+    weight: 1,
     courier: "",
   });
 
@@ -58,6 +63,17 @@ const OrderDetailsPage = () => {
     let attr = `?province=${provinceId}`;
     dispatch(getCitiesByProvinceId(attr));
   }, [provinceId]);
+
+  useEffect(() => {
+    if (
+      shippingDetail.courier !== "" &&
+      shippingDetail.destination !== 0 &&
+      shippingDetail.weight !== 0
+    ) {
+      dispatch(checkCost(shippingDetail));
+    }
+    console.log(shippingDetail);
+  }, [shippingDetail]);
 
   useEffect(() => {
     if (action === "GET_ORDER" && status === "data") {
@@ -126,7 +142,9 @@ const OrderDetailsPage = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <StripeContainer totalDue={data.totalDue} />
+        <StripeContainer
+          totalDue={Number(data.totalDue) + Number(shippingCost)}
+        />
         <div align="center" className="py-5">
           <button
             className="bg-gray-500  text-white p-3 rounded font-semibold"
@@ -231,7 +249,7 @@ const OrderDetailsPage = () => {
           <div className="px-24 ">
             <table
               className="border w-full text-sm lg:text-base"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead className="bg-gray-200 ">
                 <tr className="h-12 uppercase">
@@ -252,7 +270,7 @@ const OrderDetailsPage = () => {
               <tbody className="text-center py-10">
                 {data.Products.map((product, index) => {
                   return (
-                    <tr className="text-center ">
+                    <tr key={index} className="text-center ">
                       <td className="text-center flex justify-center">
                         <Link to="#">
                           <img
@@ -314,7 +332,10 @@ const OrderDetailsPage = () => {
                         statusProvinces === "data"
                           ? dataProvinces.rajaongkir.results.map((province) => {
                               return (
-                                <option value={province.province_id}>
+                                <option
+                                  key={province.province_id}
+                                  value={province.province_id}
+                                >
                                   {province.province}
                                 </option>
                               );
@@ -337,12 +358,12 @@ const OrderDetailsPage = () => {
                           })
                         }
                       >
-                        <option>Choose City</option>
+                        <option value={0}>Choose City</option>
                         {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
                         statusCities === "data"
                           ? dataCities.rajaongkir.results.map((city) => {
                               return (
-                                <option value={city.city_id}>
+                                <option key={city.city_id} value={city.city_id}>
                                   {city.type + " " + city.city_name}
                                 </option>
                               );
@@ -355,7 +376,7 @@ const OrderDetailsPage = () => {
                         Shipping Service :
                       </label>
                     </div>
-                    <div className="px-3 py-2">
+                    <div className="px-3 pt-2">
                       <select
                         className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
                         onChange={(e) =>
@@ -365,12 +386,49 @@ const OrderDetailsPage = () => {
                           })
                         }
                       >
-                        <option>Choose Shipping Service : </option>
+                        <option value="">Choose Shipping Service : </option>
                         <option value="jne">JNE</option>
                         <option value="tiki">Tiki</option>
                         <option value="pos">Pos</option>
                       </select>
                     </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Service :
+                      </label>
+                    </div>
+                    {actionCost === "CHECK_COST" &&
+                    statusCost === "data" &&
+                    shippingDetail.courier !== "" &&
+                    shippingDetail.destination !== 0 ? (
+                      <div className="px-3 pt-2">
+                        <select
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                          onChange={(e) => {
+                            setShippingCost(e.target.value);
+                          }}
+                        >
+                          <option key={-1} value={0}>
+                            Choose Service
+                          </option>
+                          {dataCost.result
+                            ? dataCost.result[0].costs.map((service) => {
+                                return (
+                                  <option
+                                    key={service.service}
+                                    value={service.cost[0].value}
+                                  >
+                                    {service.description} - Rp
+                                    {service.cost[0].value}
+                                  </option>
+                                );
+                              })
+                            : console.log(actionCost, statusCost)}
+                        </select>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
@@ -388,12 +446,12 @@ const OrderDetailsPage = () => {
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 text-darkColor font-semibold ">
+                            <div className="mb-4 md:ml-4 text-darkColor font-semibold ">
                               <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
                               {intToRupiah(data.subtotal)}
-                            </p>
+                            </div>
                           </Link>
                         </td>
                       </tr>
@@ -428,17 +486,36 @@ const OrderDetailsPage = () => {
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
+                          <h1 className="text-darkColor text-md">
+                            Shipping Cost
+                          </h1>
+                        </td>
+                        <td>
+                          <Link to="#">
+                            <p className="mb-4 md:ml-4 font-semibold text-darkColor">
+                              <span className="text-darkColor font normal">
+                                :{" "}
+                              </span>{" "}
+                              {intToRupiah(shippingCost)}
+                            </p>
+                          </Link>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="hidden pb-4 md:table-cell">
                           <h1 className="text-darkColor text-md">Total</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 font-bold text-darkColor text-lg">
+                            <div className="mb-4 md:ml-4 font-bold text-darkColor text-lg">
                               <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
-                              {intToRupiah(data.totalDue)}
+                              {intToRupiah(
+                                Number(data.totalDue) + Number(shippingCost)
+                              )}
                               <hr className="font-bold " />
-                            </p>
+                            </div>
                           </Link>
                         </td>
                       </tr>
@@ -446,19 +523,25 @@ const OrderDetailsPage = () => {
                   </table>
                   <div align="center">
                     {data.status === "unpaid" ? (
-                      <div className="w-full">
+                      <div className="grid grid-cols-2">
                         <button
-                          className="text-white bg-amber-600 hover:bg-amber-700 font-bold p-3 mt-5 w-1/2"
+                          className="text-white bg-amber-600 hover:bg-amber-700 font-bold p-3 mt-5"
                           onClick={() => cancelOrderHandler()}
                         >
                           CANCEL ORDER
                         </button>
-                        <button
-                          className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5  w-1/2"
-                          onClick={() => setOpenModal(true)}
-                        >
-                          PAY NOW
-                        </button>
+                        {shippingCost != 0 ? (
+                          <button
+                            className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5"
+                            onClick={() => setOpenModal(true)}
+                          >
+                            PAY NOW
+                          </button>
+                        ) : (
+                          <div className="text-white bg-gray-500 font-bold p-3 mt-5">
+                            PAY NOW
+                          </div>
+                        )}
                       </div>
                     ) : data.status === "cancelled" ? (
                       <div className="text-gray-50 bg-red-400 font-bold p-3 mt-5">

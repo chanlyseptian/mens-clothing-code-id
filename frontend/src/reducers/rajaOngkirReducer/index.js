@@ -6,6 +6,10 @@ const initialState = {
   actionCities: "",
   statusCities: "loading",
   dataCities: "loading",
+
+  actionCost: "",
+  statusCost: "loading",
+  dataCost: "loading",
 };
 
 const rajaOngkirReducer = (state = initialState, { type, payload }) => {
