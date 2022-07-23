@@ -6,16 +6,18 @@ const upload = require("../middlewares/multer");
 productRoute.get("/", ProductController.getAllProducts);
 productRoute.get("/search", ProductController.getProductsBySearch);
 productRoute.get("/categories/:category", ProductController.getByCategories);
+productRoute.get("/highlight_sort", ProductController.getProductsSortPrice);
+
 productRoute.post(
   "/",
   authentication,
-  upload.array("filename"),
+  upload.fields([{ name: "filename" }, { name: "imageSize", maxCount: 1 }]),
   ProductController.create
 ); //just for admin
 productRoute.put(
   "/:id",
   authentication,
-  upload.array("filename"),
+  upload.fields([{ name: "filename" }, { name: "imageSize", maxCount: 1 }]),
   ProductController.update
 ); //just for admin
 productRoute.put(
@@ -23,6 +25,12 @@ productRoute.put(
   authentication,
   upload.single("imageSize"),
   ProductController.updateImageSize
+); //just for admin
+productRoute.post(
+  "/bulkProduct",
+  authentication,
+  upload.single("filename"),
+  ProductController.createBulkProduct
 ); //just for admin
 productRoute.get("/:id", ProductController.getProductById);
 productRoute.put("/views/:id", ProductController.addViews);

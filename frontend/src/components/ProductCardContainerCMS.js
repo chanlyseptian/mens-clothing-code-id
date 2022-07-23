@@ -10,6 +10,7 @@ import {
   fiveStars,
 } from "../helpers/stars";
 import { MdDescription } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const ProductCardContainerCMS = (props) => {
   const navigate = useNavigate();
@@ -18,32 +19,41 @@ const ProductCardContainerCMS = (props) => {
 
   return (
     <div>
-      <table className="table-fixed">
+      <table className="table-fixed w-full">
         <thead>
           <tr className="h-20 uppercase text-left">
-            <th colSpan="3" className="text-center">
+            <th colSpan="4" className="text-center">
               Product
             </th>
-            <th>Rating</th>
-            <th className="text-left">Stock</th>
-            <th className="text-center">Price</th>
-            <th className="text-right">Details</th>
+            <th className="text-left">Price</th>
+            <th className="text-left">Final Price</th>
+            <th className="text-center">Details</th>
           </tr>
         </thead>
         <tbody>
           {data.map((product, index) => {
             return (
               <tr key={index}>
-                <td className="pr-5 py-1">{index + 1}.</td>
-                <td className="w-3/6 py-1">
+                <td className="py-1">{index + 1}.</td>
+                <td className="py-1">
                   <img
                     className="w-[200px] h-[200px] hover:shadow-xl hover:scale-125 cursor-pointer object-cover"
                     alt=""
                     src={`${url}/images/${product.ProductImages[0].filename}`}
+                    onClick={() =>
+                      Swal.fire({
+                        width: 1000,
+                        imageUrl:
+                          url + "/images/" + product.ProductImages[0].filename,
+                        imageHeight: 500,
+                      })
+                    }
                   />
                 </td>
-                <td className="w-2/6 py-1">{product.name}</td>
-                <td className="w-2/6 py-1">
+                <td colspan="2" className="py-1 text-center">
+                  {product.name}
+                </td>
+                {/* <td className="w-2/6 py-1">
                   <div className="text-amber-500 text-lg flex text-start">
                     {product.rating === 1
                       ? oneStar
@@ -55,10 +65,11 @@ const ProductCardContainerCMS = (props) => {
                       ? fourStars
                       : fiveStars}
                   </div>
-                </td>
-                <td className="w-1/6 text-center py-1">{product.stock}</td>
-                <td className="w-1/6 py-1">Rp{product.price}</td>
-                <td className="w-2/6 py-1">
+                </td> */}
+                {/* <td className="w-1/6 text-center py-1">{product.stock}</td> */}
+                <td className="py-1 line-through">Rp{product.price}</td>
+                <td className="py-1">Rp{product.finalPrice}</td>
+                <td className="text-center py-1">
                   <button
                     onClick={() => navigate(`/cms/details/${product.id}`)}
                   >

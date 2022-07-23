@@ -9,6 +9,12 @@ import {
   cancelOrder,
 } from "../../actions/shoppingActions";
 
+import {
+  getProvinces,
+  getCitiesByProvinceId,
+  checkCost,
+} from "../../actions/rajaOngkirActions";
+
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import StripeContainer from "../../components/StripeContainer";
@@ -24,8 +30,39 @@ const OrderDetailsPage = () => {
     (state) => state.shoppingReducer
   );
 
+  const { actionProvinces, statusProvinces, dataProvinces } = useSelector(
+    (state) => state.rajaOngkirReducer
+  );
+
+  const { actionCities, statusCities, dataCities } = useSelector(
+    (state) => state.rajaOngkirReducer
+  );
+
   useEffect(() => {
     dispatch(getOrder(id));
+  }, []);
+
+  const [provinceId, setProvinceId] = useState(0);
+  const [shippingDetail, setShippingDetail] = useState({
+    origin: 152,
+    destination: 0,
+    weight: 0,
+    courier: "",
+  });
+
+  useEffect(() => {
+    dispatch(getProvinces());
+  }, []);
+
+  useEffect(() => {
+    let attr = `?province=${provinceId}`;
+    dispatch(getCitiesByProvinceId(attr));
+  }, [provinceId]);
+
+  useEffect(() => {
+    if (action === "GET_ORDER" && status === "data") {
+      setShippingDetail({ ...shippingDetail, weight: data.totalWeight });
+    }
   }, []);
 
   const [openModal, setOpenModal] = useState(false);
@@ -241,12 +278,12 @@ const OrderDetailsPage = () => {
                       </td>
                       <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-medium">
-                          {product.price}
+                          {product.finalPrice}
                         </span>
                       </td>
                       <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-bold text-darkColor">
-                          {product.price * product.LineItem.qty}
+                          {product.finalPrice * product.LineItem.qty}
                         </span>
                       </td>
                     </tr>
@@ -254,8 +291,90 @@ const OrderDetailsPage = () => {
                 })}
               </tbody>
             </table>
-            <div className="flex px-2  mr-12 mt-5 mb-10  justify-center">
-              <div className="bg-white w-96 justify-center rounded-lg h-[300px]">
+            <div className="flex mr-12 mt-5 mb-10  justify-center">
+              <div className="bg-white w-2/3 justify-center rounded-lg h-[300px] mr-8">
+                <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
+                  Shipping Detail
+                </h1>
+                <hr className="mt-2" />
+                <div className="py-5">
+                  <div className="grid grid-cols-2">
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Province :
+                      </label>
+                    </div>
+                    <div className="px-3 py-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) => setProvinceId(e.target.value)}
+                      >
+                        <option>Choose Province</option>
+                        {actionProvinces === "GET_PROVINCES" &&
+                        statusProvinces === "data"
+                          ? dataProvinces.rajaongkir.results.map((province) => {
+                              return (
+                                <option value={province.province_id}>
+                                  {province.province}
+                                </option>
+                              );
+                            })
+                          : console.log(actionProvinces, statusProvinces)}
+                      </select>
+                    </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        City :
+                      </label>
+                    </div>
+                    <div className="px-3 py-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) =>
+                          setShippingDetail({
+                            ...shippingDetail,
+                            destination: e.target.value,
+                          })
+                        }
+                      >
+                        <option>Choose City</option>
+                        {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
+                        statusCities === "data"
+                          ? dataCities.rajaongkir.results.map((city) => {
+                              return (
+                                <option value={city.city_id}>
+                                  {city.type + " " + city.city_name}
+                                </option>
+                              );
+                            })
+                          : console.log(actionCities, statusCities)}
+                      </select>
+                    </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Shipping Service :
+                      </label>
+                    </div>
+                    <div className="px-3 py-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) =>
+                          setShippingDetail({
+                            ...shippingDetail,
+                            courier: e.target.value,
+                          })
+                        }
+                      >
+                        <option>Choose Shipping Service : </option>
+                        <option value="jne">JNE</option>
+                        <option value="tiki">Tiki</option>
+                        <option value="pos">Pos</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white w-1/3 justify-center rounded-lg h-[300px] ml-8">
                 <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
                   Subtotal
                 </h1>

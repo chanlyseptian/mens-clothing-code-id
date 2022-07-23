@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import base_url from "../helpers/base_url";
+import Swal from "sweetalert2";
 
 import { MdDescription } from "react-icons/md";
 
@@ -28,12 +29,19 @@ const BannerContainer = (props) => {
               <tr key={index}>
                 <td className="pr-5 py-1">{index + 1}.</td>
                 <td className="w-3/6 py-1">
-                  <div className="hover:scale-125">
+                  <div>
                     <img
                       className="w-[400px] h-[200px] hover:shadow-xl cursor-pointer object-cover"
                       alt=""
                       // src={banner.filename}
                       src={`${url}/images/${banner.filename}`}
+                      onClick={() =>
+                        Swal.fire({
+                          width: 1000,
+                          imageUrl: url + "/images/" + banner.filename,
+                          imageHeight: 500,
+                        })
+                      }
                     />
                     <p className="text-center py-1 text-darkColor font-bold">
                       {banner.body}

@@ -5,6 +5,7 @@ import { TbEdit } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { getBannerDetails } from "../../actions/miscActions";
 import base_url from "../../helpers/base_url";
+import Swal from "sweetalert2";
 
 const BannerDetails = () => {
   const { id } = useParams();
@@ -57,6 +58,13 @@ const BannerDetails = () => {
                   className="mx-auto object-cover w-screen"
                   src={`${url}/images/${data.filename}`}
                   alt="Flower and sky"
+                  onClick={() =>
+                    Swal.fire({
+                      width: 1000,
+                      imageUrl: url + "/images/" + data.filename,
+                      imageHeight: 500,
+                    })
+                  }
                 />
               </label>
             </div>

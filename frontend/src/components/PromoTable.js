@@ -3,15 +3,18 @@ import { useNavigate, Link } from "react-router-dom";
 import intToRupiah from "../helpers/rupiah";
 import { MdEventNote } from "react-icons/md";
 import PromoEdit from "../components/PromoEdit";
+import { getPromos, getPromoById } from "../actions/promoActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const PromoTable = (props) => {
-  const navigate = useNavigate();
-  const data = props.data;
+  const { action, status, data } = useSelector((state) => state.promoReducer);
+  const dispatch = useDispatch();
+  const promos = props.data;
   const [showPromoEdit, setShowPromoEdit] = useState(false);
 
   useEffect(() => {
-    console.log(showPromoEdit);
-  }, [showPromoEdit]);
+    console.log(data);
+  }, [status]);
 
   return (
     <div>
@@ -31,13 +34,15 @@ const PromoTable = (props) => {
         </div>
         {/* </thead> */}
         {/* <tbody> */}
-        {data
-          ? data.map((promo, index) => {
+        {promos
+          ? promos.map((promo, index) => {
               return (
-                <>
+                <div key={index}>
                   {showPromoEdit ? (
                     <PromoEdit
                       id={promo.id}
+                      // formPromo={formPromo}
+                      // setFormPromo={setFormPromo}
                       setShowPromoEdit={setShowPromoEdit}
                     />
                   ) : (
@@ -47,7 +52,10 @@ const PromoTable = (props) => {
                     className="border bg-gray-50 hover:bg-white relative cursor-pointer grid grid-cols-11"
                     key={index}
                     onClick={
-                      () => setShowPromoEdit(true)
+                      () => {
+                        // editHandler(promo.id)
+                        setShowPromoEdit(true);
+                      }
                       // navigate("/user/orderDetail/" + order.id)
                     }
                   >
@@ -60,28 +68,28 @@ const PromoTable = (props) => {
                     </div>
                     <div className="text-right md:table-cell pb-3 p-2 col-span-2">
                       <span className="text-sm lg:text-base text-midColor fot-medium">
-                        {promo.promoName}
+                        {promo.nama_promo}
                       </span>
                     </div>
                     <div className="p-2 text-right md:table-cell pb-3 col-span-2">
                       <span className="text-sm lg:text-base font-medium text-midColor ">
-                        {promo.discount}
+                        {promo.potongan_harga}
                       </span>
                     </div>
 
                     <div className="text-right md:table-cell pb-3 p-2 col-span-3">
                       <span className="text-sm lg:text-base font-medium text-midColor">
-                        {promo.startDate}
+                        {promo.tgl_mulai}
                       </span>
                     </div>
 
                     <div className="text-right md:table-cell pb-3 p-2 col-span-3">
                       <span className="text-sm lg:text-base">
-                        {promo.endDate}
+                        {promo.tgl_akhir}
                       </span>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })
           : console.log(data)}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CarouselComponent from "../../components/CarouselComponent";
 import ProductCardContainerUser from "../../components/ProductCardContainerUser";
+import HighlightProduct from "../../components/HighlightProduct";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
@@ -112,6 +113,7 @@ const HomePage = () => {
   return (
     <>
       <CarouselComponent />
+      <HighlightProduct />
       <aside className=" flex border-r border-lightColor transform top-0 left-0 w-72 fixed h-screen ease-in-out transition-all duration-300 -translate-x-[285px] hover:translate-x-0">
         <div className="bg-darkColor w-full">
           <div className="mx-auto h-full w-full">
@@ -239,7 +241,8 @@ const HomePage = () => {
         <div className="mb-16">
           {(action === "GET_ALL_PRODUCTS" && status === "data") ||
           (action === "GET_PRODUCTS_BY_SEARCH" && status === "data") ||
-          (action === "GET_AND_FILTER_PRODUCTS" && status === "data") ? (
+          (action === "GET_AND_FILTER_PRODUCTS" && status === "data") ||
+          (action === "GET_PRODUCTS_SORT_PRICE" && status === "data") ? (
             <ProductCardContainerUser data={data.data} />
           ) : (
             console.log(action, data)

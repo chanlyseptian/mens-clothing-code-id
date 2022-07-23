@@ -39,6 +39,7 @@ class ShoppingCartController {
     try {
       const id = +req.userData.id;
       const { qty, ProductId, ProductStockId } = req.body;
+      console.log(qty, ProductId, ProductStockId);
 
       // cari keranjang yang open
       const shoppingCart = await ShoppingCart.findOne({
@@ -53,9 +54,20 @@ class ShoppingCartController {
         qty,
         status: "cart",
       });
+
+      let productStockToUpdate = await ProductStock.findByPk(ProductStockId);
+
+      await ProductStock.update(
+        {
+          stock: productStockToUpdate.stock - qty,
+        },
+        {
+          where: { id: ProductStockId },
+        }
+      );
       res.status(201).json(result);
     } catch (err) {
-      next(err);
+      console.log(err);
     }
   }
   static async checkout(req, res, next) {
@@ -73,9 +85,12 @@ class ShoppingCartController {
 
       let totalQty = 0;
       let subtotal = 0;
+      let totalWeight = 0;
       lineItems.forEach((lineItem) => {
         totalQty = totalQty + lineItem.qty;
         subtotal = subtotal + lineItem.qty * lineItem.Product.finalPrice;
+        totalWeight = totalWeight + lineItem.Product.weight * lineItem.qty;
+        // console.log(lineItem)
       });
 
       let discount;
@@ -90,12 +105,14 @@ class ShoppingCartController {
       let totalTax = (subtotal * 10) / 100;
 
       let totalDue = totalDiscount + totalTax;
+      console.log(totalWeight);
 
       let order = await Order.create({
         subtotal: subtotal,
         discount: discount,
         totalDue: totalDue,
         totalQty: totalQty,
+        totalWeight: totalWeight,
         tax: totalTax,
         status: "unpaid",
         UserId: id,

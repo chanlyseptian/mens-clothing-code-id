@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getProductById } from "../../actions/cmsActions";
 import {
   addToCart,
@@ -35,19 +36,36 @@ const ProductDetailsUser = () => {
 
   const [dropdownSizeStock, setDropdownSizeStock] = useState([]);
   const [modalQtySize, setModalQtySize] = useState(false);
+  const [itemToCart, setItemToCart] = useState({
+    qty: 0,
+    ProductId: 0,
+    ProductStockId: 0,
+  });
 
   useEffect(() => {
     if (action === "GET_PRODUCT_BY_ID" && status === "data") {
       // setDropdownSizeStock(data.ProductStocks.reduce((a, product) => (product.stock > 0) ? ({ ...a, [product.size]: product.size.toUpperCase() }) : ({ ...a }), {}))
-      setDropdownSizeStock(
-        data.ProductStocks.reduce(
-          (a, product) =>
-            product.stock > 0 ? [...a, product.size.toUpperCase()] : [...a],
-          []
-        )
-      );
+      data.ProductStocks.forEach((productStock) => {
+        setDropdownSizeStock([
+          ...dropdownSizeStock,
+          {
+            id: productStock.id,
+            size: productStock.size,
+            color: productStock.color,
+            stock: productStock.stock,
+          },
+        ]);
+      });
     }
   }, [status]);
+
+  const addToCartHandler = () => {
+    dispatch(addToCart(itemToCart)).then(() => {
+      dispatch(getCartByUserId());
+    });
+
+    // console.log(itemToCart);
+  };
 
   async function inputQty(qty) {
     // const { value: qty } = await Swal.fire({
@@ -65,12 +83,7 @@ const ProductDetailsUser = () => {
     // });
 
     if (qty >= 1 && qty <= data.stock) {
-      dispatch(
-        addToCart({
-          ProductId: id,
-          qty: qty,
-        })
-      ).then(() => {
+      dispatch(addToCart(itemToCart)).then(() => {
         dispatch(getCartByUserId());
       });
     } else if (qty < 1) {
@@ -121,12 +134,20 @@ const ProductDetailsUser = () => {
                         type="select"
                         name="size"
                         id="size"
+                        onChange={(e) =>
+                          setItemToCart({
+                            ...itemToCart,
+                            ProductStockId: e.target.value,
+                            ProductId: id,
+                          })
+                        }
                         className="block w-10/12 mx-auto h-10 rounded-md"
                       >
+                        <option>Choose</option>
                         {dropdownSizeStock.map((product, index) => {
                           return (
-                            <option key={index} value={product}>
-                              {product.toUpperCase()}
+                            <option key={index} value={product.id}>
+                              {product.size + " - " + product.color}
                             </option>
                           );
                         })}
@@ -139,12 +160,18 @@ const ProductDetailsUser = () => {
                       <input
                         className="block w-10/12 mx-auto h-10 rounded-md"
                         type="number"
+                        onChange={(e) =>
+                          setItemToCart({ ...itemToCart, qty: e.target.value })
+                        }
                       ></input>
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-center">
-                  <button className="bg-white px-10 rounded-md py-2 text-darkColor">
+                  <button
+                    className="bg-white px-10 rounded-md py-2 text-darkColor"
+                    onClick={addToCartHandler}
+                  >
                     OK
                   </button>
                 </div>
@@ -204,7 +231,7 @@ const ProductDetailsUser = () => {
                 </p>
                 <hr />
                 <h1 className="pt-3 text-lg font-bold text-darkColor">
-                  Condition
+                  Availability
                 </h1>
                 <p className="mb-3 text-darkColor capitalize">
                   {data.condition}
@@ -214,6 +241,18 @@ const ProductDetailsUser = () => {
                   Available Sizes
                 </h1>
                 <div className="mb-3 text-darkColor">
+                  <div className="my-3">
+                    <img
+                      src={url + "/images/" + data.imageSize}
+                      onClick={() =>
+                        Swal.fire({
+                          width: 1000,
+                          imageUrl: url + "/images/" + data.imageSize,
+                          imageHeight: 500,
+                        })
+                      }
+                    />
+                  </div>
                   <table className="border-collapse border border-slate-500 w-full">
                     <thead>
                       <tr className="p-2">
@@ -297,9 +336,11 @@ const ProductDetailsUser = () => {
                 <div className="flex justify-center mt-5 w-full 3xl:mt-6">
                   <button
                     className="bg-darkColor text-white hover:bg-lightColor p-4 font-semibold rounded-md w-full"
-                    onClick={() =>
-                      // inputQty()
-                      setModalQtySize(true)
+                    onClick={
+                      () =>
+                        // inputQty()
+                        setModalQtySize(true)
+                      // console.log(dropdownSizeStock)
                     }
                   >
                     Add To Cart

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../actions/userActions";
 import { MdAddAPhoto } from "react-icons/md";
+import Swal from "sweetalert2";
 
 function RegisterCMS() {
   const { action, status, data } = useSelector((state) => state.userReducer);
@@ -13,17 +14,26 @@ function RegisterCMS() {
     username: "",
     email: "",
     password: "",
+    confirmPass: "",
     avatar: null,
   });
 
   const registerHandler = () => {
-    let formData = new FormData();
-    formData.append("username", form.username);
-    formData.append("email", form.email);
-    formData.append("password", form.password);
-    formData.append("avatar", form.avatar);
-    formData.append("type", "cms");
-    dispatch(register(formData));
+    if (form.password === form.confirmPass) {
+      let formData = new FormData();
+      formData.append("username", form.username);
+      formData.append("email", form.email);
+      formData.append("password", form.password);
+      formData.append("avatar", form.avatar);
+      formData.append("type", "cms");
+      dispatch(register(formData));
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Password and Confirm Password must be same",
+      });
+    }
   };
 
   useEffect(() => {
@@ -104,8 +114,20 @@ function RegisterCMS() {
               onChange={(e) => setForm({ ...form, password: e.target.value })}
             ></input>
           </div>
+          <div className="px-5 py-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
+              onChange={(e) =>
+                setForm({ ...form, confirmPass: e.target.value })
+              }
+            ></input>
+          </div>
         </div>
-        <div className="px-5 py-8 mt-12">
+        <div className="px-5 py-8 mt-3">
           <button
             className="text-2xl py-2 border text-white bg-midColor hover:bg-darkColor p-2 rounded-md w-full"
             name="condition"

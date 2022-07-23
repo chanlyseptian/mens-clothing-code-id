@@ -6,6 +6,7 @@ const {
   User,
   ProductImage,
   ProductStock,
+  Shipping,
 } = require("../models");
 
 class OrderController {
@@ -143,16 +144,41 @@ class OrderController {
   static async updatePayment(req, res, next) {
     // const UserId = +req.userData.id
     const OrderId = +req.params.id;
-    // const { paymentTrasaction } = req.body
-    try {
-      // let order = await Order.findOne({
-      //     where: { UserId: id, status: 'unpaid' }
-      // })
+    const {
+      destinationCityId,
+      destinationCityName,
+      destinationProvinceId,
+      destinationProvinceName,
+      fullAddress,
+      expeditionCode,
+      expeditionService,
+      cost,
+    } = req.body;
 
+    try {
+      let order = await Order.findOne({
+        where: { id: OrderId },
+      });
+
+      let shipping = await Shipping.create({
+        destinationCityId,
+        destinationCityName,
+        destinationProvinceId,
+        destinationProvinceName,
+        fullAddress,
+        expeditionCode,
+        expeditionService,
+        cost,
+        totalWeight: order.totalWeight,
+      });
+
+      let newTotal = +order.totalDue + +cost;
       let result = await Order.update(
         {
           paymentTrasaction: "debit",
           status: "ready to collect",
+          ShippingId: shipping.id,
+          totalDue: newTotal,
         },
         {
           where: { id: OrderId },

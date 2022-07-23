@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Order.belongsTo(models.User);
+      Order.belongsTo(models.Shipping);
       Order.belongsToMany(models.Product, { through: models.LineItem });
       Order.belongsToMany(models.ProductStock, { through: models.LineItem });
       Order.belongsToMany(models.ShoppingCart, { through: models.LineItem });
@@ -22,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       tax: DataTypes.INTEGER,
       totalDue: DataTypes.INTEGER,
       totalQty: DataTypes.INTEGER,
+      totalWeight: DataTypes.INTEGER,
+      ShippingId: DataTypes.INTEGER,
       paymentTrasaction: DataTypes.STRING,
       status: {
         type: DataTypes.STRING,

@@ -7,6 +7,8 @@ const {
 } = require("../models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+const XLSX = require("xlsx");
+const fs = require("fs");
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -17,7 +19,7 @@ class ProductController {
       const limit = req.query.limit || 5;
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -37,6 +39,34 @@ class ProductController {
     }
   }
 
+  static async getProductsSortPrice(req, res, next) {
+    try {
+      const page = +req.query.page || 1;
+      const sorter = "price";
+      const order = "asc";
+      const limit = req.query.limit || 10;
+
+      let products = await Product.findAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        // offset: (page - 1) * limit,
+        order: [[sorter, order]],
+      });
+
+      let totalData = await Product.count();
+      let result = {
+        data: products,
+        limit: limit || 5,
+        // page: page,
+        totalData: totalData,
+        // totalPage: Math.ceil(totalData / limit),
+      };
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   static async getProductsBySearch(req, res, next) {
     try {
       const page = +req.query.page || 1;
@@ -48,7 +78,7 @@ class ProductController {
       let products;
 
       products = await Product.findAndCountAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -108,7 +138,7 @@ class ProductController {
       const order = req.query.order || "asc";
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -139,13 +169,16 @@ class ProductController {
   static async create(req, res, next) {
     try {
       const id = req.userData.id;
-      const imagenames = req.files;
+      const imageSize = req.files.imageSize[0].filename;
+      const imagenames = req.files.filename;
       const {
         name,
         desc,
         price,
-        stock,
         sizes,
+        height,
+        width,
+        len,
         colors,
         stocks,
         weight,
@@ -154,20 +187,25 @@ class ProductController {
         totalSold,
         rating,
         views,
+        PromoId,
       } = req.body;
 
       const result = await Product.create({
         name,
         desc,
         price,
-        stock: stock || 0,
         weight,
+        height,
+        width,
+        len,
         category,
         condition,
         totalSold,
         rating,
         views,
+        imageSize,
         finalPrice: price || 0,
+        PromoId,
         UserId: id,
       });
 
@@ -177,45 +215,56 @@ class ProductController {
         console.log(colors);
         console.log(stocks);
         if (sizes && colors) {
-          sizes.forEach(async (size, index) => {
+          if (sizes.constructor === Array) {
+            sizes.forEach(async (size, index) => {
+              await ProductStock.create({
+                ProductId: result.id,
+                size: size || 0,
+                color: colors[index] || 0,
+                stock: stocks[index] || 0,
+              });
+            });
+          } else {
             await ProductStock.create({
               ProductId: result.id,
-              size: size || 0,
-              color: colors[index] || 0,
-              stock: stocks[index] || 0,
+              size: sizes || 0,
+              color: colors || 0,
+              stock: stocks || 0,
             });
-          });
+          }
         }
       }
 
-      // let newPromo = await promo.create({
-      //   potongan_harga: potongan_harga || 0,
-      //   tgl_mulai: tgl_mulai || Date.now(),
-      //   tgl_akhir: tgl_akhir || Date.now(),
-      //   ProductId: result.id,
-      // });
+      let newPromo = await Promo.findByPk(PromoId);
 
-      // let newPrice = await Product.update({
-      //     finalPrice: result.price - newPromo.potongan_harga,
-      //   },
-      //   {
-      //     where: {
-      //       id: result.id,
-      //     },
-      // });
+      if (newPromo) {
+        console.log("OK");
+        console.log(newPromo);
+        let newPrice = await Product.update(
+          {
+            finalPrice:
+              result.price - result.price * (newPromo.potongan_harga / 100),
+          },
+          {
+            where: {
+              id: result.id,
+            },
+          }
+        );
+      }
 
-      // imagenames.forEach(async (imagename, index) => {
-      //   const isPrimary = index === 0 ? true : false;
-      //   await ProductImage.create({
-      //     filename: imagename.filename,
-      //     ProductId: result.id,
-      //     fileType: imagename.mimetype,
-      //     primary: isPrimary,
-      //   });
-      // });
+      imagenames.forEach(async (imagename, index) => {
+        const isPrimary = index === 0 ? true : false;
+        await ProductImage.create({
+          filename: imagename.filename,
+          ProductId: result.id,
+          fileType: imagename.mimetype,
+          primary: isPrimary,
+        });
+      });
       res.status(201).json(result);
     } catch (err) {
-      next(err);
+      console.log(err);
     }
   }
   //just for admin
@@ -223,8 +272,8 @@ class ProductController {
     try {
       const id = req.params.id;
       const userId = req.userData.id;
-      const imagenames = req.files;
-
+      const imageSize = req.files.imageSize[0].filename;
+      const imagenames = req.files.filename;
       const {
         name,
         desc,
@@ -232,9 +281,12 @@ class ProductController {
         sizes,
         colors,
         stocks,
-        stock,
         weight,
+        height,
+        width,
+        len,
         category,
+        PromoId,
         condition,
         totalSold,
         rating,
@@ -245,9 +297,13 @@ class ProductController {
           name,
           desc,
           finalPrice: price,
-          stock,
           weight,
+          height,
+          width,
+          len,
           category,
+          imageSize,
+          PromoId,
           condition,
           totalSold,
           rating,
@@ -265,37 +321,72 @@ class ProductController {
 
       if (result) {
         console.log("result true");
-        sizes.forEach(async (size, index) => {
-          await ProductStock.update(
-            {
-              stock: stocks[index],
-            },
-            {
-              where: {
-                ProductId: id,
-                size: sizes[index],
-                color: colors[index],
+        if (sizes && colors) {
+          if (sizes.constructor === Array) {
+            sizes.forEach(async (size, index) => {
+              await ProductStock.update(
+                {
+                  stock: stocks[index],
+                },
+                {
+                  where: {
+                    ProductId: id,
+                    size: sizes[index],
+                    color: colors[index],
+                  },
+                }
+              );
+            });
+          } else {
+            await ProductStock.update(
+              {
+                stock: stocks,
               },
-            }
-          );
-        });
+              {
+                where: {
+                  ProductId: id,
+                  size: sizes,
+                  color: colors,
+                },
+              }
+            );
+          }
+        }
       }
 
-      // imagenames.forEach(async (imagename, index) => {
-      //   const isPrimary = index === 0 ? true : false;
-      //   await ProductImage.update(
-      //     {
-      //       filename: imagename.filename,
-      //       fileType: imagename.mimetype,
-      //       primary: isPrimary,
-      //     },
-      //     {
-      //       where: {
-      //         ProductId: id,
-      //       },
-      //     }
-      //   );
-      // });
+      let newPromo = await Promo.findByPk(PromoId);
+      let selectedProduct = await Product.findByPk(id);
+
+      if (newPromo) {
+        let newPrice = await Product.update(
+          {
+            finalPrice:
+              selectedProduct.price -
+              selectedProduct.price * (newPromo.potongan_harga / 100),
+          },
+          {
+            where: {
+              id: id,
+            },
+          }
+        );
+      }
+
+      imagenames.forEach(async (imagename, index) => {
+        const isPrimary = index === 0 ? true : false;
+        await ProductImage.update(
+          {
+            filename: imagename.filename,
+            fileType: imagename.mimetype,
+            primary: isPrimary,
+          },
+          {
+            where: {
+              ProductId: id,
+            },
+          }
+        );
+      });
       res.status(201).json(result);
     } catch (err) {
       console.log(err);
@@ -305,7 +396,7 @@ class ProductController {
     const id = req.params.id;
     try {
       let result = await Product.findByPk(id, {
-        include: [ProductImage, ProductStock],
+        include: [ProductImage, ProductStock, Promo],
       });
       res.status(201).json(result);
     } catch (err) {
@@ -346,6 +437,49 @@ class ProductController {
         }
       );
       res.status(201).json(result);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async createBulkProduct(req, res, next) {
+    try {
+      // console.log("test")
+      const type = req.file;
+      const workbook = XLSX.readFile(`assets/${type.filename}`);
+      const sheets = workbook.Sheets["Sheet1"];
+      const dataJson = XLSX.utils.sheet_to_json(sheets);
+      console.log(dataJson);
+      const userId = req.userData.id;
+
+      dataJson.forEach(async (data, index) => {
+        let result = await Product.create({
+          name: data.name || "",
+          desc: data.desc || "",
+          price: data.price || 0,
+          stock: 0,
+          weight: data.weight || 0,
+          category: data.category || "",
+          condition: data.condition || "Need to stock",
+          UserId: userId,
+          finalPrice: data.price || 0,
+          PromoId: data.PromoId || 1,
+        });
+        const sizes = data.sizes.split(",");
+        const colors = data.colors.split(",");
+        const stocks = data.stocks.split(",");
+        const images = data.imagesName.split(",");
+        sizes.forEach(async (size, index) => {
+          let stock = await ProductStock.create({
+            size: sizes[index],
+            color: colors[index],
+            stock: stocks[index],
+            ProductId: result.id,
+          });
+        });
+      });
+
+      res.status(201).json("sukses");
     } catch (err) {
       console.log(err);
     }

@@ -1,20 +1,42 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { getPromoById, editPromo } from "../actions/promoActions";
 
 function PromoEdit(props) {
+  const { action, status, data, actionPromo, statusPromo, dataPromo } =
+    useSelector((state) => state.promoReducer);
+  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+
   const [formPromo, setFormPromo] = useState({
-    promoName: "",
-    discount: 0,
-    startDate: "",
-    endDate: "",
+    nama_promo: "",
+    potongan_harga: 0,
+    tgl_mulai: "",
+    tgl_akhir: "",
   });
 
   const id = +props.id;
 
   useEffect(() => {
-    //   dispatch(getPromoById(id))
-    console.log(id);
+    dispatch(getPromoById(id));
   }, []);
+
+  useEffect(() => {
+    if (actionPromo === "GET_PROMO_BY_ID" && statusPromo === "data") {
+      setFormPromo({
+        nama_promo: dataPromo.nama_promo,
+        potongan_harga: dataPromo.potongan_harga,
+        tgl_mulai: dataPromo.tgl_mulai.split("T")[0],
+        tgl_akhir: dataPromo.tgl_akhir.split("T")[0],
+      });
+    }
+    // console.log(formPromo)
+  }, [statusPromo]);
+
+  const submitHandler = () => {
+    dispatch(editPromo(id, formPromo));
+  };
 
   return (
     <div className="overflow-y-auto fixed z-10 flex justify-center items-center inset-0 h-modal w-full">
@@ -40,7 +62,11 @@ function PromoEdit(props) {
                 <p className="text-white text-center">Promo Name</p>
                 <input
                   className="block w-10/12 mx-auto h-10 rounded-md px-3"
-                  type="number"
+                  type="text"
+                  value={formPromo.nama_promo}
+                  onChange={(e) => {
+                    setFormPromo({ ...formPromo, nama_promo: e.target.value });
+                  }}
                 ></input>
               </div>
             </div>
@@ -50,6 +76,10 @@ function PromoEdit(props) {
                 <input
                   type="date"
                   className="block w-10/12 mx-auto h-10 rounded-md px-3"
+                  value={formPromo.tgl_mulai}
+                  onChange={(e) => {
+                    setFormPromo({ ...formPromo, tgl_mulai: e.target.value });
+                  }}
                 ></input>
               </div>
             </div>
@@ -63,13 +93,18 @@ function PromoEdit(props) {
                   type="range"
                   min="0"
                   max="100"
-                  value={formPromo.discount}
+                  value={formPromo.potongan_harga}
                   onChange={(e) =>
-                    setFormPromo({ ...formPromo, discount: e.target.value })
+                    setFormPromo({
+                      ...formPromo,
+                      potongan_harga: e.target.value,
+                    })
                   }
                   step="5"
                 ></input>
-                <p className="text-white text-center">{formPromo.discount}%</p>
+                <p className="text-white text-center">
+                  {formPromo.potongan_harga}%
+                </p>
               </div>
             </div>
             <div className="flex justify-center">
@@ -78,13 +113,20 @@ function PromoEdit(props) {
                 <input
                   type="date"
                   className="block w-10/12 mx-auto h-10 rounded-md px-3"
+                  value={formPromo.tgl_akhir}
+                  onChange={(e) => {
+                    setFormPromo({ ...formPromo, tgl_akhir: e.target.value });
+                  }}
                 ></input>
               </div>
             </div>
           </div>
         </div>
         <div className="flex justify-center">
-          <button className="bg-white px-10 rounded-md py-2 text-darkColor">
+          <button
+            className="bg-white px-10 rounded-md py-2 text-darkColor"
+            onClick={() => submitHandler()}
+          >
             OK
           </button>
         </div>
