@@ -374,7 +374,7 @@ export const deleteLineItem = (id) => {
   };
 };
 
-export const updatePayment = (id) => {
+export const updatePayment = (id, shippingData) => {
   return async (dispatch) => {
     // Loading
     dispatch({
@@ -389,6 +389,7 @@ export const updatePayment = (id) => {
     await axios({
       method: "PUT",
       url: url + "/orders/payment/" + id,
+      data: shippingData,
       headers: {
         access_token: localStorage.getItem("access_token"),
       },

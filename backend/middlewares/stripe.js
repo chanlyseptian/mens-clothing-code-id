@@ -7,7 +7,7 @@ const stripeMiddleware = async (req, res) => {
     const payment = await stripe.paymentIntents.create({
       amount,
       currency: "IDR",
-      description: "Organify",
+      description: "MensClothing",
       payment_method: id,
       confirm: true,
     });

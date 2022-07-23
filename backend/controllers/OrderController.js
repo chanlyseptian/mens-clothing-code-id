@@ -146,12 +146,9 @@ class OrderController {
     const OrderId = +req.params.id;
     const {
       destinationCityId,
-      destinationCityName,
       destinationProvinceId,
-      destinationProvinceName,
       fullAddress,
       expeditionCode,
-      expeditionService,
       cost,
     } = req.body;
 
@@ -162,12 +159,9 @@ class OrderController {
 
       let shipping = await Shipping.create({
         destinationCityId,
-        destinationCityName,
         destinationProvinceId,
-        destinationProvinceName,
         fullAddress,
         expeditionCode,
-        expeditionService,
         cost,
         totalWeight: order.totalWeight,
       });

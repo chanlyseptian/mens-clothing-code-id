@@ -40,6 +40,46 @@ export const getCities = () => {
   };
 };
 
+export const getCity = (attr) => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "GET_CITY",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+    axios({
+      method: "GET",
+      url: `${url}/getCities${attr}`,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_CITY",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_CITY",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
 export const getCitiesByProvinceId = (attr) => {
   return (dispatch) => {
     //loading
@@ -111,6 +151,46 @@ export const getProvinces = () => {
         // failed
         dispatch({
           type: "GET_PROVINCES",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const getProvince = (attr) => {
+  return (dispatch) => {
+    //loading
+    dispatch({
+      type: "GET_PROVINCE",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+    axios({
+      method: "GET",
+      url: `${url}/getProvinces${attr}`,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        // completed
+        dispatch({
+          type: "GET_PROVINCE",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        // failed
+        dispatch({
+          type: "GET_PROVINCE",
           payload: {
             status: "error",
             data: error.message,

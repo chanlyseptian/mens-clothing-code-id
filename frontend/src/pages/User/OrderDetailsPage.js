@@ -10,6 +10,8 @@ import {
 } from "../../actions/shoppingActions";
 
 import {
+  getCity,
+  getProvince,
   getProvinces,
   getCitiesByProvinceId,
   checkCost,
@@ -30,9 +32,17 @@ const OrderDetailsPage = () => {
     (state) => state.shoppingReducer
   );
 
-  const { actionProvinces, statusProvinces, dataProvinces } = useSelector(
-    (state) => state.rajaOngkirReducer
-  );
+  const {
+    actionProvinces,
+    statusProvinces,
+    dataProvinces,
+    actionProvince,
+    statusProvince,
+    dataProvince,
+    actionCity,
+    statusCity,
+    dataCity,
+  } = useSelector((state) => state.rajaOngkirReducer);
 
   const { actionCities, statusCities, dataCities } = useSelector(
     (state) => state.rajaOngkirReducer
@@ -48,11 +58,23 @@ const OrderDetailsPage = () => {
 
   const [shippingCost, setShippingCost] = useState(0);
   const [provinceId, setProvinceId] = useState(0);
+  const [cityId, setCityId] = useState(0);
   const [shippingDetail, setShippingDetail] = useState({
     origin: 152,
     destination: 0,
     weight: 1,
     courier: "",
+  });
+
+  const [shippingData, setShippingData] = useState({
+    destinationCityId: 0,
+    destinationCityName: "",
+    destinationProvinceId: 0,
+    destinationProvinceName: "",
+    fullAddress: "",
+    expeditionCode: "",
+    expeditionService: "",
+    cost: 0,
   });
 
   useEffect(() => {
@@ -61,6 +83,7 @@ const OrderDetailsPage = () => {
 
   useEffect(() => {
     let attr = `?province=${provinceId}`;
+    setShippingData({ ...shippingData, destinationProvinceId: provinceId });
     dispatch(getCitiesByProvinceId(attr));
   }, [provinceId]);
 
@@ -110,7 +133,7 @@ const OrderDetailsPage = () => {
 
   function closeModal() {
     setOpenModal(false);
-    dispatch(updatePayment(id)).then(() => {
+    dispatch(updatePayment(id, shippingData)).then(() => {
       dispatch(getOrder(id));
     });
   }
@@ -310,7 +333,7 @@ const OrderDetailsPage = () => {
               </tbody>
             </table>
             <div className="flex mr-12 mt-5 mb-10  justify-center">
-              <div className="bg-white w-2/3 justify-center rounded-lg h-[300px] mr-8">
+              <div className="bg-white w-2/3 justify-center rounded-lg h-[350px] mr-8">
                 <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
                   Shipping Detail
                 </h1>
@@ -351,12 +374,16 @@ const OrderDetailsPage = () => {
                     <div className="px-3 py-2">
                       <select
                         className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setShippingDetail({
                             ...shippingDetail,
                             destination: e.target.value,
-                          })
-                        }
+                          });
+                          setShippingData({
+                            ...shippingData,
+                            destinationCityId: e.target.value,
+                          });
+                        }}
                       >
                         <option value={0}>Choose City</option>
                         {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
@@ -379,12 +406,16 @@ const OrderDetailsPage = () => {
                     <div className="px-3 pt-2">
                       <select
                         className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setShippingDetail({
                             ...shippingDetail,
                             courier: e.target.value,
-                          })
-                        }
+                          });
+                          setShippingData({
+                            ...shippingData,
+                            expeditionCode: e.target.value,
+                          });
+                        }}
                       >
                         <option value="">Choose Shipping Service : </option>
                         <option value="jne">JNE</option>
@@ -406,6 +437,10 @@ const OrderDetailsPage = () => {
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
                           onChange={(e) => {
                             setShippingCost(e.target.value);
+                            setShippingData({
+                              ...shippingData,
+                              cost: e.target.value,
+                            });
                           }}
                         >
                           <option key={-1} value={0}>
@@ -429,10 +464,27 @@ const OrderDetailsPage = () => {
                     ) : (
                       ""
                     )}
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Address :
+                      </label>
+                    </div>
+                    <div className="px-3 pt-2">
+                      <textarea
+                        className="border"
+                        cols={35}
+                        onChange={(e) =>
+                          setShippingData({
+                            ...shippingData,
+                            fullAddress: e.target.value,
+                          })
+                        }
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-white w-1/3 justify-center rounded-lg h-[300px] ml-8">
+              <div className="bg-white w-1/3 justify-center rounded-lg h-[350px] ml-8">
                 <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
                   Subtotal
                 </h1>
@@ -534,6 +586,7 @@ const OrderDetailsPage = () => {
                           <button
                             className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5"
                             onClick={() => setOpenModal(true)}
+                            // onClick={() => console.log(shippingData)}
                           >
                             PAY NOW
                           </button>
