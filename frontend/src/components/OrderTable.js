@@ -39,7 +39,7 @@ const OrderTable = (props) => {
                     <td className="pb-4 md:table-cell p-2 text-right">
                       <Link to="#">
                         <p className="md:table-cell text-midColor">
-                          {index + 1}.
+                          {order.id}.
                         </p>
                       </Link>
                     </td>
@@ -76,7 +76,7 @@ const OrderTable = (props) => {
                             : order.status}
                         </span> */}
 
-                        {order.status === "ready to collect" ? (
+                        {order.status === "completed" ? (
                           <span className="text-sm lg:text-base  text-green-500 font-semibold uppercase">
                             completed
                           </span>

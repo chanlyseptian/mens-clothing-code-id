@@ -7,7 +7,7 @@ productRoute.get("/", ProductController.getAllProducts);
 productRoute.get("/search", ProductController.getProductsBySearch);
 productRoute.get("/categories/:category", ProductController.getByCategories);
 productRoute.get("/highlight_sort", ProductController.getProductsSortPrice);
-
+productRoute.get("/popular_product", ProductController.getProductsPopular);
 productRoute.post(
   "/",
   authentication,

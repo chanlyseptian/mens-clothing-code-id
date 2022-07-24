@@ -145,7 +145,7 @@ export const getOrder = (id) => {
   };
 };
 
-export const getOrdersByUserId = () => {
+export const getOrdersByUserId = (attribute) => {
   return (dispatch) => {
     // Loading
     dispatch({
@@ -159,7 +159,7 @@ export const getOrdersByUserId = () => {
     // Success
     axios({
       method: "GET",
-      url: url + "/orders/",
+      url: url + "/orders" + attribute,
       timeout: 5000,
       headers: {
         access_token: localStorage.getItem("access_token"),
@@ -182,6 +182,52 @@ export const getOrdersByUserId = () => {
         });
         dispatch({
           type: "GET_ORDERS_BY_USER_ID",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const getFilteredOrdersByUserId = (attribute, status) => {
+  return (dispatch) => {
+    // Loading
+    dispatch({
+      type: "GET_FILTERED_ORDERS_BY_USER_ID",
+      payload: {
+        status: "loading",
+        data: "Loading",
+      },
+    });
+    console.log(attribute);
+    console.log(status);
+
+    // Success
+    axios({
+      method: "GET",
+      url: url + "/orders/status" + attribute,
+      data: {},
+      params: {
+        status: status,
+      },
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then((response) => {
+        dispatch({
+          type: "GET_FILTERED_ORDERS_BY_USER_ID",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_FILTERED_ORDERS_BY_USER_ID",
           payload: {
             status: "error",
             data: error.message,

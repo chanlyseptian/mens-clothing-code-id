@@ -39,7 +39,11 @@ const ProductCardContainerCMS = (props) => {
                   <img
                     className="w-[200px] h-[200px] hover:shadow-xl hover:scale-125 cursor-pointer object-cover"
                     alt=""
-                    src={`${url}/images/${product.ProductImages[0].filename}`}
+                    src={
+                      product.ProductImages[0] === undefined
+                        ? "https://sipr.mojokertokab.go.id/images/avatar/no-image.jpg"
+                        : `${url}/images/${product.ProductImages[0].filename}`
+                    }
                     onClick={() =>
                       Swal.fire({
                         width: 1000,

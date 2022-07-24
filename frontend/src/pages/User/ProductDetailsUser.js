@@ -41,6 +41,28 @@ const ProductDetailsUser = () => {
     ProductId: 0,
     ProductStockId: 0,
   });
+  const [listOfQuantity, setListOfQuantity] = useState([]);
+
+  useEffect(() => {
+    if (
+      dropdownSizeStock &&
+      dropdownSizeStock.length > 0 &&
+      itemToCart.ProductStockId !== 0
+    ) {
+      const listQty = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      setListOfQuantity([
+        ...listQty.filter(
+          (value) =>
+            value <=
+            dropdownSizeStock[
+              +dropdownSizeStock
+                .map((productStock) => productStock.id)
+                .indexOf(+itemToCart.ProductStockId)
+            ].stock
+        ),
+      ]);
+    }
+  }, [itemToCart.ProductStockId]);
 
   useEffect(() => {
     if (action === "GET_PRODUCT_BY_ID" && status === "data") {
@@ -156,14 +178,35 @@ const ProductDetailsUser = () => {
                   </div>
                   <div className="flex justify-center">
                     <div className="w-10/12">
-                      <p className="text-white text-center">Quantity</p>
-                      <input
+                      {/* <p className="text-white text-center">Quantity</p> */}
+                      {/* <input
                         className="block w-10/12 mx-auto h-10 rounded-md"
                         type="number"
                         onChange={(e) =>
                           setItemToCart({ ...itemToCart, qty: e.target.value })
                         }
-                      ></input>
+                      ></input> */}
+                      <p className="text-white text-center">Quantity</p>
+                      <select
+                        type="select"
+                        name="size"
+                        id="size"
+                        onChange={(e) =>
+                          setItemToCart({ ...itemToCart, qty: e.target.value })
+                        }
+                        className="block w-10/12 mx-auto h-10 rounded-md"
+                      >
+                        <option>Choose</option>
+                        {listOfQuantity && itemToCart.ProductStockId !== 0
+                          ? listOfQuantity.map((value) => {
+                              return (
+                                <option key={value} value={value}>
+                                  {value}
+                                </option>
+                              );
+                            })
+                          : ""}
+                      </select>
                     </div>
                   </div>
                 </div>

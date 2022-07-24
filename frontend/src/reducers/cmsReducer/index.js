@@ -6,6 +6,14 @@ const initialState = {
   actionSort: "",
   statusSort: "loading",
   dataSort: "loading",
+
+  actionPopular: "",
+  statusPopular: "loading",
+  dataPopular: "Loading",
+
+  actionUpdate: "",
+  statusUpdate: "",
+  dataUpdate: "",
 };
 
 const cmsReducer = (state = initialState, { type, payload }) => {
@@ -45,6 +53,13 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         statusSort: payload.status,
         dataSort: payload.data,
       };
+    case "GET_PRODUCTS_POPULAR":
+      return {
+        ...state,
+        actionPopular: "GET_PRODUCTS_POPULAR",
+        statusPopular: payload.status,
+        dataPopular: payload.data,
+      };
     case "CREATE":
       return {
         ...state,
@@ -55,14 +70,21 @@ const cmsReducer = (state = initialState, { type, payload }) => {
     case "UPDATE":
       return {
         ...state,
-        action: "UPDATE",
-        status: payload.status,
-        data: payload.data,
+        actionUpdate: "UPDATE",
+        statusUpdate: payload.status,
+        dataUpdate: payload.data,
       };
     case "DELETE_PRODUCT":
       return {
         ...state,
         action: "DELETE_PRODUCT",
+        status: payload.status,
+        data: payload.data,
+      };
+    case "CREATE_BULK":
+      return {
+        ...state,
+        action: "CREATE_BULK",
         status: payload.status,
         data: payload.data,
       };

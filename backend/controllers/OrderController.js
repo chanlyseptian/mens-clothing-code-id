@@ -146,9 +146,12 @@ class OrderController {
     const OrderId = +req.params.id;
     const {
       destinationCityId,
+      destinationCityName,
       destinationProvinceId,
+      destinationProvinceName,
       fullAddress,
       expeditionCode,
+      expeditionService,
       cost,
     } = req.body;
 
@@ -159,9 +162,12 @@ class OrderController {
 
       let shipping = await Shipping.create({
         destinationCityId,
+        destinationCityName,
         destinationProvinceId,
+        destinationProvinceName,
         fullAddress,
         expeditionCode,
+        expeditionService,
         cost,
         totalWeight: order.totalWeight,
       });
@@ -170,7 +176,7 @@ class OrderController {
       let result = await Order.update(
         {
           paymentTrasaction: "debit",
-          status: "ready to collect",
+          status: "completed",
           ShippingId: shipping.id,
           totalDue: newTotal,
         },
@@ -240,6 +246,7 @@ class OrderController {
             include: [ProductImage],
           },
           User,
+          Shipping,
         ],
         where: {
           // UserId: UserId,
@@ -259,8 +266,11 @@ class OrderController {
     try {
       const id = +req.userData.id;
       const page = +req.query.page || 1;
-      const perPage = req.query.limit || 1;
+      const limit = req.query.limit || 15;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
       const skip = (page - 1) * 10;
+
       let pageOrder = await Order.findAll({
         include: [
           {
@@ -269,13 +279,65 @@ class OrderController {
           },
           User,
         ],
-        limit: 5,
-        offset: (page - 1) * 5,
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
         where: { UserId: id },
       });
-      res.status(200).json(pageOrder);
+      let totalData = await Order.count();
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
+      };
+
+      res.status(200).json(result);
     } catch (err) {
-      next(err);
+      console.log(err);
+    }
+  }
+
+  static async getFilteredOrdersByUserId(req, res, next) {
+    try {
+      const id = +req.userData.id;
+      const page = +req.query.page || 1;
+      const limit = +req.query.limit || 15;
+      const sorter = req.query.sorter || "id";
+      const order = req.query.order || "asc";
+      const status = req.query.status;
+      const skip = (page - 1) * 10;
+
+      console.log(status);
+
+      let pageOrder = await Order.findAll({
+        include: [
+          {
+            model: Product,
+            include: [ProductImage, ProductStock],
+          },
+          User,
+        ],
+        limit: limit,
+        offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: { UserId: id, status: status },
+      });
+      let totalData = await Order.count();
+
+      let result = {
+        data: pageOrder,
+        page: page,
+        limit: limit,
+        totalData: totalData,
+        totalPage: Math.ceil(totalData / limit),
+      };
+
+      res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
     }
   }
 

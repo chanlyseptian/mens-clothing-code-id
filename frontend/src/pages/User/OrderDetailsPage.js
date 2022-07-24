@@ -83,7 +83,6 @@ const OrderDetailsPage = () => {
 
   useEffect(() => {
     let attr = `?province=${provinceId}`;
-    setShippingData({ ...shippingData, destinationProvinceId: provinceId });
     dispatch(getCitiesByProvinceId(attr));
   }, [provinceId]);
 
@@ -247,7 +246,7 @@ const OrderDetailsPage = () => {
                             </span>
                             {data.status.toUpperCase()}
                           </p>
-                        ) : data.status === "ready to collect" ? (
+                        ) : data.status === "completed" ? (
                           <p className="mb-4 md:ml-4 text-green-700 font-bold">
                             <span className="text-darkColor font-normal">
                               :{" "}
@@ -338,151 +337,234 @@ const OrderDetailsPage = () => {
                   Shipping Detail
                 </h1>
                 <hr className="mt-2" />
-                <div className="py-5">
-                  <div className="grid grid-cols-2">
-                    <div className="pl-8 pt-4">
-                      <label className="font-semibold text-midColor">
-                        Province :
-                      </label>
+                {data.Shipping ? (
+                  <div className="py-5">
+                    <div className="grid grid-cols-2">
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Province :
+                        </label>
+                      </div>
+                      <div className="px-3 py-2">
+                        <select className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5">
+                          <option>
+                            {data.Shipping.destinationProvinceName}
+                          </option>
+                        </select>
+                      </div>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          City :
+                        </label>
+                      </div>
+                      <div className="px-3 py-2">
+                        <select className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5">
+                          <option>{data.Shipping.destinationCityName}</option>
+                        </select>
+                      </div>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Shipping Service :
+                        </label>
+                      </div>
+                      <div className="px-3 pt-2">
+                        <select className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5">
+                          <option>{data.Shipping.expeditionCode}</option>
+                        </select>
+                      </div>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Service :
+                        </label>
+                      </div>
+
+                      <div className="px-3 pt-2">
+                        <select className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5">
+                          <option key={-1} value={0}>
+                            {data.Shipping.expeditionService}
+                          </option>
+                        </select>
+                      </div>
+
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Address :
+                        </label>
+                      </div>
+                      <div className="px-3 pt-2">
+                        <textarea
+                          className="border"
+                          cols={35}
+                          value={data.Shipping.fullAddress}
+                        ></textarea>
+                      </div>
                     </div>
-                    <div className="px-3 py-2">
-                      <select
-                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
-                        onChange={(e) => setProvinceId(e.target.value)}
-                      >
-                        <option>Choose Province</option>
-                        {actionProvinces === "GET_PROVINCES" &&
-                        statusProvinces === "data"
-                          ? dataProvinces.rajaongkir.results.map((province) => {
-                              return (
-                                <option
-                                  key={province.province_id}
-                                  value={province.province_id}
-                                >
-                                  {province.province}
-                                </option>
-                              );
-                            })
-                          : console.log(actionProvinces, statusProvinces)}
-                      </select>
-                    </div>
-                    <div className="pl-8 pt-4">
-                      <label className="font-semibold text-midColor">
-                        City :
-                      </label>
-                    </div>
-                    <div className="px-3 py-2">
-                      <select
-                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
-                        onChange={(e) => {
-                          setShippingDetail({
-                            ...shippingDetail,
-                            destination: e.target.value,
-                          });
-                          setShippingData({
-                            ...shippingData,
-                            destinationCityId: e.target.value,
-                          });
-                        }}
-                      >
-                        <option value={0}>Choose City</option>
-                        {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
-                        statusCities === "data"
-                          ? dataCities.rajaongkir.results.map((city) => {
-                              return (
-                                <option key={city.city_id} value={city.city_id}>
-                                  {city.type + " " + city.city_name}
-                                </option>
-                              );
-                            })
-                          : console.log(actionCities, statusCities)}
-                      </select>
-                    </div>
-                    <div className="pl-8 pt-4">
-                      <label className="font-semibold text-midColor">
-                        Shipping Service :
-                      </label>
-                    </div>
-                    <div className="px-3 pt-2">
-                      <select
-                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
-                        onChange={(e) => {
-                          setShippingDetail({
-                            ...shippingDetail,
-                            courier: e.target.value,
-                          });
-                          setShippingData({
-                            ...shippingData,
-                            expeditionCode: e.target.value,
-                          });
-                        }}
-                      >
-                        <option value="">Choose Shipping Service : </option>
-                        <option value="jne">JNE</option>
-                        <option value="tiki">Tiki</option>
-                        <option value="pos">Pos</option>
-                      </select>
-                    </div>
-                    <div className="pl-8 pt-4">
-                      <label className="font-semibold text-midColor">
-                        Service :
-                      </label>
-                    </div>
-                    {actionCost === "CHECK_COST" &&
-                    statusCost === "data" &&
-                    shippingDetail.courier !== "" &&
-                    shippingDetail.destination !== 0 ? (
+                  </div>
+                ) : (
+                  <div className="py-5">
+                    <div className="grid grid-cols-2">
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Province :
+                        </label>
+                      </div>
+                      <div className="px-3 py-2">
+                        <select
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                          onChange={(e) => {
+                            let provinceData = e.target.value.split(",");
+                            setShippingData({
+                              ...shippingData,
+                              destinationProvinceId: provinceData[0],
+                              destinationProvinceName: provinceData[1],
+                            });
+                            setProvinceId(provinceData[0]);
+                          }}
+                        >
+                          <option>Choose Province</option>
+                          {actionProvinces === "GET_PROVINCES" &&
+                          statusProvinces === "data"
+                            ? dataProvinces.rajaongkir.results.map(
+                                (province) => {
+                                  return (
+                                    <option
+                                      key={province.province_id}
+                                      value={`${province.province_id},${province.province}`}
+                                    >
+                                      {province.province}
+                                    </option>
+                                  );
+                                }
+                              )
+                            : console.log(actionProvinces, statusProvinces)}
+                        </select>
+                      </div>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          City :
+                        </label>
+                      </div>
+                      <div className="px-3 py-2">
+                        <select
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                          onChange={(e) => {
+                            let cityData = e.target.value.split(",");
+                            setShippingDetail({
+                              ...shippingDetail,
+                              destination: cityData[0],
+                            });
+                            setShippingData({
+                              ...shippingData,
+                              destinationCityId: cityData[0],
+                              destinationCityName:
+                                cityData[1] + " " + cityData[2],
+                            });
+                          }}
+                        >
+                          <option value={0}>Choose City</option>
+                          {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
+                          statusCities === "data"
+                            ? dataCities.rajaongkir.results.map((city) => {
+                                return (
+                                  <option
+                                    key={city.city_id}
+                                    value={`${city.city_id},${city.type},${city.city_name}`}
+                                  >
+                                    {city.type + " " + city.city_name}
+                                  </option>
+                                );
+                              })
+                            : console.log(actionCities, statusCities)}
+                        </select>
+                      </div>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Shipping Service :
+                        </label>
+                      </div>
                       <div className="px-3 pt-2">
                         <select
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
                           onChange={(e) => {
-                            setShippingCost(e.target.value);
+                            setShippingDetail({
+                              ...shippingDetail,
+                              courier: e.target.value,
+                            });
                             setShippingData({
                               ...shippingData,
-                              cost: e.target.value,
+                              expeditionCode: e.target.value,
                             });
                           }}
                         >
-                          <option key={-1} value={0}>
-                            Choose Service
-                          </option>
-                          {dataCost.result
-                            ? dataCost.result[0].costs.map((service) => {
-                                return (
-                                  <option
-                                    key={service.service}
-                                    value={service.cost[0].value}
-                                  >
-                                    {service.description} - Rp
-                                    {service.cost[0].value}
-                                  </option>
-                                );
-                              })
-                            : console.log(actionCost, statusCost)}
+                          <option value="">Choose Shipping Service : </option>
+                          <option value="jne">JNE</option>
+                          <option value="tiki">Tiki</option>
+                          <option value="pos">Pos</option>
                         </select>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                    <div className="pl-8 pt-4">
-                      <label className="font-semibold text-midColor">
-                        Address :
-                      </label>
-                    </div>
-                    <div className="px-3 pt-2">
-                      <textarea
-                        className="border"
-                        cols={35}
-                        onChange={(e) =>
-                          setShippingData({
-                            ...shippingData,
-                            fullAddress: e.target.value,
-                          })
-                        }
-                      ></textarea>
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Service :
+                        </label>
+                      </div>
+                      {actionCost === "CHECK_COST" &&
+                      statusCost === "data" &&
+                      shippingDetail.courier !== "" &&
+                      shippingDetail.destination !== 0 ? (
+                        <div className="px-3 pt-2">
+                          <select
+                            className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                            onChange={(e) => {
+                              let serviceData = e.target.value.split(",");
+                              setShippingData({
+                                ...shippingData,
+                                expeditionService: serviceData[0],
+                                cost: serviceData[1],
+                              });
+                              setShippingCost(serviceData[1]);
+                            }}
+                          >
+                            <option key={-1} value={0}>
+                              Choose Service
+                            </option>
+                            {dataCost.result
+                              ? dataCost.result[0].costs.map((service) => {
+                                  return (
+                                    <option
+                                      key={service.service}
+                                      value={`${service.description},${service.cost[0].value}`}
+                                    >
+                                      {service.description} - Rp
+                                      {service.cost[0].value}
+                                    </option>
+                                  );
+                                })
+                              : console.log(actionCost, statusCost)}
+                          </select>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      <div className="pl-8 pt-4">
+                        <label className="font-semibold text-midColor">
+                          Address :
+                        </label>
+                      </div>
+                      <div className="px-3 pt-2">
+                        <textarea
+                          className="border"
+                          cols={35}
+                          onChange={(e) =>
+                            setShippingData({
+                              ...shippingData,
+                              fullAddress: e.target.value,
+                            })
+                          }
+                        ></textarea>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
               <div className="bg-white w-1/3 justify-center rounded-lg h-[350px] ml-8">
                 <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
@@ -586,7 +668,6 @@ const OrderDetailsPage = () => {
                           <button
                             className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5"
                             onClick={() => setOpenModal(true)}
-                            // onClick={() => console.log(shippingData)}
                           >
                             PAY NOW
                           </button>

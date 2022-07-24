@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 import {
   AddBanner,
+  AddProductBulky,
   BannerManagement,
   BannerDetails,
   EditBanner,
@@ -29,7 +30,13 @@ const CMSRoute = () => {
         path="/dashboard/:query"
         element={<CMSSearchedDashboard />}
       ></Route>
-      <Route path="/add" element={<AddProduct />}></Route>
+      <Route path="add">
+        <Route path="one_product" element={<AddProduct />}></Route>
+        <Route
+          path="many_product"
+          element={<AddProductBulky></AddProductBulky>}
+        ></Route>
+      </Route>
       <Route path="/details/:id" element={<ProductDetails />}></Route>
       <Route path="/edit/:id" element={<EditProduct />}></Route>
       <Route path="/profile" element={<ProfileCMS />}></Route>

@@ -11,12 +11,14 @@ import AddBanner from "./AddBanner";
 import BannerDetails from "./BannerDetails";
 import EditBanner from "./EditBanner";
 import Promos from "./Promos";
+import AddProductBulky from "./AddProductBulky";
 
 export {
   CMSDashboard,
   CMSSearchedDashboard,
   EditProfile,
   AddProduct,
+  AddProductBulky,
   EditProduct,
   ProfileCMS,
   RegisterCMS,

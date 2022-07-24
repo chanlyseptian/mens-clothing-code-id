@@ -13,6 +13,7 @@ import {
 } from "../../actions/cmsActions";
 import { RiTShirtAirFill } from "react-icons/ri";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import "tw-elements";
 
 const CMSDashboard = () => {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
@@ -28,6 +29,7 @@ const CMSDashboard = () => {
   const [sortAttr, setSortAttr] = useState("");
   const [sorter, setSorter] = useState("");
   const [order, setOrder] = useState("");
+  const [showModal, setShowModal] = useState(false);
   let pageAttribute = `?page=${page}`;
 
   useEffect(() => {
@@ -250,7 +252,7 @@ const CMSDashboard = () => {
       <div className="fixed right-28 bottom-9">
         <button
           className="text-darkColor hover:text-cyan-600"
-          onClick={() => navigate("/cms/add")}
+          onClick={() => setShowModal(true)}
         >
           <div className="flex">
             <IoMdAddCircle size={50} />
@@ -260,6 +262,48 @@ const CMSDashboard = () => {
           </div>
         </button>
       </div>
+      {showModal ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-darkColor outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-center p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold text-white">
+                    Please Select
+                  </h3>
+                  <button
+                    className="p-1 ml-auto border-0 text-white opacity-5 float-right text-3xl leading-none outline-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                  >
+                    {" "}
+                    x
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="bg-accentColor text-darkColor active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => navigate("/cms/add/one_product")}
+                  >
+                    One Product
+                  </button>
+                  <button
+                    className="bg-accentColor text-darkColor active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => navigate("/cms/add/many_product")}
+                  >
+                    Many Products
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </div>
   );
 };

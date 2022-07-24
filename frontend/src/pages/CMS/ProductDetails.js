@@ -181,7 +181,7 @@ const ProductDetails = () => {
             <input
               type="number"
               className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
-              value={intToRupiah(data.price)}
+              value={intToRupiah(data.finalPrice)}
               disabled
             ></input>
           </div>
@@ -197,7 +197,15 @@ const ProductDetails = () => {
                 id="condition"
                 disabled
               >
-                <option>{data.Promo.nama_promo}</option>
+                {data.Promo ? (
+                  data.Promo.nama_promo !== null ? (
+                    <option>{data.Promo.nama_promo}</option>
+                  ) : (
+                    <option>No Promo</option>
+                  )
+                ) : (
+                  <option>No Promo</option>
+                )}
               </select>
             ) : (
               <></>
@@ -257,17 +265,21 @@ const ProductDetails = () => {
                     htmlFor="imageSize"
                   >
                     <div className="text-7xl">
-                      <img
-                        className="object-cover w-full h-40"
-                        src={url + "/images/" + data.imageSize}
-                        onClick={() =>
-                          Swal.fire({
-                            width: 1000,
-                            imageUrl: url + "/images/" + data.imageSize,
-                            imageHeight: 500,
-                          })
-                        }
-                      />
+                      {action === "GET_PRODUCT_BY_ID" && status === "data" ? (
+                        <img
+                          className="object-cover w-full h-40"
+                          src={url + "/images/" + data.imageSize}
+                          onClick={() =>
+                            Swal.fire({
+                              width: 1000,
+                              imageUrl: url + "/images/" + data.imageSize,
+                              imageHeight: 500,
+                            })
+                          }
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </label>
                 </div>

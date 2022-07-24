@@ -205,6 +205,47 @@ export const getProductsSortPrice = (limit) => {
   };
 };
 
+export const getProductsPopular = (limit) => {
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "GET_PRODUCTS_POPULAR",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "GET",
+      url: url + "/popular_product",
+      params: {
+        limit: limit,
+      },
+    })
+      .then((response) => {
+        console.log("RESPONSE DATA SLIDER=== ", response.data);
+        dispatch({
+          type: "GET_PRODUCTS_POPULAR",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_PRODUCTS_POPULAR",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
 export const create = (data) => {
   return (dispatch) => {
     // loading
@@ -298,6 +339,54 @@ export const update = (data, id) => {
       .catch((error) => {
         dispatch({
           type: "UPDATE",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const createproductbulk = (data) => {
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "CREATE_BULK",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "POST",
+      url: url + "/bulkProduct",
+      data: data,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then(async (response) => {
+        await Swal.fire(
+          "Add Product Success!",
+          "Congratulations, You've created a Products!",
+          "success"
+        );
+        dispatch({
+          type: "CREATE_BULK",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      //error
+      .catch(async (error) => {
+        await Swal.fire("Add Product Failed", "error");
+        dispatch({
+          type: "CREATE_BULK",
           payload: {
             status: "error",
             data: error.message,

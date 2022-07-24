@@ -221,6 +221,7 @@ function AddProduct() {
               id="condition"
               onChange={(e) => setForm({ ...form, PromoId: e.target.value })}
             >
+              <option value={0}>No Promo</option>
               {actionPromo === "GET_PROMOS" && statusPromo === "data"
                 ? dataPromo.map((promo) => {
                     return <option value={promo.id}>{promo.nama_promo}</option>;

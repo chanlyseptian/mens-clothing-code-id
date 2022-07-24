@@ -34,6 +34,13 @@ const shoppingReducer = (state = initialState, { type, payload }) => {
         status: payload.status,
         data: payload.data,
       };
+    case "GET_FILTERED_ORDERS_BY_USER_ID":
+      return {
+        ...state,
+        action: "GET_FILTERED_ORDERS_BY_USER_ID",
+        status: payload.status,
+        data: payload.data,
+      };
     case "CHECKOUT":
       return {
         ...state,

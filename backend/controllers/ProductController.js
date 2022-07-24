@@ -14,9 +14,9 @@ class ProductController {
   static async getAllProducts(req, res, next) {
     try {
       const page = +req.query.page || 1;
-      const sorter = req.query.sorter || "id";
+      const sorter = req.query.sorter || "name";
       const order = req.query.order || "asc";
-      const limit = req.query.limit || 5;
+      const limit = req.query.limit || 8;
 
       let products = await Product.findAll({
         include: [User, ProductImage, ProductStock, Promo],
@@ -59,6 +59,37 @@ class ProductController {
         limit: limit || 5,
         // page: page,
         totalData: totalData,
+        // totalPage: Math.ceil(totalData / limit),
+      };
+      res.status(200).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async getProductsPopular(req, res, next) {
+    try {
+      const page = +req.query.page || 1;
+      const sorter = "totalSold";
+      const order = "desc";
+      const limit = req.query.limit || 10;
+
+      let products = await Product.findAll({
+        include: [User, ProductImage, ProductStock],
+        limit: limit,
+        // offset: (page - 1) * limit,
+        order: [[sorter, order]],
+        where: {
+          totalSold: { [Op.gt]: 0 },
+        },
+      });
+
+      let totalData = await Product.count();
+      let result = {
+        data: products,
+        limit: limit || 5,
+        totalData: totalData,
+        // page: page,
         // totalPage: Math.ceil(totalData / limit),
       };
       res.status(200).json(result);
@@ -272,7 +303,7 @@ class ProductController {
     try {
       const id = req.params.id;
       const userId = req.userData.id;
-      const imageSize = req.files.imageSize[0].filename;
+      console.log(req.files.imageSize);
       const imagenames = req.files.filename;
       const {
         name,
@@ -291,7 +322,12 @@ class ProductController {
         totalSold,
         rating,
         views,
+        oldImageSize,
       } = req.body;
+
+      const newImageSize = oldImageSize || req.files.imageSize[0].filename;
+      // const imageSize = req.files.imageSize[0].filename;
+
       let result = await Product.update(
         {
           name,
@@ -302,12 +338,12 @@ class ProductController {
           width,
           len,
           category,
-          imageSize,
+          imageSize: newImageSize,
           PromoId,
           condition,
-          totalSold,
-          rating,
-          views,
+          // totalSold,
+          // rating,
+          // views,
         },
         {
           where: { id: id, UserId: userId },
@@ -372,26 +408,24 @@ class ProductController {
         );
       }
 
-      imagenames.forEach(async (imagename, index) => {
-        const isPrimary = index === 0 ? true : false;
-        await ProductImage.update(
-          {
+      if (imagenames.length > 1) {
+        imagenames.forEach(async (imagename, index) => {
+          const isPrimary = index === 0 ? true : false;
+          await ProductImage.create({
             filename: imagename.filename,
+            ProductId: id,
             fileType: imagename.mimetype,
             primary: isPrimary,
-          },
-          {
-            where: {
-              ProductId: id,
-            },
-          }
-        );
-      });
+          });
+        });
+      }
+
       res.status(201).json(result);
     } catch (err) {
       console.log(err);
     }
   }
+
   static async getProductById(req, res, next) {
     const id = req.params.id;
     try {
