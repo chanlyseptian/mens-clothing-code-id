@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ProductImage extends Model {
     /**
@@ -11,31 +9,34 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ProductImage.belongsTo(models.Product)
+      ProductImage.belongsTo(models.Product);
     }
   }
-  ProductImage.init({
-    filename: DataTypes.STRING,
-    fileType: DataTypes.STRING,
-    primary: {
-      type: DataTypes.BOOLEAN,
-      validate: {
-        notEmpty: {
-          msg:"Primary must not be empty"
-        }
-      }
-    }, 
-    ProductId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"Product Id must not be empty"
-        }
-      }
-    }, 
-  }, {
-    sequelize,
-    modelName: 'ProductImage',
-  });
+  ProductImage.init(
+    {
+      filename: DataTypes.STRING,
+      fileType: DataTypes.STRING,
+      primary: {
+        type: DataTypes.BOOLEAN,
+        validate: {
+          notEmpty: {
+            msg: "Primary must not be empty",
+          },
+        },
+      },
+      ProductId: {
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: {
+            msg: "Product Id must not be empty",
+          },
+        },
+      },
+    },
+    {
+      sequelize,
+      modelName: "ProductImage",
+    }
+  );
   return ProductImage;
 };

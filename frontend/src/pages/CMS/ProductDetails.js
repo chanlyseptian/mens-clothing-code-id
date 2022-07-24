@@ -7,6 +7,7 @@ import { getProductById } from "../../actions/cmsActions";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import base_url from "../../helpers/base_url";
+import Swal from "sweetalert2";
 
 const ProductDetails = () => {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
@@ -54,7 +55,7 @@ const ProductDetails = () => {
         {action === "GET_PRODUCT_BY_ID" &&
         status === "data" &&
         data !== "loading" ? (
-          <></>
+          console.log(data)
         ) : (
           <></>
         )}
@@ -78,6 +79,13 @@ const ProductDetails = () => {
                             img
                               ? url + "/images/" + img.filename
                               : "https://www.w3schools.com/howto/img_avatar.png"
+                          }
+                          onClick={() =>
+                            Swal.fire({
+                              width: 1000,
+                              imageUrl: url + "/images/" + img.filename,
+                              imageHeight: 500,
+                            })
                           }
                         />
                       </div>
@@ -177,11 +185,94 @@ const ProductDetails = () => {
               disabled
             ></input>
           </div>
+          <div className="px-5 py-2">
+            <label className="block text-cyan-900 text-lg font-bold pb-2">
+              Promo
+            </label>
+
+            {action === "GET_PRODUCT_BY_ID" && status === "data" ? (
+              <select
+                className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                name="condition"
+                id="condition"
+                disabled
+              >
+                <option>{data.Promo.nama_promo}</option>
+              </select>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <hr className="border-cyan-800 mx-5 mt-2" />
+        <div className="px-5 py-5">
+          <h1 className="text-cyan-900 text-lg font-bold pb-5">
+            Dimensional Weight (in inches)
+          </h1>
+          <div className="grid grid-cols-3">
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Length
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                value={data.len}
+                disabled
+              ></input>
+            </div>
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Width
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                value={data.width}
+                disabled
+              ></input>
+            </div>
+            <div className="px-5 py-2">
+              <label className="block text-cyan-900 text-lg font-bold pb-2">
+                Height
+              </label>
+              <input
+                type="number"
+                className="border hover:border-cyan-800 focus:boder-darkColor p-2 rounded-md w-full"
+                value={data.height}
+                disabled
+              ></input>
+            </div>
+          </div>
         </div>
         <hr className="border-cyan-800 mx-5 mt-2" />
         <div className="px-5 py-2">
           <div className="py-4 text-xl font-bold text-cyan-900 text-left 3xl:mt-3 3xl:mb-8">
             <h1 className="pl-5">Size Chart</h1>
+            <div className="px-5 py-2">
+              <div className="flex-shrink-0 my-5 w-full h-40 bg-white text-gray-500 p-2 cursor-pointer hover:scale-125 shadow-lg rounded mx-2">
+                <div>
+                  <label
+                    className="cursor-pointer custom-file-upload"
+                    htmlFor="imageSize"
+                  >
+                    <div className="text-7xl">
+                      <img
+                        className="object-cover w-full h-40"
+                        src={url + "/images/" + data.imageSize}
+                        onClick={() =>
+                          Swal.fire({
+                            width: 1000,
+                            imageUrl: url + "/images/" + data.imageSize,
+                            imageHeight: 500,
+                          })
+                        }
+                      />
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-2">
@@ -191,20 +282,30 @@ const ProductDetails = () => {
                 data.ProductStocks.map((row, index) => {
                   return (
                     <tr key={index}>
-                      <td className="pl-5 ml-5 w-[200vw]">
+                      <td className="pl-5 w-[900vw]">
                         <input
-                          placeholder="Size Type (S/M/L/US/UK)"
                           type="text"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
                           value={row.size}
+                          disabled
                         />
                       </td>
-                      <td className="ml-5 w-[80vw]">
+                      <td className="pl-5 w-[300vw]">
+                        <input
+                          placeholder="Color"
+                          type="text"
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
+                          value={row.color}
+                          disabled
+                        />
+                      </td>
+                      <td className="pl-5 w-[220vw]">
                         <input
                           placeholder="Stock"
                           type="number"
                           className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-full"
                           value={row.stock}
+                          disabled
                         />
                       </td>
                     </tr>

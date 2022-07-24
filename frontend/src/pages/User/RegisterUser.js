@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdAddAPhoto } from "react-icons/md";
-import Swal from "sweetalert2";
-
 import { useDispatch, useSelector } from "react-redux";
 import { register, clear } from "../../actions/userActions";
+import Swal from "sweetalert2";
 
 function RegisterUser() {
   const { action, status, data } = useSelector((state) => state.userReducer);
@@ -15,8 +14,7 @@ function RegisterUser() {
     username: "",
     email: "",
     password: "",
-    birthday: "",
-    gender: false,
+    confirmPass: "",
     avatar: null,
   });
 
@@ -33,15 +31,21 @@ function RegisterUser() {
   }, [status]);
 
   const registerHandler = () => {
-    let formData = new FormData();
-    formData.append("username", form.username);
-    formData.append("email", form.email);
-    formData.append("password", form.password);
-    formData.append("birthday", form.birthday);
-    formData.append("gender", form.gender);
-    formData.append("avatar", form.avatar);
-    formData.append("type", "user");
-    dispatch(register(formData));
+    if (form.password === form.confirmPass) {
+      let formData = new FormData();
+      formData.append("username", form.username);
+      formData.append("email", form.email);
+      formData.append("password", form.password);
+      formData.append("avatar", form.avatar);
+      formData.append("type", "user");
+      dispatch(register(formData));
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Password and Confirm Password must be same",
+      });
+    }
   };
   return (
     <div className="mx-auto lg:w-2/5 md:w-3/5 sm:w-96 rounded-md">
@@ -84,7 +88,7 @@ function RegisterUser() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 relative">
+        <div>
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
               Username
@@ -93,6 +97,16 @@ function RegisterUser() {
               type="text"
               className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
               onChange={(e) => setForm({ ...form, username: e.target.value })}
+            ></input>
+          </div>
+          <div className="px-5 py-2">
+            <label className="block text-midColor text-lg font-bold pb-2">
+              Email
+            </label>
+            <input
+              type="text"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
             ></input>
           </div>
           <div className="px-5 py-2">
@@ -107,42 +121,18 @@ function RegisterUser() {
           </div>
           <div className="px-5 py-2">
             <label className="block text-midColor text-lg font-bold pb-2">
-              Email
+              Confirm Password
             </label>
             <input
-              type="text"
-              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-96"
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              type="password"
+              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
+              onChange={(e) =>
+                setForm({ ...form, confirmPass: e.target.value })
+              }
             ></input>
           </div>
-
-          {/* <div className="px-5 py-2">
-            <label className="block text-midColor text-lg font-bold pb-2 ">
-              Gender
-            </label>
-            <select
-              className="border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white w-full"
-              name="gender"
-              id="gender"
-              onChange={(e) => setForm({ ...form, gender: e.target.value })}
-            >
-              <option value="false">Male</option>
-              <option value="true">Female</option>
-            </select>
-          </div> */}
-
-          {/* <div className="  px-5 py-2 mb-6">
-            <label className="   block text-midColor text-lg font-bold pb-2 absolute ml-[205px] 3xl:ml-[270px]  mt-2">
-              Birth Day
-            </label>
-            <input
-              type="date"
-              className="  border hover:border-green-800 focus:border-midColor p-2 rounded-md bg-white  absolute w-72 text-center ml-24 3xl:ml-[160px] mt-10"
-              onChange={(e) => setForm({ ...form, birthday: e.target.value })}
-            ></input>
-          </div> */}
         </div>
-        <div className="px-5 py-8 mt-12">
+        <div className="px-5 py-8 mt-5">
           <button
             className="text-2xl py-2 border text-white bg-midColor hover:bg-darkColor p-2 rounded-md w-full"
             name="condition"

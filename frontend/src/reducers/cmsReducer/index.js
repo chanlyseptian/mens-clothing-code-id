@@ -2,6 +2,10 @@ const initialState = {
   action: "",
   status: "loading",
   data: "Loading",
+
+  actionSort: "",
+  statusSort: "loading",
+  dataSort: "loading",
 };
 
 const cmsReducer = (state = initialState, { type, payload }) => {
@@ -33,6 +37,13 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         action: "GET_PRODUCT_BY_ID",
         status: payload.status,
         data: payload.data,
+      };
+    case "GET_PRODUCTS_SORT_PRICE":
+      return {
+        ...state,
+        actionSort: "GET_PRODUCTS_SORT_PRICE",
+        statusSort: payload.status,
+        dataSort: payload.data,
       };
     case "CREATE":
       return {

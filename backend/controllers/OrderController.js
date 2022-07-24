@@ -5,6 +5,8 @@ const {
   ShoppingCart,
   User,
   ProductImage,
+  ProductStock,
+  Shipping,
 } = require("../models");
 
 class OrderController {
@@ -17,7 +19,7 @@ class OrderController {
       const order = req.query.order || "asc";
       const skip = (page - 1) * limit;
       let pageOrder = await Order.findAll({
-        include: Product,
+        include: [Product, ProductStock],
         limit: limit,
         offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -30,8 +32,8 @@ class OrderController {
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
 
       res.status(200).json(result);
     } catch (err) {
@@ -52,23 +54,23 @@ class OrderController {
         offset: (page - 1) * limit,
         order: [[sorter, order]],
         where: {
-          status: status
-        }
+          status: status,
+        },
       });
 
       let totalData = Order.count({
         where: {
-          status: status
-        }
-      })
+          status: status,
+        },
+      });
 
       let result = {
         data: pageOrder,
         page: page,
         limit: limit,
         totalData: totalData,
-        totalPage: Math.ceil(totalData / limit)
-      }
+        totalPage: Math.ceil(totalData / limit),
+      };
 
       res.status(200).json(result);
     } catch (err) {
@@ -92,7 +94,7 @@ class OrderController {
       });
       //cari data line item dimana OrderId sama dengan id di table order yang dibuat diatas
       let resultGet = await LineItem.findOne({
-        include: [Product, Order],
+        include: [Product, ProductStock, Order],
         where: { OrderId: resultLine.OrderId },
       });
 
@@ -142,16 +144,35 @@ class OrderController {
   static async updatePayment(req, res, next) {
     // const UserId = +req.userData.id
     const OrderId = +req.params.id;
-    // const { paymentTrasaction } = req.body
-    try {
-      // let order = await Order.findOne({
-      //     where: { UserId: id, status: 'unpaid' }
-      // })
+    const {
+      destinationCityId,
+      destinationProvinceId,
+      fullAddress,
+      expeditionCode,
+      cost,
+    } = req.body;
 
+    try {
+      let order = await Order.findOne({
+        where: { id: OrderId },
+      });
+
+      let shipping = await Shipping.create({
+        destinationCityId,
+        destinationProvinceId,
+        fullAddress,
+        expeditionCode,
+        cost,
+        totalWeight: order.totalWeight,
+      });
+
+      let newTotal = +order.totalDue + +cost;
       let result = await Order.update(
         {
           paymentTrasaction: "debit",
           status: "ready to collect",
+          ShippingId: shipping.id,
+          totalDue: newTotal,
         },
         {
           where: { id: OrderId },
@@ -192,7 +213,7 @@ class OrderController {
 
         await Product.update(
           {
-            stock: product.stock + lineItem.qty,
+            stock: product.ProductStock.stock + lineItem.qty,
             totalSold: product.totalSold - lineItem.qty,
           },
           {
@@ -244,7 +265,7 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage],
+            include: [ProductImage, ProductStock],
           },
           User,
         ],

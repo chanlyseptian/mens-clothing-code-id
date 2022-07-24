@@ -145,7 +145,7 @@ export const getOrder = (id) => {
   };
 };
 
-export const getOrdersByUserId = () => {
+export const getOrdersByUserId = (attribute) => {
   return (dispatch) => {
     // Loading
     dispatch({
@@ -159,7 +159,7 @@ export const getOrdersByUserId = () => {
     // Success
     axios({
       method: "GET",
-      url: url + "/orders/",
+      url: url + "/orders/" + attribute,
       timeout: 5000,
       headers: {
         access_token: localStorage.getItem("access_token"),
@@ -374,7 +374,7 @@ export const deleteLineItem = (id) => {
   };
 };
 
-export const updatePayment = (id) => {
+export const updatePayment = (id, shippingData) => {
   return async (dispatch) => {
     // Loading
     dispatch({
@@ -389,6 +389,7 @@ export const updatePayment = (id) => {
     await axios({
       method: "PUT",
       url: url + "/orders/payment/" + id,
+      data: shippingData,
       headers: {
         access_token: localStorage.getItem("access_token"),
       },

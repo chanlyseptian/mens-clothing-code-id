@@ -1,54 +1,120 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import CarouselComponent from "../../components/CarouselComponent";
 import ProductCardContainerUser from "../../components/ProductCardContainerUser";
-import ProductCard from "../../components/ProductCard";
+import HighlightProduct from "../../components/HighlightProduct";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import Category from "../../components/Category";
+import { FaSearch } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProducts } from "../../actions/cmsActions";
+import {
+  getAllProducts,
+  getProductsBySearch,
+  getAndFilterProducts,
+} from "../../actions/cmsActions";
 
 const HomePage = () => {
   const { action, status, data } = useSelector((state) => state.cmsReducer);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [limit,setLimit] = useState(5)
-  
+  const [tops, setTops] = useState(false);
+  const [bottoms, setBottoms] = useState(false);
+  const [accessories, setAccessories] = useState(false);
+  const [grooming, setGrooming] = useState(false);
+  const [filterArr, setFilterArr] = useState([]);
+  const [sortAttr, setSortAttr] = useState("");
+  const [sorter, setSorter] = useState("");
+  const [order, setOrder] = useState("");
+  let pageAttribute = `?page=${page}`;
+
+  const [query, setQuery] = useState("");
+  const [queryDone, setQueryDone] = useState(false);
+
   useEffect(() => {
     let pageAttribute = `?page=${page}`;
-    
-    dispatch(getAllProducts(pageAttribute,));
-    
+    dispatch(getAllProducts(pageAttribute));
   }, [page]);
 
-  // useEffect(() => {
-  //   let limitAttribute = `?page=${page}`;
-    
-  //   dispatch(getAllProducts(limitAttribute));
-  //   setLimit(10)
-  // }, [limit]);
+  useEffect(() => {
+    if (tops === true) {
+      setFilterArr([...filterArr, "tops"]);
+    } else {
+      setFilterArr(filterArr.filter((data) => data !== "tops"));
+    }
+  }, [tops]);
 
-  const handleSubmit = ()=>{
-    setLimit({limit : 10})
-  }
+  useEffect(() => {
+    if (tops === true) {
+      setFilterArr([...filterArr, "tops"]);
+    } else {
+      setFilterArr(filterArr.filter((data) => data !== "tops"));
+    }
+  }, [tops]);
 
+  useEffect(() => {
+    if (bottoms === true) {
+      setFilterArr([...filterArr, "bottoms"]);
+    } else {
+      setFilterArr(filterArr.filter((data) => data !== "bottoms"));
+    }
+  }, [bottoms]);
 
-  const [formFilter, setFormFilter] = useState({
-    tops: false,
-    bottoms: false,
-    accessories: false,
-    grooming: false,
-  });
+  useEffect(() => {
+    if (accessories === true) {
+      setFilterArr([...filterArr, "accessories"]);
+    } else {
+      setFilterArr(filterArr.filter((data) => data !== "accessories"));
+    }
+  }, [accessories]);
 
-  // useEffect(() => {
-  //   console.log(formFilter)
-  // },[formFilter])
+  useEffect(() => {
+    if (grooming === true) {
+      setFilterArr([...filterArr, "grooming"]);
+    } else {
+      setFilterArr(filterArr.filter((data) => data !== "grooming"));
+    }
+  }, [grooming]);
+
+  useEffect(() => {
+    if (sortAttr === "az") {
+      setSorter("name");
+      setOrder("asc");
+    }
+    if (sortAttr === "za") {
+      setSorter("name");
+      setOrder("desc");
+    }
+    if (sortAttr === "highToLow") {
+      setSorter("price");
+      setOrder("desc");
+    }
+    if (sortAttr === "lowToHigh") {
+      setSorter("price");
+      setOrder("asc");
+    }
+  }, [sortAttr]);
+
+  useEffect(() => {
+    dispatch(getAllProducts(pageAttribute));
+  }, [page]);
+
+  useEffect(() => {
+    let searchAttribute = `${pageAttribute}&sorter=${sorter}&order=${order}&search=${query}`;
+    console.log(filterArr);
+    if (queryDone === true && filterArr.length === 0) {
+      dispatch(getProductsBySearch(searchAttribute));
+    } else if (queryDone === true && filterArr.length > 0) {
+      dispatch(getAndFilterProducts(searchAttribute, filterArr));
+    } else {
+      dispatch(getAllProducts(pageAttribute));
+    }
+  }, [queryDone]);
 
   return (
     <>
-      <aside className=" flex border-r border-lightColor transform top-0 left-0 w-48 fixed h-screen ease-in-out transition-all duration-300 -translate-x-[185px] hover:translate-x-0">
+      <CarouselComponent />
+      <HighlightProduct />
+      <aside className=" flex border-r border-lightColor transform top-0 left-0 w-72 fixed h-screen ease-in-out transition-all duration-300 -translate-x-[285px] hover:translate-x-0">
         <div className="bg-darkColor w-full">
           <div className="mx-auto h-full w-full">
             <ul className="my-2 h-full text-accentColor">
@@ -57,15 +123,36 @@ const HomePage = () => {
                 Filter
               </li>
               <hr />
+              <li className="pl-2 py-3">Search</li>
+              <div className="w-96 flex justify-start pl-2 items-center">
+                <input
+                  className="rounded  p-2 w-3/5"
+                  placeholder="Search"
+                  onChange={(e) => setQuery(e.target.value)}
+                ></input>
+                {queryDone === false ? (
+                  <button
+                    className="ml-1 p-3 rounded bg-white text-darkColor hover:bg-accentColor hover:text-darkColor"
+                    onClick={() => setQueryDone(true)}
+                  >
+                    <FaSearch />
+                  </button>
+                ) : (
+                  <button
+                    className="ml-1 p-3 rounded bg-white text-darkColor hover:bg-accentColor hover:text-darkColor"
+                    onClick={() => setQueryDone(false)}
+                  >
+                    <ImCross />
+                  </button>
+                )}
+              </div>
               <li className="pl-2 py-3">Categories</li>
               <li className="flex items-center mb-2">
                 <input
                   type="checkbox"
                   className="mx-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  value={formFilter.tops}
-                  onChange={(e) => {
-                    setFormFilter({ ...formFilter, tops: !formFilter.tops });
-                  }}
+                  value={tops}
+                  onChange={() => setTops(!tops)}
                 />
                 <label>Tops</label>
               </li>
@@ -73,13 +160,8 @@ const HomePage = () => {
                 <input
                   type="checkbox"
                   className="mx-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  value={formFilter.bottoms}
-                  onChange={(e) => {
-                    setFormFilter({
-                      ...formFilter,
-                      bottoms: !formFilter.bottoms,
-                    });
-                  }}
+                  value={bottoms}
+                  onChange={() => setBottoms(!bottoms)}
                 />
                 <label>Bottoms</label>
               </li>
@@ -87,13 +169,8 @@ const HomePage = () => {
                 <input
                   type="checkbox"
                   className="mx-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  value={formFilter.accessories}
-                  onChange={(e) => {
-                    setFormFilter({
-                      ...formFilter,
-                      accessories: !formFilter.accessories,
-                    });
-                  }}
+                  value={accessories}
+                  onChange={() => setAccessories(!accessories)}
                 />
                 <label>Accessories</label>
               </li>
@@ -101,13 +178,8 @@ const HomePage = () => {
                 <input
                   type="checkbox"
                   className="mx-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  value={formFilter.grooming}
-                  onChange={(e) => {
-                    setFormFilter({
-                      ...formFilter,
-                      grooming: !formFilter.grooming,
-                    });
-                  }}
+                  value={grooming}
+                  onChange={() => setGrooming(!grooming)}
                 />
                 <label>Grooming</label>
               </li>
@@ -128,52 +200,52 @@ const HomePage = () => {
               {data.length} products
             </p>
           </div>
-          <div className="flex items-center space-x-10">
+          <div className="flex justify-end space-x-10">
             <div className="flex items-center">
               <label className=" text-darkColor text-sm mr-4">Sort: </label>
               <select
                 className="border hover:border-cyan-800 focus:border-cyan-900 w-full rounded-md bg-white py-1 px-4 text-darkColor text-sm"
                 name="condition"
                 id="condition"
-                value="featured"
+                value={sortAttr}
+                onChange={(e) => setSortAttr(e.target.value)}
               >
-                <option value="featured">Featured</option>
+                {/* <option value="featured">Featured</option> */}
                 <option value="lowToHigh">Price : Low to High</option>
-                <option value="hightoLow">Price : High to Low</option>
+                <option value="highToLow">Price : High to Low</option>
                 <option value="az">A-Z</option>
                 <option value="za">Z-A</option>
               </select>
             </div>
 
             <div className="text-4xl flex justify-center items-center ">
-            
-            {data.page > 1? (
-            <button onClick={() => setPage(page - 1)}>
-              <MdKeyboardArrowLeft className="text-darkColor cursor-pointer" />
-            </button>
-           
-          ) : (
-            ""
-          )}
-          <p className="text-sm">{data.page}</p>
-          {data.page < data.totalPage? (
-            <button onClick={() => setPage(page + 1)}>
-              <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
-            </button>
-          ) : (
-            ""
-          )}    
-          
-        </div>
+              {data.page > 1 ? (
+                <button onClick={() => setPage(page - 1)}>
+                  <MdKeyboardArrowLeft className="text-gray-400" />
+                </button>
+              ) : (
+                ""
+              )}
+              <p className="text-sm">{data.page}</p>
+              {data.page < data.totalPage ? (
+                <button onClick={() => setPage(page + 1)}>
+                  <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
+                </button>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
         </div>
 
         <div className="mb-16">
-          {action === "GET_ALL_PRODUCTS" && status === "data" ? (
-            
-              <ProductCardContainerUser data={data.data} />    
+          {(action === "GET_ALL_PRODUCTS" && status === "data") ||
+          (action === "GET_PRODUCTS_BY_SEARCH" && status === "data") ||
+          (action === "GET_AND_FILTER_PRODUCTS" && status === "data") ||
+          (action === "GET_PRODUCTS_SORT_PRICE" && status === "data") ? (
+            <ProductCardContainerUser data={data.data} />
           ) : (
-            "loading"
+            console.log(action, data)
           )}
         </div>
       </div>

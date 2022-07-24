@@ -9,6 +9,14 @@ import {
   cancelOrder,
 } from "../../actions/shoppingActions";
 
+import {
+  getCity,
+  getProvince,
+  getProvinces,
+  getCitiesByProvinceId,
+  checkCost,
+} from "../../actions/rajaOngkirActions";
+
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 import StripeContainer from "../../components/StripeContainer";
@@ -24,8 +32,76 @@ const OrderDetailsPage = () => {
     (state) => state.shoppingReducer
   );
 
+  const {
+    actionProvinces,
+    statusProvinces,
+    dataProvinces,
+    actionProvince,
+    statusProvince,
+    dataProvince,
+    actionCity,
+    statusCity,
+    dataCity,
+  } = useSelector((state) => state.rajaOngkirReducer);
+
+  const { actionCities, statusCities, dataCities } = useSelector(
+    (state) => state.rajaOngkirReducer
+  );
+
+  const { actionCost, statusCost, dataCost } = useSelector(
+    (state) => state.rajaOngkirReducer
+  );
+
   useEffect(() => {
     dispatch(getOrder(id));
+  }, []);
+
+  const [shippingCost, setShippingCost] = useState(0);
+  const [provinceId, setProvinceId] = useState(0);
+  const [cityId, setCityId] = useState(0);
+  const [shippingDetail, setShippingDetail] = useState({
+    origin: 152,
+    destination: 0,
+    weight: 1,
+    courier: "",
+  });
+
+  const [shippingData, setShippingData] = useState({
+    destinationCityId: 0,
+    destinationCityName: "",
+    destinationProvinceId: 0,
+    destinationProvinceName: "",
+    fullAddress: "",
+    expeditionCode: "",
+    expeditionService: "",
+    cost: 0,
+  });
+
+  useEffect(() => {
+    dispatch(getProvinces());
+  }, []);
+
+  useEffect(() => {
+    let attr = `?province=${provinceId}`;
+    setShippingData({ ...shippingData, destinationProvinceId: provinceId });
+    dispatch(getCitiesByProvinceId(attr));
+  }, [provinceId]);
+
+  useEffect(() => {
+    if (
+      shippingDetail.courier !== "" &&
+      shippingDetail.destination !== 0 &&
+      shippingDetail.weight !== 0
+    ) {
+      dispatch(checkCost(shippingDetail));
+    }
+    console.log(shippingDetail);
+  }, [shippingDetail]);
+
+  useEffect(() => {
+    if (action === "GET_ORDER" && status === "data") {
+      setShippingDetail({ ...shippingDetail, weight: data.totalWeight });
+    }
   }, []);
 
   const [openModal, setOpenModal] = useState(false);
@@ -57,7 +133,7 @@ const OrderDetailsPage = () => {
 
   function closeModal() {
     setOpenModal(false);
-    dispatch(updatePayment(id)).then(() => {
+    dispatch(updatePayment(id, shippingData)).then(() => {
       dispatch(getOrder(id));
     });
   }
@@ -89,7 +165,9 @@ const OrderDetailsPage = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <StripeContainer totalDue={data.totalDue} />
+        <StripeContainer
+          totalDue={Number(data.totalDue) + Number(shippingCost)}
+        />
         <div align="center" className="py-5">
           <button
             className="bg-gray-500  text-white p-3 rounded font-semibold"
@@ -194,7 +272,7 @@ const OrderDetailsPage = () => {
           <div className="px-24 ">
             <table
               className="border w-full text-sm lg:text-base"
-              cellspacing="0"
+              cellSpacing="0"
             >
               <thead className="bg-gray-200 ">
                 <tr className="h-12 uppercase">
@@ -215,7 +293,7 @@ const OrderDetailsPage = () => {
               <tbody className="text-center py-10">
                 {data.Products.map((product, index) => {
                   return (
-                    <tr className="text-center ">
+                    <tr key={index} className="text-center ">
                       <td className="text-center flex justify-center">
                         <Link to="#">
                           <img
@@ -241,12 +319,12 @@ const OrderDetailsPage = () => {
                       </td>
                       <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-medium">
-                          {product.price}
+                          {product.finalPrice}
                         </span>
                       </td>
                       <td className="text-center text-darkColor">
                         <span className="text-sm lg:text-base font-bold text-darkColor">
-                          {product.price * product.LineItem.qty}
+                          {product.finalPrice * product.LineItem.qty}
                         </span>
                       </td>
                     </tr>
@@ -254,8 +332,159 @@ const OrderDetailsPage = () => {
                 })}
               </tbody>
             </table>
-            <div className="flex px-2  mr-12 mt-5 mb-10  justify-center">
-              <div className="bg-white w-96 justify-center rounded-lg h-[300px]">
+            <div className="flex mr-12 mt-5 mb-10  justify-center">
+              <div className="bg-white w-2/3 justify-center rounded-lg h-[350px] mr-8">
+                <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
+                  Shipping Detail
+                </h1>
+                <hr className="mt-2" />
+                <div className="py-5">
+                  <div className="grid grid-cols-2">
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Province :
+                      </label>
+                    </div>
+                    <div className="px-3 py-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) => setProvinceId(e.target.value)}
+                      >
+                        <option>Choose Province</option>
+                        {actionProvinces === "GET_PROVINCES" &&
+                        statusProvinces === "data"
+                          ? dataProvinces.rajaongkir.results.map((province) => {
+                              return (
+                                <option
+                                  key={province.province_id}
+                                  value={province.province_id}
+                                >
+                                  {province.province}
+                                </option>
+                              );
+                            })
+                          : console.log(actionProvinces, statusProvinces)}
+                      </select>
+                    </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        City :
+                      </label>
+                    </div>
+                    <div className="px-3 py-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) => {
+                          setShippingDetail({
+                            ...shippingDetail,
+                            destination: e.target.value,
+                          });
+                          setShippingData({
+                            ...shippingData,
+                            destinationCityId: e.target.value,
+                          });
+                        }}
+                      >
+                        <option value={0}>Choose City</option>
+                        {actionCities === "GET_CITIES_BY_PROVINCE_ID" &&
+                        statusCities === "data"
+                          ? dataCities.rajaongkir.results.map((city) => {
+                              return (
+                                <option key={city.city_id} value={city.city_id}>
+                                  {city.type + " " + city.city_name}
+                                </option>
+                              );
+                            })
+                          : console.log(actionCities, statusCities)}
+                      </select>
+                    </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Shipping Service :
+                      </label>
+                    </div>
+                    <div className="px-3 pt-2">
+                      <select
+                        className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                        onChange={(e) => {
+                          setShippingDetail({
+                            ...shippingDetail,
+                            courier: e.target.value,
+                          });
+                          setShippingData({
+                            ...shippingData,
+                            expeditionCode: e.target.value,
+                          });
+                        }}
+                      >
+                        <option value="">Choose Shipping Service : </option>
+                        <option value="jne">JNE</option>
+                        <option value="tiki">Tiki</option>
+                        <option value="pos">Pos</option>
+                      </select>
+                    </div>
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Service :
+                      </label>
+                    </div>
+                    {actionCost === "CHECK_COST" &&
+                    statusCost === "data" &&
+                    shippingDetail.courier !== "" &&
+                    shippingDetail.destination !== 0 ? (
+                      <div className="px-3 pt-2">
+                        <select
+                          className="border hover:border-cyan-800 focus:border-darkColor p-2 rounded-md  w-4/5"
+                          onChange={(e) => {
+                            setShippingCost(e.target.value);
+                            setShippingData({
+                              ...shippingData,
+                              cost: e.target.value,
+                            });
+                          }}
+                        >
+                          <option key={-1} value={0}>
+                            Choose Service
+                          </option>
+                          {dataCost.result
+                            ? dataCost.result[0].costs.map((service) => {
+                                return (
+                                  <option
+                                    key={service.service}
+                                    value={service.cost[0].value}
+                                  >
+                                    {service.description} - Rp
+                                    {service.cost[0].value}
+                                  </option>
+                                );
+                              })
+                            : console.log(actionCost, statusCost)}
+                        </select>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    <div className="pl-8 pt-4">
+                      <label className="font-semibold text-midColor">
+                        Address :
+                      </label>
+                    </div>
+                    <div className="px-3 pt-2">
+                      <textarea
+                        className="border"
+                        cols={35}
+                        onChange={(e) =>
+                          setShippingData({
+                            ...shippingData,
+                            fullAddress: e.target.value,
+                          })
+                        }
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-white w-1/3 justify-center rounded-lg h-[350px] ml-8">
                 <h1 className="font-semibold text-base text-center mt-2 text-darkColor">
                   Subtotal
                 </h1>
@@ -269,12 +498,12 @@ const OrderDetailsPage = () => {
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 text-darkColor font-semibold ">
+                            <div className="mb-4 md:ml-4 text-darkColor font-semibold ">
                               <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
                               {intToRupiah(data.subtotal)}
-                            </p>
+                            </div>
                           </Link>
                         </td>
                       </tr>
@@ -309,17 +538,36 @@ const OrderDetailsPage = () => {
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
+                          <h1 className="text-darkColor text-md">
+                            Shipping Cost
+                          </h1>
+                        </td>
+                        <td>
+                          <Link to="#">
+                            <p className="mb-4 md:ml-4 font-semibold text-darkColor">
+                              <span className="text-darkColor font normal">
+                                :{" "}
+                              </span>{" "}
+                              {intToRupiah(shippingCost)}
+                            </p>
+                          </Link>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="hidden pb-4 md:table-cell">
                           <h1 className="text-darkColor text-md">Total</h1>
                         </td>
                         <td>
                           <Link to="#">
-                            <p className="mb-4 md:ml-4 font-bold text-darkColor text-lg">
+                            <div className="mb-4 md:ml-4 font-bold text-darkColor text-lg">
                               <span className="text-darkColor font-normal">
                                 :{" "}
                               </span>{" "}
-                              {intToRupiah(data.totalDue)}
+                              {intToRupiah(
+                                Number(data.totalDue) + Number(shippingCost)
+                              )}
                               <hr className="font-bold " />
-                            </p>
+                            </div>
                           </Link>
                         </td>
                       </tr>
@@ -327,19 +575,26 @@ const OrderDetailsPage = () => {
                   </table>
                   <div align="center">
                     {data.status === "unpaid" ? (
-                      <div className="w-full">
+                      <div className="grid grid-cols-2">
                         <button
-                          className="text-white bg-amber-600 hover:bg-amber-700 font-bold p-3 mt-5 w-1/2"
+                          className="text-white bg-amber-600 hover:bg-amber-700 font-bold p-3 mt-5"
                           onClick={() => cancelOrderHandler()}
                         >
                           CANCEL ORDER
                         </button>
-                        <button
-                          className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5  w-1/2"
-                          onClick={() => setOpenModal(true)}
-                        >
-                          PAY NOW
-                        </button>
+                        {shippingCost != 0 ? (
+                          <button
+                            className="text-white bg-green-500 hover:bg-green-600 font-bold p-3 mt-5"
+                            onClick={() => setOpenModal(true)}
+                            // onClick={() => console.log(shippingData)}
+                          >
+                            PAY NOW
+                          </button>
+                        ) : (
+                          <div className="text-white bg-gray-500 font-bold p-3 mt-5">
+                            PAY NOW
+                          </div>
+                        )}
                       </div>
                     ) : data.status === "cancelled" ? (
                       <div className="text-gray-50 bg-red-400 font-bold p-3 mt-5">

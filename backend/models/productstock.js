@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ProductStock extends Model {
     /**
@@ -11,23 +9,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ProductStock.belongsTo(models.Product)
+      ProductStock.belongsTo(models.Product);
+      ProductStock.belongsToMany(models.Order, { through: models.LineItem });
+      ProductStock.belongsToMany(models.ShoppingCart, {
+        through: models.LineItem,
+      });
     }
   }
-  ProductStock.init({
-    ProductId: {
-      type: DataTypes.INTEGER,
-      validate: {
-        notEmpty: {
-          msg:"Product Id must not be empty"
-        }
-      }
-    }, 
-    size: DataTypes.STRING,
-    stock: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'ProductStock',
-  });
+  ProductStock.init(
+    {
+      ProductId: {
+        type: DataTypes.INTEGER,
+        validate: {
+          notEmpty: {
+            msg: "Product Id must not be empty",
+          },
+        },
+      },
+      size: DataTypes.STRING,
+      color: DataTypes.STRING,
+      stock: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "ProductStock",
+    }
+  );
   return ProductStock;
 };
