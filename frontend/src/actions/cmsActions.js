@@ -264,3 +264,53 @@ export const update = (data, id) => {
       });
   };
 };
+export const createproductbulk = (data) => {
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "CREATE_BULK",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "POST",
+      url: url + "/bulkProduct",
+      data: data,
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    })
+      .then(async (response) => {
+        await Swal.fire(
+          "Add Product Success!",
+          "Congratulations, You've created a Products!",
+          "success"
+        );
+        dispatch({
+          type: "CREATE_BULK",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      //error
+      .catch(async (error) => {
+        await Swal.fire(
+          "Add Product Failed",
+          "error"
+        );
+        dispatch({
+          type: "CREATE_BULK",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};

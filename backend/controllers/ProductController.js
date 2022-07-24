@@ -1,6 +1,8 @@
-const { Product, User, ProductImage, ProductStock } = require("../models");
+const { Product, User, ProductImage, ProductStock, Promo } = require("../models");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+const XLSX = require('xlsx')
+const fs = require('fs')
 
 class ProductController {
   static async getAllProducts(req, res, next) {
@@ -295,6 +297,48 @@ class ProductController {
       res.status(201).json(result);
     } catch (err) {
       next(err);
+    }
+  }
+  static async createBulkProduct(req, res, next) {
+    try {
+      // console.log("test")
+      const type = req.file
+      const workbook = XLSX.readFile(`assets/${type.filename}`)
+      const sheets = workbook.Sheets['Sheet1']
+      const dataJson = XLSX.utils.sheet_to_json(sheets)
+      console.log(dataJson)
+      const userId = req.userData.id;
+
+      dataJson.forEach(async (data, index) => {
+        let result = await Product.create({
+          name: data.name || "",
+          desc: data.desc || "",
+          price: data.price || 0,
+          stock: 0,
+          weight: data.weight || 0,
+          category: data.category || "",
+          condition: data.condition || "Need to stock",
+          UserId: userId,
+          finalPrice: data.price || 0,
+          PromoId: data.PromoId || 1
+        })
+        const sizes = data.sizes.split(',')
+        const colors = data.colors.split(',')
+        const stocks = data.stocks.split(',')
+        sizes.forEach(async (size, index) => {
+          let stock = await ProductStock.create({
+            size: sizes[index],
+            color: colors[index],
+            stock: stocks[index],
+            ProductId: result.id
+          })
+        })
+
+      })
+
+      res.status(201).json('sukses');
+    } catch (err) {
+      console.log(err);
     }
   }
 }

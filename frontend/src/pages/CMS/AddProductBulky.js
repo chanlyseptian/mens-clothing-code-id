@@ -2,19 +2,36 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineArrowBackIos, MdUpload } from "react-icons/md";
 import { saveAs } from "file-saver";
-import file_template_add_product from "./Template_Add_Product/template_add_product_mens_clothing.csv";
+import file_template_add_product from "./Template_Add_Product/Template_Add_Product.rar";
 import "tw-elements";
+import { useDispatch, useSelector } from "react-redux";
+import { createproductbulk } from "../../actions/cmsActions";
 
 function AddProductBulky() {
+  const { action, status, data } = useSelector((state) => state.cmsReducer);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const saveFile = () => {
-    saveAs(file_template_add_product, "template_add_product.csv");
+    saveAs(file_template_add_product, "template_add_product.rar");
   };
 
-  const [selectedFile, setSelectedFile] = useState();
-  const changeHandler = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const [images, setImages] = useState([]);
+  const addProductbulkHandler = () => {
+    let formData = new FormData();
+    formData.append("filename", images);
+    console.log(formData);
+    dispatch(createproductbulk(formData));
+  };
+
+  useEffect(() => {
+    if (action === "CREATE_BULK" && status === "data") {
+      navigate("/cms/dashboard");
+    }
+  }, [data]);
+
+  const fileHandler = (event) => {
+    setImages(event.target.files[0]);
   };
 
   return (
@@ -70,7 +87,7 @@ function AddProductBulky() {
                 Fill in the form or template according to the instructions
                 provided. Important! The File Format Must be Excel (.xlsx)
               </p>
-              
+
               <br></br>
               <div className="box-content h-32 w-34 p-4 border-4 rounded-lg items-center flex text-ellipsis overflow-hidden">
                 <label
@@ -86,17 +103,13 @@ function AddProductBulky() {
                       id="file_upload"
                       type="file"
                       className="hidden"
-                      accept=".csv,.xlsx"
-                      onChange={changeHandler}
+                      accept=".xlsx"
+                      onChange={fileHandler}
                     />
-                    {selectedFile ? (
-                      <p className="text-thin text-gray-400">
-                       {selectedFile.name}
-                      </p>
+                    {images ? (
+                      <p className="text-thin text-gray-400">{images.name}</p>
                     ) : (
-                      <p className="text-thin text-gray-400">
-                       
-                      </p>
+                      <p className="text-thin text-gray-400"></p>
                     )}
                   </div>
                 </label>
@@ -109,8 +122,9 @@ function AddProductBulky() {
             className="text-2xl py-2 border bg-cyan-700 hover:bg-cyan-900 p-2 rounded-md w-1/3 text-white uppercase"
             name="upload_file"
             id="upload_file"
-            // onClick={() => {
-            // }}
+            onClick={() => {
+              addProductbulkHandler();
+            }}
           >
             Upload
           </button>

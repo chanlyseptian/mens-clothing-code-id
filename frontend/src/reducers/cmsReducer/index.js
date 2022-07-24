@@ -55,6 +55,13 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         status: payload.status,
         data: payload.data,
       };
+      case "CREATE_BULK":
+        return {
+          ...state,
+          action: "CREATE_BULK",
+          status: payload.status,
+          data: payload.data,
+        };
     default:
       return state;
   }

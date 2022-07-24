@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       ProductStock.belongsTo(models.Product)
+      ProductStock.belongsToMany(models.Order, { through: models.LineItem });
+      ProductStock.belongsToMany(models.ShoppingCart, { through: models.LineItem });
     }
   }
   ProductStock.init({
@@ -24,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }, 
     size: DataTypes.STRING,
+    color: DataTypes.STRING,
     stock: DataTypes.INTEGER
   }, {
     sequelize,
