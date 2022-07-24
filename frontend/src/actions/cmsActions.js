@@ -84,6 +84,47 @@ export const getProductsSortPrice = (limit) => {
   };
 };
 
+export const getProductsPopular = (limit) => {
+  return (dispatch) => {
+    // loading
+    dispatch({
+      type: "GET_PRODUCTS_POPULAR",
+      payload: {
+        status: "loading",
+        data: "loading",
+      },
+    });
+
+    //success
+    axios({
+      method: "GET",
+      url: url + "/popular_product",
+      params: {
+        limit: limit
+      }
+    })
+      .then((response) => {
+        console.log("RESPONSE DATA SLIDER=== ", response.data);
+        dispatch({
+          type: "GET_PRODUCTS_POPULAR",
+          payload: {
+            status: "data",
+            data: response.data,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: "GET_PRODUCTS_POPULAR",
+          payload: {
+            status: "error",
+            data: error.message,
+          },
+        });
+      });
+  };
+};
+
 export const getProductsBySearch = (attribute) => {
   console.log("SEARCH ONLY");
   return (dispatch) => {

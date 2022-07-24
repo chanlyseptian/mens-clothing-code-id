@@ -6,6 +6,10 @@ const initialState = {
   actionPrice: "",
   statusPrice: "loading",
   dataPrice: "Loading",
+
+  actionPopular: "",
+  statusPopular: "loading",
+  dataPopular: "Loading",
 };
 
 const cmsReducer = (state = initialState, { type, payload }) => {
@@ -24,6 +28,13 @@ const cmsReducer = (state = initialState, { type, payload }) => {
         statusPrice: payload.status,
         dataPrice: payload.data,
       };
+    case "GET_PRODUCTS_POPULAR":
+      return {
+        ...state,
+        actionPopular: "GET_PRODUCTS_POPULAR",
+        statusPopular: payload.status,
+        dataPopular: payload.data,
+      }
     case "GET_PRODUCTS_BY_SEARCH":
       return {
         ...state,
