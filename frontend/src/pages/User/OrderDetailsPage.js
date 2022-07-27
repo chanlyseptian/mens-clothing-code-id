@@ -630,7 +630,7 @@ const OrderDetailsPage = () => {
                               <span className="text-darkColor font normal">
                                 :{" "}
                               </span>{" "}
-                              {intToRupiah(shippingCost)}
+                              {intToRupiah(data.Shipping.cost)}
                             </p>
                           </Link>
                         </td>

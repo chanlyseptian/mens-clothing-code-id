@@ -344,28 +344,24 @@ const ProductDetailsUser = () => {
                 <hr />
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col items-center">
-                    <h1 className="pt-3 text-lg font-bold text-darkColor">
-                      Price
-                    </h1>
-                    <p className="mb-3 text-darkColor font-semibold">
-                      Rp. {intToRupiah(data.price)}
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <h1 className="pt-3 text-lg font-bold text-darkColor">
-                      Rating
-                    </h1>
+                    <div className="flex">
+                      <h1 className="pt-3 text-lg font-bold text-darkColor">
+                        Price -
+                      </h1>
+                      <div className="pt-3 pl-1 text-lg font-bold text-red-800">
+                        {data.Promo.potongan_harga}% OFF!
+                      </div>
+                    </div>
 
-                    <div className="flex justify-center mt-2">
-                      {data.rating !== 0 && data.rating !== null
-                        ? [...Array(data.rating)].map((x, i) => (
-                            <BsFillStarFill
-                              key={i}
-                              className="text-amber-500"
-                              size={20}
-                            />
-                          ))
-                        : "No ratings given"}
+                    <div className="flex">
+                      <s>
+                        <p className="mb-3 text-red-800 font-semibold">
+                          Rp. {intToRupiah(data.price)}
+                        </p>
+                      </s>
+                      <p className="mb-3 ml-3 text-darkColor font-bold">
+                        Rp. {intToRupiah(data.finalPrice)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-col items-center">

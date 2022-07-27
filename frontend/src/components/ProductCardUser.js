@@ -29,24 +29,14 @@ const ProductCardUser = (props) => {
           <div>
             <p className="text-darkColor text-start">{data.name}</p>
             <div>
-              <p className="font-bold text-darkColor text-start">
-                Rp. {intToRupiah(data.price)}{" "}
+              <s>
+                <p className="font-bold text-red-800 text-start">
+                  Rp. {intToRupiah(data.price)}{" "}
+                </p>
+              </s>
+              <p className="font-bold text-darkColor text-start text-xl">
+                Rp. {intToRupiah(data.finalPrice)}{" "}
               </p>
-            </div>
-            <div className="flex grid-cols-5 mt-1 text-start">
-              <div className="flex col-span-2 w-12 text-start">
-                <div className="text-amber-500 text-lg flex text-start">
-                  {data.rating === 1
-                    ? oneStar
-                    : data.rating === 2
-                    ? twoStars
-                    : data.rating === 3
-                    ? threeStars
-                    : data.rating === 4
-                    ? fourStars
-                    : fiveStars}
-                </div>
-              </div>
             </div>
           </div>
           <div className="text-sm text-darkColor">

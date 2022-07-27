@@ -95,11 +95,16 @@ const HighlightProduct = () => {
                       <div className="flex justify-between px-2 ">
                         <div>
                           <div>
-                            <p className="text-start text-gray-200 font-bold">
-                              Rp. {intToRupiah(data.price)}{" "}
+                            <s>
+                              <p className="text-start text-red-800 font-bold">
+                                Rp. {intToRupiah(data.price)}{" "}
+                              </p>
+                            </s>
+                            <p className="text-start font-bold text-accentColor text-xl">
+                              Rp. {intToRupiah(data.finalPrice)}{" "}
                             </p>
                           </div>
-                          <div className="flex grid-cols-5 mt-1 text-start">
+                          {/* <div className="flex grid-cols-5 mt-1 text-start">
                             <div className="flex col-span-2 w-12 text-start">
                               <div className="text-amber-500 text-lg flex text-start">
                                 {data.rating === 1
@@ -113,7 +118,7 @@ const HighlightProduct = () => {
                                   : fiveStars}
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="text-sm text-gray-200">
                           <p className="text-[12px] capitalize text-end">
@@ -166,11 +171,16 @@ const HighlightProduct = () => {
                       <div className="flex justify-between px-2 ">
                         <div>
                           <div>
-                            <p className="text-start text-gray-200 font-bold">
-                              Rp. {intToRupiah(populer.price)}{" "}
+                            <s>
+                              <p className="text-start text-red-800 font-bold">
+                                Rp. {intToRupiah(populer.price)}{" "}
+                              </p>
+                            </s>
+                            <p className="text-start font-bold text-accentColor text-xl">
+                              Rp. {intToRupiah(populer.finalPrice)}{" "}
                             </p>
                           </div>
-                          <div className="flex grid-cols-5 mt-1 text-start">
+                          {/* <div className="flex grid-cols-5 mt-1 text-start">
                             <div className="flex col-span-2 w-12 text-start">
                               <div className="text-amber-500 text-lg flex text-start">
                                 {populer.rating === 1
@@ -184,7 +194,7 @@ const HighlightProduct = () => {
                                   : fiveStars}
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="text-sm text-gray-200">
                           <p className="text-[12px] capitalize text-end">

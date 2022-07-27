@@ -30,7 +30,7 @@ const CMSDashboard = () => {
   const [sorter, setSorter] = useState("");
   const [order, setOrder] = useState("");
   const [showModal, setShowModal] = useState(false);
-  let pageAttribute = `?page=${page}`;
+  let pageAttribute = `?page=${page}&limit=10`;
 
   useEffect(() => {
     if (tops === true) {

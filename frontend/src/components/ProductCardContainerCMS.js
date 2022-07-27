@@ -71,8 +71,12 @@ const ProductCardContainerCMS = (props) => {
                   </div>
                 </td> */}
                 {/* <td className="w-1/6 text-center py-1">{product.stock}</td> */}
-                <td className="py-1 line-through">Rp{product.price}</td>
-                <td className="py-1">Rp{product.finalPrice}</td>
+                <td className="py-1 line-through text-red-800">
+                  Rp{product.price}
+                </td>
+                <td className="py-1 font-bold text-darkColor">
+                  Rp{product.finalPrice}
+                </td>
                 <td className="text-center py-1">
                   <button
                     onClick={() => navigate(`/cms/details/${product.id}`)}

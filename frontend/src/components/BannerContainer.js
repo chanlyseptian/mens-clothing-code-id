@@ -18,7 +18,7 @@ const BannerContainer = (props) => {
             <th colSpan="2" className="text-center">
               Banner
             </th>
-            <th className="text-center">Upload Date</th>
+            <th className="text-center">Caption</th>
             <th className="text-center">Status</th>
             <th className="text-right">Details</th>
           </tr>
@@ -43,13 +43,10 @@ const BannerContainer = (props) => {
                         })
                       }
                     />
-                    <p className="text-center py-1 text-darkColor font-bold">
-                      {banner.body}
-                    </p>
                   </div>
                 </td>
-                <td className="w-2/6 py-1 text-center">
-                  {String(banner.createdAt).slice(0, 10)}
+                <td className="w-2/6 py-1 text-center font-bold text-darkColor">
+                  {banner.body}
                 </td>
                 {banner.active === true ? (
                   <td className="w-1/6 text-center py-1 text-green-700 font-extrabold">
