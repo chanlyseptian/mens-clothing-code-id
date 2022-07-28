@@ -79,13 +79,13 @@ const PromoTable = (props) => {
 
                     <div className="text-right md:table-cell pb-3 p-2 col-span-3">
                       <span className="text-sm lg:text-base font-medium text-midColor">
-                        {promo.tgl_mulai}
+                        {String(promo.tgl_mulai).slice(0, 10)}
                       </span>
                     </div>
 
                     <div className="text-right md:table-cell pb-3 p-2 col-span-3">
                       <span className="text-sm lg:text-base">
-                        {promo.tgl_akhir}
+                        {String(promo.tgl_akhir).slice(0, 10)}
                       </span>
                     </div>
                   </div>
