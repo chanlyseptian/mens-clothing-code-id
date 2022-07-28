@@ -10,9 +10,7 @@ import { getPromos } from "../../actions/promoActions";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const Promos = () => {
-  const { actionPromo, statusPromo, dataPromo } = useSelector(
-    (state) => state.promoReducer
-  );
+  const { action, status, data } = useSelector((state) => state.promoReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,12 +21,12 @@ const Promos = () => {
 
   useEffect(() => {
     if (
-      (actionPromo === "CREATE_PROMO" || actionPromo === "EDIT_PROMO") &&
-      statusPromo === "data"
+      (action === "CREATE_PROMO" || action === "EDIT_PROMO") &&
+      status === "data"
     ) {
       dispatch(getPromos());
     }
-  }, [statusPromo]);
+  }, [status]);
 
   useEffect(() => {
     dispatch(getPromos());
@@ -38,7 +36,7 @@ const Promos = () => {
     if (page < 1) {
       return;
     }
-    if (dataPromo.length < 5 && page > 1) {
+    if (data.length < 5 && page > 1) {
       return;
     }
     setPage(page);
@@ -91,7 +89,7 @@ const Promos = () => {
                 />
               )}
               <p className="text-sm">{page}</p>
-              {dataPromo.length >= 5 ? (
+              {data.length >= 5 ? (
                 <button onClick={() => changeDataPage(page + 1)}>
                   <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
                 </button>
@@ -104,8 +102,8 @@ const Promos = () => {
           <hr className="mt-1" />
 
           <div className="p-5 border border-1 bg-gray-100 mt-5">
-            {actionPromo === "GET_PROMOS" && statusPromo === "data" ? (
-              <PromoTable data={dataPromo} />
+            {action === "GET_PROMOS" && status === "data" ? (
+              <PromoTable data={data} />
             ) : (
               <></>
             )}

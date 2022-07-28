@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getPromoById, editPromo } from "../actions/promoActions";
+import { getPromoById, editPromo, getPromos } from "../actions/promoActions";
 
 function PromoEdit(props) {
   const { action, status, data, actionPromo, statusPromo, dataPromo } =
@@ -35,7 +35,7 @@ function PromoEdit(props) {
   }, [statusPromo]);
 
   const submitHandler = () => {
-    dispatch(editPromo(id, formPromo));
+    dispatch(editPromo(id, formPromo)).then(() => dispatch(getPromos()));
   };
 
   return (

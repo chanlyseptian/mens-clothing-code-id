@@ -155,7 +155,7 @@ export const createPromo = (data) => {
 };
 
 export const editPromo = (id, data) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     //loading
     dispatch({
       type: "EDIT_PROMO",
@@ -164,7 +164,7 @@ export const editPromo = (id, data) => {
         data: "loading",
       },
     });
-    axios({
+    await axios({
       method: "PUT",
       url: `${url}/${id}`,
       data: data,

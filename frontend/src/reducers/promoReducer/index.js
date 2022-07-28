@@ -1,4 +1,8 @@
 const initialState = {
+  action: "",
+  status: "",
+  data: "",
+
   actionPromo: "",
   statusPromo: "",
   dataPromo: "",
@@ -9,9 +13,9 @@ const promoReducer = (state = initialState, { type, payload }) => {
     case "GET_PROMOS":
       return {
         ...state,
-        actionPromo: "GET_PROMOS",
-        statusPromo: payload.status,
-        dataPromo: payload.data,
+        action: "GET_PROMOS",
+        status: payload.status,
+        data: payload.data,
       };
     case "GET_PROMO_BY_ID":
       return {
@@ -23,21 +27,14 @@ const promoReducer = (state = initialState, { type, payload }) => {
     case "GET_ACTIVE_PROMOS":
       return {
         ...state,
-        actionPromo: "GET_ACTIVE_PROMOS",
-        statusPromo: payload.status,
-        dataPromo: payload.data,
+        action: "GET_ACTIVE_PROMOS",
+        status: payload.status,
+        data: payload.data,
       };
     case "CREATE_PROMO":
       return {
         ...state,
         actionPromo: "CREATE_PROMO",
-        statusPromo: payload.status,
-        dataPromo: payload.data,
-      };
-    case "GET_PROMO_DETAILS":
-      return {
-        ...state,
-        actionPromo: "GET_PROMO_DETAILS",
         statusPromo: payload.status,
         dataPromo: payload.data,
       };
