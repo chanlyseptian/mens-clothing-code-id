@@ -278,6 +278,7 @@ class OrderController {
             include: [ProductImage, ProductStock],
           },
           User,
+          Shipping,
         ],
         limit: limit,
         offset: (page - 1) * limit,

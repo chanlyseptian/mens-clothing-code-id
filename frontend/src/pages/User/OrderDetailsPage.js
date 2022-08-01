@@ -53,7 +53,7 @@ const OrderDetailsPage = () => {
   );
 
   useEffect(() => {
-    dispatch(getOrder(id));
+    dispatch(getOrder(+id));
   }, []);
 
   const [shippingCost, setShippingCost] = useState(0);
@@ -133,7 +133,7 @@ const OrderDetailsPage = () => {
   function closeModal() {
     setOpenModal(false);
     dispatch(updatePayment(id, shippingData)).then(() => {
-      dispatch(getOrder(id));
+      dispatch(getOrder(+id));
     });
   }
 
@@ -624,16 +624,29 @@ const OrderDetailsPage = () => {
                             Shipping Cost
                           </h1>
                         </td>
-                        <td>
-                          <Link to="#">
-                            <p className="mb-4 md:ml-4 font-semibold text-darkColor">
-                              <span className="text-darkColor font normal">
-                                :{" "}
-                              </span>{" "}
-                              {intToRupiah(data.Shipping.cost)}
-                            </p>
-                          </Link>
-                        </td>
+                        {data.Shipping !== null ? (
+                          <td>
+                            <Link to="#">
+                              <p className="mb-4 md:ml-4 font-semibold text-darkColor">
+                                <span className="text-darkColor font normal">
+                                  :{" "}
+                                </span>{" "}
+                                {intToRupiah(data.Shipping.cost)}
+                              </p>
+                            </Link>
+                          </td>
+                        ) : (
+                          <td>
+                            <Link to="#">
+                              <p className="mb-4 md:ml-4 font-semibold text-darkColor">
+                                <span className="text-darkColor font normal">
+                                  :{" "}
+                                </span>{" "}
+                                {intToRupiah(shippingCost)}
+                              </p>
+                            </Link>
+                          </td>
+                        )}
                       </tr>
                       <tr>
                         <td className="hidden pb-4 md:table-cell">
