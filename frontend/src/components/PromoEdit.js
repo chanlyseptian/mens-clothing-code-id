@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPromoById, editPromo, getPromos } from "../actions/promoActions";
 
 function PromoEdit(props) {
-  const { action, status, data, actionPromo, statusPromo, dataPromo } =
+  const { actionPromo2, statusPromo2, dataPromo2 } =
     useSelector((state) => state.promoReducer);
   const dispatch = useDispatch();
   // const navigate = useNavigate();
@@ -16,23 +16,23 @@ function PromoEdit(props) {
     tgl_akhir: "",
   });
 
-  const id = +props.id;
+  let id = +props.id;
 
   useEffect(() => {
     dispatch(getPromoById(id));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-    if (actionPromo === "GET_PROMO_BY_ID" && statusPromo === "data") {
+    if (actionPromo2 === "GET_PROMO_BY_ID" && statusPromo2 === "data") {
       setFormPromo({
-        nama_promo: dataPromo.nama_promo,
-        potongan_harga: dataPromo.potongan_harga,
-        tgl_mulai: dataPromo.tgl_mulai.split("T")[0],
-        tgl_akhir: dataPromo.tgl_akhir.split("T")[0],
+        nama_promo: dataPromo2.nama_promo,
+        potongan_harga: dataPromo2.potongan_harga,
+        tgl_mulai: dataPromo2.tgl_mulai.split("T")[0],
+        tgl_akhir: dataPromo2.tgl_akhir.split("T")[0],
       });
     }
     // console.log(formPromo)
-  }, [statusPromo]);
+  }, [statusPromo2]);
 
   const submitHandler = () => {
     dispatch(editPromo(id, formPromo)).then(() => dispatch(getPromos()));

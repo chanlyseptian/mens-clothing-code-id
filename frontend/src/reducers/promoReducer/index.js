@@ -1,11 +1,11 @@
 const initialState = {
-  action: "",
-  status: "",
-  data: "",
-
   actionPromo: "",
   statusPromo: "",
   dataPromo: "",
+
+  actionPromo2: "",
+  statusPromo2: "",
+  dataPromo2: "",
 };
 
 const promoReducer = (state = initialState, { type, payload }) => {
@@ -13,37 +13,37 @@ const promoReducer = (state = initialState, { type, payload }) => {
     case "GET_PROMOS":
       return {
         ...state,
-        action: "GET_PROMOS",
-        status: payload.status,
-        data: payload.data,
-      };
-    case "GET_PROMO_BY_ID":
-      return {
-        ...state,
-        actionPromo: "GET_PROMO_BY_ID",
+        actionPromo: "GET_PROMOS",
         statusPromo: payload.status,
         dataPromo: payload.data,
       };
     case "GET_ACTIVE_PROMOS":
       return {
         ...state,
-        action: "GET_ACTIVE_PROMOS",
-        status: payload.status,
-        data: payload.data,
-      };
-    case "CREATE_PROMO":
-      return {
-        ...state,
-        actionPromo: "CREATE_PROMO",
+        actionPromo: "GET_ACTIVE_PROMOS",
         statusPromo: payload.status,
         dataPromo: payload.data,
+      };
+    case "GET_PROMO_BY_ID"://
+      return {
+        ...state,
+        actionPromo2: "GET_PROMO_BY_ID",
+        statusPromo2: payload.status,
+        dataPromo2: payload.data,
+      };
+    case "CREATE_PROMO"://
+      return {
+        ...state,
+        actionPromo2: "CREATE_PROMO",
+        statusPromo2: payload.status,
+        dataPromo2: payload.data,
       };
     case "EDIT_PROMO":
       return {
         ...state,
-        actionPromo: "EDIT_PROMO",
-        statusPromo: payload.status,
-        dataPromo: payload.data,
+        actionPromo2: "EDIT_PROMO",
+        statusPromo2: payload.status,
+        dataPromo2: payload.data,
       };
     default:
       return state;

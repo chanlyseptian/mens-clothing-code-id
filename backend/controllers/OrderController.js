@@ -2,6 +2,7 @@ const {
   Product,
   Order,
   LineItem,
+  Promo,
   ShoppingCart,
   User,
   ProductImage,
@@ -243,7 +244,7 @@ class OrderController {
         include: [
           {
             model: Product,
-            include: [ProductImage],
+            include: [ProductImage,Promo],
           },
           User,
           Shipping,
@@ -253,6 +254,12 @@ class OrderController {
           id: OrderId,
         },
       });
+
+      // console.log(result.Products)
+      result.Products.forEach((product, index) => {
+        result.Products[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
+
       result
         ? res.status(201).json(result)
         : res.status(404).json({ message: "Not Found" });

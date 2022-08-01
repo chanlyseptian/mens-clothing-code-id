@@ -10,7 +10,7 @@ import { getPromos } from "../../actions/promoActions";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
 const Promos = () => {
-  const { action, status, data } = useSelector((state) => state.promoReducer);
+  const { actionPromo, statusPromo, dataPromo, actionPromo2, statusPromo2, dataPromo2 } = useSelector((state) => state.promoReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,14 +21,16 @@ const Promos = () => {
 
   useEffect(() => {
     if (
-      (action === "CREATE_PROMO" || action === "EDIT_PROMO") &&
-      status === "data"
+      (actionPromo2 === "CREATE_PROMO" || actionPromo2 === "EDIT_PROMO") &&
+      statusPromo2 === "data"
     ) {
+      console.log("aloha")
       dispatch(getPromos());
     }
-  }, [status]);
+  }, [statusPromo]);
 
   useEffect(() => {
+    console.log("hello")
     dispatch(getPromos());
   }, []);
 
@@ -36,7 +38,7 @@ const Promos = () => {
     if (page < 1) {
       return;
     }
-    if (data.length < 5 && page > 1) {
+    if (dataPromo.length < 5 && page > 1) {
       return;
     }
     setPage(page);
@@ -89,7 +91,7 @@ const Promos = () => {
                 />
               )}
               <p className="text-sm">{page}</p>
-              {data.length >= 5 ? (
+              {dataPromo.length >= 5 ? (
                 <button onClick={() => changeDataPage(page + 1)}>
                   <MdKeyboardArrowRight className="text-darkColor cursor-pointer" />
                 </button>
@@ -102,8 +104,8 @@ const Promos = () => {
           <hr className="mt-1" />
 
           <div className="p-5 border border-1 bg-gray-100 mt-5">
-            {action === "GET_PROMOS" && status === "data" ? (
-              <PromoTable data={data} />
+            {actionPromo === "GET_PROMOS" && statusPromo === "data" ? (
+              <PromoTable dataPromo={dataPromo} />
             ) : (
               <></>
             )}

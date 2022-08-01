@@ -2,6 +2,7 @@ const {
   ShoppingCart,
   User,
   LineItem,
+  Promo,
   Product,
   Order,
   ProductStock,
@@ -79,16 +80,20 @@ class ShoppingCartController {
       });
 
       const lineItems = await LineItem.findAll({
-        include: Product,
+        include: {
+          model: Product,
+          include: Promo
+        },
         where: { ShoppingCartId: shoppingCart.id },
       });
 
       let totalQty = 0;
       let subtotal = 0;
       let totalWeight = 0;
+      console.log(lineItems[0].Product);
       lineItems.forEach((lineItem) => {
         totalQty = totalQty + lineItem.qty;
-        subtotal = subtotal + lineItem.qty * lineItem.Product.finalPrice;
+        subtotal = subtotal + lineItem.qty * (lineItem.Product.price - lineItem.Product.price * (lineItem.Product.Promo.potongan_harga / 100));
         totalWeight = totalWeight + lineItem.Product.weight * lineItem.qty;
         // console.log(lineItem)
       });

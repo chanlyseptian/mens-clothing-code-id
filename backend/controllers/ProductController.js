@@ -25,7 +25,12 @@ class ProductController {
         order: [[sorter, order]],
       });
 
+      products.forEach((product, index) => {
+        products[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
+
       let totalData = await Product.count();
+
       let result = {
         data: products,
         page: page,
@@ -47,11 +52,15 @@ class ProductController {
       const limit = req.query.limit || 10;
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         // offset: (page - 1) * limit,
         order: [[sorter, order]],
       });
+
+      products.forEach((product, index) => {
+        products[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
 
       let totalData = await Product.count();
       let result = {
@@ -75,7 +84,7 @@ class ProductController {
       const limit = req.query.limit || 10;
 
       let products = await Product.findAll({
-        include: [User, ProductImage, ProductStock],
+        include: [User, ProductImage, ProductStock, Promo],
         limit: limit,
         // offset: (page - 1) * limit,
         order: [[sorter, order]],
@@ -84,6 +93,9 @@ class ProductController {
         },
       });
 
+      products.forEach((product, index) => {
+        products[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
       let totalData = await Product.count();
       let result = {
         data: products,
@@ -145,6 +157,10 @@ class ProductController {
       }
 
       // ----- Output Data for FE -----
+      products.rows.forEach((product, index) => {
+        products.rows[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
+
       let totalData = products.count;
       let result = {
         data: products.rows,
@@ -183,6 +199,10 @@ class ProductController {
           category: category,
         },
       });
+
+      products.forEach((product, index) => {
+        products[index].finalPrice = product.price - product.price * (product.Promo.potongan_harga / 100);
+      })
 
       let result = {
         data: products,
@@ -432,6 +452,9 @@ class ProductController {
       let result = await Product.findByPk(id, {
         include: [ProductImage, ProductStock, Promo],
       });
+
+      result.finalPrice = result.price - result.price * (result.Promo.potongan_harga / 100);
+
       res.status(201).json(result);
     } catch (err) {
       next(err);

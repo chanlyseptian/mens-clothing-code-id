@@ -124,8 +124,8 @@ export const createPromo = (data) => {
     })
       .then(async (response) => {
         await Swal.fire(
-          "Add Product Success!",
-          "Congratulations, You've created a Product!",
+          "Add Promo Success!",
+          "Congratulations, You've created a Promo!",
           "success"
         );
         dispatch({
@@ -175,8 +175,8 @@ export const editPromo = (id, data) => {
       .then(async (response) => {
         // completed
         await Swal.fire(
-          "Edit Banner Success!",
-          "Congratulations, You've edited your Banner!",
+          "Edit Promo Success!",
+          "Congratulations, You've edited your Promo!",
           "success"
         );
         dispatch({
